@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HP-Ord – Träna inför högskoleprovet</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#182542;background:#f4f6fb}*{box-sizing:border-box}body{margin:0}main{max-width:850px;margin:auto;padding:26px 18px 70px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.brand{font-size:25px;font-weight:850;color:#293e9d}.sub{color:#71809a;font-size:13px}.card{background:white;border:1px solid #e3e8f2;border-radius:20px;padding:26px;margin-bottom:17px;box-shadow:0 6px 20px #24396009}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#f4f6fd;border-radius:12px;padding:15px}.num{font-size:26px;font-weight:850;color:#3146a0}.label{font-size:12px;color:#71809a}.eyebrow{text-transform:uppercase;font-size:12px;letter-spacing:1px;color:#70809c;font-weight:750}.word{font-size:clamp(32px,6vw,48px);letter-spacing:-1.5px;margin:10px 0 22px}.options{display:grid;gap:9px;margin:22px 0}.option{border:1px solid #dce2ef;background:#fafbfe;color:#21304b;border-radius:13px;padding:14px;text-align:left;font:inherit;cursor:pointer}.option:hover:not(:disabled){border-color:#536bd4;background:#f4f6ff}.option:disabled{cursor:default}.correct{border-color:#45a67d;background:#e8f8ef}.wrong{border-color:#db7474;background:#fff0f0}.actions{display:flex;flex-wrap:wrap;gap:10px}.btn{font:inherit;font-weight:700;border-radius:12px;padding:12px 17px;border:1px solid #dbe2f0;background:white;cursor:pointer;color:#3146a0}.btn.primary{background:#344bbb;border-color:#344bbb;color:white}.btn.green{background:#edfaf1;border-color:#b7dec5;color:#217144}.btn:disabled{opacity:.5;cursor:default}.hint{font-size:13px;color:#70809c;line-height:1.6}.feedback{padding:15px;background:#f1f4fb;border-radius:12px;margin:15px 0;line-height:1.6}.hidden{display:none}select{border:1px solid #dfe5ee;border-radius:10px;padding:10px;background:white}footer{font-size:12px;color:#8290a8;margin-top:20px}@media(max-width:500px){.card{padding:19px}.stats{gap:7px}.stat{padding:12px}.num{font-size:21px}}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.manage{max-height:290px;overflow:auto;display:grid;gap:8px}.manage-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid #e4e8f2;border-radius:10px}.manage-item span{font-weight:650}.tiny{font-size:12px;padding:7px 10px}.note{background:#edf3ff;border-radius:12px;padding:13px;margin-top:14px;color:#31446b;font-size:13px;line-height:1.6}button:focus-visible,select:focus-visible{outline:3px solid #819aff;outline-offset:2px}
+
+/* Vändbart ordkort */
+.flashcard{display:block;width:100%;height:245px;padding:0;margin:22px 0 10px;border:0;background:transparent;cursor:pointer;perspective:1100px;text-align:center;color:inherit;font:inherit}
+.flashcard-inner{display:block;position:relative;width:100%;height:100%;transition:transform .48s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;padding:28px;border:1px solid #ccd7fa;border-radius:24px;background:linear-gradient(140deg,#ffffff 10%,#ecf0ff 100%);box-shadow:0 14px 32px #253b8316;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flashcard-back{transform:rotateY(180deg);background:linear-gradient(140deg,#eefaf5,#fff);border-color:#b5dec9}
+.flashcard-word{font-size:clamp(28px,6vw,46px);font-weight:830;line-height:1.15;overflow-wrap:anywhere}
+.flashcard-definition{font-size:clamp(19px,3.2vw,28px);font-weight:700;line-height:1.35;max-height:155px;overflow:auto;overflow-wrap:anywhere}
+.flashcard-caption{font-size:13px;color:#64749d;font-weight:650;line-height:1.4}
+.flashcard:focus-visible{outline:3px solid #4266e8;outline-offset:5px;border-radius:24px}
+.flashcard:disabled{cursor:default;opacity:1}
+.options-heading{font-size:14px;font-weight:750;color:#415078;margin:17px 0 4px}
+.options{margin:10px 0 16px}
+.known-row{display:flex;justify-content:center;margin-top:16px}.known-row .btn{width:100%;max-width:330px}
+@media (prefers-reduced-motion: reduce){.flashcard-inner{transition:none}}
+@media(max-width:500px){.flashcard{height:215px}.flashcard-face{padding:18px}}
+
+/* V7: Startvy och navigation */
+.site-nav{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 20px}
+.nav-btn{border:1px solid #dce4f4;background:#fff;color:#415073;border-radius:12px;padding:12px 19px;font:inherit;font-weight:750;cursor:pointer}
+.nav-btn.active{background:#344bbb;color:#fff;border-color:#344bbb}
+.hero{background:linear-gradient(125deg,#253d9e 0%,#5369ce 100%);border:0;color:#fff;box-shadow:0 16px 35px #263c941c;padding:38px}
+.hero-eyebrow{color:#cad5ff;font-size:12px;letter-spacing:1.5px;font-weight:800;text-transform:uppercase}
+.hero h1{font-size:clamp(28px,5vw,42px);letter-spacing:-1.3px;line-height:1.15;margin:12px 0}
+.hero p{color:#e2e9ff;line-height:1.65;max-width:540px;margin:0 0 22px}
+.hero-actions{display:flex;gap:11px;flex-wrap:wrap}
+.hero-actions .btn{min-width:165px}
+.hero-actions .btn.primary{background:#fff;color:#293e9d;border-color:#fff}
+.hero-actions .btn.secondary{color:#fff;border-color:#a8b7ff;background:#ffffff18}
+.home-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.guide-tile{border:1px solid #e4e9f5;border-radius:15px;padding:16px;background:#fafbff}
+.guide-num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:10px;background:#e6ebff;color:#3048b3;font-weight:800}
+.guide-tile h3{font-size:15px;margin:12px 0 5px}.guide-tile p{font-size:13px;color:#6c7a91;line-height:1.5;margin:0}
+.section-title{font-size:21px;margin:0 0 6px}.section-lead{font-size:13px;color:#70809c;margin:0 0 18px}
+.view-hidden{display:none!important}
+@media(max-width:590px){.hero{padding:26px}.home-guide{grid-template-columns:1fr}.hero-actions .btn{flex:1}.site-nav{margin-top:0}}
+
+/* v9: compact account/navigation dropdown */
+.menu-wrap{position:relative;z-index:50}
+.menu-toggle{display:flex;gap:10px;align-items:center;justify-content:center;border:1px solid #dce4f4;background:white;color:#2d418e;border-radius:12px;padding:11px 15px;font:inherit;font-weight:750;cursor:pointer;box-shadow:0 3px 12px #1e37620a}
+.menu-toggle:hover,.menu-toggle:focus-visible{border-color:#8093df;background:#f7f9ff}
+.menu-bars{font-size:19px;line-height:1}
+.menu-dropdown{position:absolute;right:0;top:calc(100% + 9px);background:white;border:1px solid #dfe5f2;border-radius:16px;box-shadow:0 17px 45px #15244a25;width:min(310px,calc(100vw - 36px));padding:9px;max-height:80vh;overflow-y:auto}
+.menu-dropdown.hidden{display:none}
+.menu-item{display:block;width:100%;padding:12px 13px;background:transparent;border:0;border-radius:10px;text-align:left;font:inherit;font-weight:680;color:#263959;cursor:pointer}
+.menu-item:hover,.menu-item:focus-visible{background:#f1f4ff;outline:0}
+.menu-item.active{color:#2a43ad;background:#edf1ff}
+.menu-divider{height:1px;background:#e8ecf4;margin:8px 5px}
+.menu-user{padding:8px 13px;color:#6e7c94;font-size:12px;overflow-wrap:anywhere}
+.menu-logout{color:#a13743}
+@media(max-width:500px){header{gap:12px}.menu-toggle{padding:10px 12px}}
+
+/* v11: progress mot målet */
+.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mastery-progress{margin-top:24px}
+.mastery-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:14px;font-weight:700;color:#35496d;margin-bottom:11px}
+.mastery-heading strong{font-size:20px;color:#3146a0;white-space:nowrap}
+.mastery-track{height:16px;border-radius:100px;background:#e7ecf7;overflow:hidden}
+.mastery-fill{width:0;height:100%;background:linear-gradient(90deg,#4f69d5,#43ad84);border-radius:inherit;transition:width .35s ease}
+.mastery-caption{margin-top:10px;color:#6c7a91;font-size:13px;font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){.mastery-fill{transition:none}}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header><div><div class="brand">📘 HP-Ord</div><div class="sub">Din personliga ordtränare · 10 000 ord</div></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></header>
+<section class="card" id="authSection"><div class="eyebrow">Ditt konto – synkroniseras med Supabase</div><div id="signedOut"><p class="hint">Skapa ett konto eller logga in. Dina ord och framsteg sparas därefter säkert i Supabase.</p><div class="toolbar"><input id="email" type="email" autocomplete="email" placeholder="E-postadress" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"><input id="password" type="password" autocomplete="current-password" placeholder="Lösenord (minst 6 tecken)" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"></div><div class="toolbar" style="margin-top:12px"><button class="btn primary" id="login">Logga in</button><button class="btn" id="signup">Skapa konto</button></div></div><div id="signedIn" class="hidden"><p class="hint">Inloggad som <strong id="account"></strong> · <span id="sync">Synkroniserat</span></p></div><p id="authMessage" role="status" aria-live="polite" class="hint"></p></section><div id="appContent" class="hidden">
+
+<div id="homeView">
+<section class="card hero"><div class="hero-eyebrow">Välkommen till HP-Ord</div><h1>Varje nytt ord tar dig närmare ditt mål.</h1><p>Öva på ord inför högskoleprovet, repetera det du tycker är svårt och följ dina framsteg i din egen takt.</p><div class="hero-actions"><button class="btn primary" id="homeStart" type="button">Börja träna →</button><button class="btn secondary" id="homeReview" type="button">Repetera ord ↻</button></div></section>
+<section class="card"><div class="eyebrow">Din utveckling</div><div class="stats" style="margin-top:15px"><div class="stat"><div class="num" id="learning">0</div><div class="label">Övar</div></div><div class="stat"><div class="num" id="mastered">0</div><div class="label">Bemästrat</div></div></div>
+<div class="mastery-progress"><div class="mastery-heading"><span>Din väg mot 10 000 bemästrade ord</span><strong id="masteryPercent">0 %</strong></div><div class="mastery-track" id="masteryProgress" role="progressbar" aria-label="Andel bemästrade ord" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="mastery-fill" id="masteryFill"></div></div><div class="mastery-caption" id="masteryCaption">0 av 10 000 ord bemästrade</div></div>
+<div class="note" id="dueStats" aria-live="polite"></div></section>
+<section class="card"><h2 class="section-title">Så fungerar träningen</h2><p class="section-lead">Tre enkla steg hjälper dig att komma ihåg fler ord.</p><div class="home-guide"><div class="guide-tile"><span class="guide-num">1</span><h3>Träna</h3><p>Försök hitta rätt betydelse bland svarsalternativen.</p></div><div class="guide-tile"><span class="guide-num">2</span><h3>Vänd kortet</h3><p>Se definitionen direkt. Vänd igen om du inte kunde ordet.</p></div><div class="guide-tile"><span class="guide-num">3</span><h3>Repetera</h3><p>Svåra ord återkommer så att kunskapen fastnar.</p></div></div></section>
+</div>
+<div id="trainingView" class="view-hidden">
+<section class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="eyebrow" id="counter">ORDTRÄNING</span><select id="mode" aria-label="Välj träningsläge"><option value="all">Nya och repetition</option><option value="review">Repetition som är dags</option><option value="allwords">Alla ord, även bemästrade</option></select></div><div id="question"><button type="button" class="flashcard" id="flashcard" aria-label="Vänd kortet för att se definitionen"><span class="flashcard-inner"><span class="flashcard-face flashcard-front"><span class="flashcard-caption">VAD BETYDER ORDET?</span><span class="flashcard-word" id="word"></span><span class="flashcard-caption">Tryck på kortet för att vända det</span></span><span class="flashcard-face flashcard-back"><span class="flashcard-caption">BETYDELSE</span><span class="flashcard-definition" id="cardDefinition"></span><span class="flashcard-caption" id="backHint">Tryck igen om du inte kunde ordet</span></span></span></button><p class="options-heading">Välj rätt betydelse</p><div class="options" id="options"></div><div class="feedback hidden" id="feedback" role="status" aria-live="polite"></div><div class="actions"><button class="btn primary hidden" id="next">Nästa ord →</button></div><div class="known-row"><button class="btn green" id="markKnown">✓ Kan redan ordet</button></div><p class="hint">Vänd kortet för att se definitionen. Klicka en gång till på det vända kortet för att registrera ett fel och schemalägga repetition. Du kan också välja bland svarsalternativen. Efter sex rätt i rad blir ordet bemästrat och tas bort från normal repetition. ”Kan redan ordet” räknas direkt som bemästrat och tas bort från normal träning.</p></div><div id="empty" class="hidden"><h2>Du är klar med den här omgången! 🎉</h2><p id="emptyMessage">Byt träningsläge eller kom tillbaka när fler ord är redo för repetition.</p></div></section>
+<p class="hint" style="margin:12px 0">Ordkälla: nya definitioner från <a href="https://www.sprakbanken.gu.se/" target="_blank" rel="noopener noreferrer">Språkbanken / LEXIN</a> (CC BY 4.0). Tidigare ord och definitioner har behållits för att skydda dina framsteg. Ordlistan är ett övningsurval och inte en officiell ordlista från UHR.</p><section class="card"><div class="eyebrow">Din ordlista</div><h2>Hantera ord du kan och har bemästrat</h2><p class="hint">Här kan du återaktivera ord du redan kan eller har bemästrat. Dina framsteg sparas automatiskt på ditt konto.</p><div class="toolbar"><button class="btn" id="toggleKnown">Visa kända och bemästrade ord</button></div><div id="knownList" class="manage hidden"></div></section>
+</div></div><footer>HP-Ord · 10 000 unika ord · vändbara ordkort · sparade framsteg i Supabase.</footer></main>
+<script>
+const legacyWords=[
+['ambivalent','Att ha motstridiga känslor','Att vara helt säker','Att vara ovanligt vänlig','Att tänka mycket snabbt','Att visa förakt'],
+['eklektisk','Som väljer och kombinerar från olika håll','Som följer en strikt stil','Som är gammalmodig','Som är svår att förstå','Som sker av en slump'],
+['implicit','Underförstådd','Högljudd','Tillfällig','Motsägelsefull','Fullständig'],
+['explicit','Tydligt uttryckt','Hemlig','Ofrivillig','Föråldrad','Osannolik'],
+['lakonisk','Kortfattad','Upprörd','Omsorgsfull','Långsam','Hänsynslös'],
+['prekär','Osäker eller bekymmersam','Högtidlig','Självklar','Tillförlitlig','Överflödig'],
+['arbiträr','Godtycklig','Noggrant motiverad','Lättillgänglig','Tålmodig','Tillfällig'],
+['koncis','Kort och kärnfull','Utförlig','Tvetydig','Oansenlig','Svårbegriplig'],
+['esoterisk','Avsedd för en begränsad krets invigda','Allmänt känd','Omedelbart begriplig','Förbjuden','Historiskt betydelsefull'],
+['redundant','Överflödig','Sällsynt','Utmanande','Pålitlig','Otydlig'],
+['plädera','Argumentera för en sak','Göra narr av','Tveka länge','Ge efter för','Hålla tyst'],
+['vederlägga','Motbevisa','Upprepa','Förstärka','Godkänna','Undersöka'],
+['försumma','Underlåta att sköta','Överdriva','Fördöma','Förutsäga','Förbättra'],
+['illojal','Inte trogen','Kunnig','Omtänksam','Obeveklig','Uppriktig'],
+['förbehåll','Villkor eller reservation','Belöning','Sammanfattning','Försening','Tacksamhet'],
+['adekvat','Lämplig eller tillräcklig','Överdriven','Ovanlig','Komplex','Bristfällig'],
+['vankelmodig','Obeslutsam','Beslutsam','Tillbakadragen','Noggrann','Oerfaren'],
+['förmäten','Överdrivet självsäker eller anspråksfull','Blygsam','Omtänksam','Lågmäld','Förvirrad'],
+['flegmatisk','Lugn och sävlig','Hetsig','Nyfiken','Misstänksam','Högljudd'],
+['idiosynkrasi','Egenartat beteende eller särdrag','Gemensam tradition','Snabb förändring','Rättslig princip','Logisk motsägelse'],
+['latent','Dold men möjlig att utvecklas','Mycket synlig','Redan avslutad','Oåterkallelig','Ofrivillig'],
+['notorisk','Allmänt känd, ofta för något negativt','Hemlig','Tillfällig','Obetydlig','Saklig'],
+['pragmatisk','Praktiskt inriktad','Teoretiskt låst','Överdrivet känslosam','Orealistisk','Dyster'],
+['provisorisk','Tillfällig','Permanent','Kostsam','Välkänd','Noggrant reglerad'],
+['rigid','Stel eller oflexibel','Anpassningsbar','Slarvig','Upprymd','Öppenhjärtig'],
+['subtil','Fin eller svår att urskilja','Uppenbar','Högljudd','Hård','Vardaglig'],
+['tvetydig','Möjlig att tolka på flera sätt','Fullständigt klar','Snabbt övergående','Noggrant kontrollerad','Missvisande'],
+['väsentlig','Betydelsefull','Överflödig','Tillfällig','Obekant','Slumpartad'],
+['ödesdiger','Som får svåra följder','Lyckosam','Ofarlig','Förutsägbar','Vardaglig'],
+['vedertagen','Allmänt accepterad','Nyuppfunnen','Kontroversiell','Avskaffad','Hemlighållen'],
+["abdikera", "Avsäga sig en tron eller ett ämbete"],
+["aberration", "Avvikelse från det normala"],
+["abstrakt", "Som inte är konkret eller påtaglig"],
+["acklamation", "Beslut genom allmänt bifall utan omröstning"],
+["ackumulera", "Samla på sig över tid"],
+["ad hoc", "För ett särskilt ändamål"],
+["aversiv", "Som väcker motvilja eller obehag"],
+["affekterad", "Konstlad eller tillgjord"],
+["agnostiker", "Person som anser att Guds existens inte kan avgöras"],
+["akilleshäl", "En avgörande svag punkt"],
+["allegori", "Berättelse med symbolisk innebörd"],
+["allokera", "Fördela eller tilldela resurser"],
+["altruism", "Osjälvisk omtanke om andra"],
+["ambiguitet", "Tvetydighet"],
+["anarki", "Tillstånd utan styrande makt"],
+["anekdot", "Kort berättelse om en händelse"],
+["animositet", "Stark ovilja eller fiendskap"],
+["anomali", "Avvikelse från det förväntade"],
+["antagonist", "Motståndare eller motkraft"],
+["antites", "Direkt motsats"],
+["apati", "Likgiltighet eller känslolöshet"],
+["apokryfisk", "Av tvivelaktig äkthet"],
+["apologi", "Försvarstal eller skrift till försvar"],
+["arbitrera", "Avgöra en tvist som skiljeman"],
+["arkaisk", "Ålderdomlig"],
+["artificiell", "Konstgjord"],
+["askes", "Sträng självförsakelse"],
+["assimilera", "Uppta och införliva i en helhet"],
+["asterisk", "Stjärnformat tecken i text"],
+["attribut", "Utmärkande egenskap eller kännetecken"],
+["autentisk", "Äkta eller tillförlitlig"],
+["autonomi", "Självbestämmande"],
+["aversion", "Stark motvilja"],
+["axiom", "Grundsats som tas för given"],
+["banal", "Trivial och föga originell"],
+["befängd", "Orimlig eller absurd"],
+["belevad", "Artig och världsvan"],
+["belägga", "Styrka med bevis eller uppgifter"],
+["benägen", "Som har lätt för eller är villig att göra något"],
+["besudla", "Smutsa ned eller vanära"],
+["beständig", "Varaktig och hållbar"],
+["betänklighet", "Tvekan eller invändning"],
+["bevekelsegrund", "Motiv bakom en handling"],
+["bilateral", "Som rör två parter"],
+["bister", "Sträng eller kärv"],
+["blasé", "Uttråkad efter alltför många upplevelser"],
+["bohemisk", "Okonventionell och obunden av normer"],
+["brasklapp", "Reservation eller förbehåll"],
+["bravur", "Stor skicklighet eller glans"],
+["brydsam", "Besvärlig eller svår att hantera"],
+["burlesk", "Grovt komisk och överdriven"],
+["cynisk", "Kallt hänsynslös mot andras känslor"],
+["dekadens", "Moraliskt eller kulturellt förfall"],
+["deklarera", "Tillkännage öppet"],
+["delegera", "Överlåta en uppgift eller befogenhet"],
+["demagog", "Person som söker stöd med känsloargument och manipulation"],
+["denaturera", "Förändra en substans så att dess egenskaper förstörs"],
+["derivera", "Härleda ur något annat"],
+["desillusionerad", "Besviken efter förlorade illusioner"],
+["despot", "Envåldshärskare som utövar makt godtyckligt"],
+["destillera", "Rena eller separera genom förångning och kondensation"],
+["detronisera", "Avsätta från en tron eller ledande position"],
+["diffus", "Otydlig eller svår att avgränsa"],
+["dilettant", "Amatör utan djupare fackkunskap"],
+["diskrepans", "Bristande överensstämmelse"],
+["diskretion", "Förmåga att vara taktfull och förtegen"],
+["disparat", "Olikartad och svår att förena"],
+["dogmatisk", "Som håller fast vid läror utan att ifrågasätta"],
+["dubiös", "Tvivelaktig"],
+["dunkel", "Svårbegriplig eller oklar"],
+["dynamisk", "Föränderlig och handlingskraftig"],
+["effektuera", "Verkställa ett beslut eller en åtgärd"],
+["efemär", "Kortlivad eller flyktig"],
+["egalitär", "Som förespråkar jämlikhet"],
+["eklatant", "Uppenbar och påfallande"],
+["elaborera", "Utveckla eller bearbeta i detalj"],
+["emancipation", "Frigörelse från beroende eller förtryck"],
+["empiri", "Kunskap grundad på erfarenhet och observation"],
+["emulera", "Försöka efterlikna eller överträffa"],
+["entydig", "Som endast kan tolkas på ett sätt"],
+["epigon", "Osjälvständig efterföljare"],
+["epitet", "Beskrivande benämning eller tillnamn"],
+["erosion", "Nednötning genom vatten vind eller is"],
+["erudition", "Stor lärdom och beläsenhet"],
+["eskalera", "Öka i omfattning eller intensitet"],
+["estetik", "Läran om skönhet och konstnärliga uttryck"],
+["etablera", "Grunda eller skapa en varaktig ställning"],
+["etymologi", "Läran om ords ursprung och historia"],
+["eufemism", "Förskönande omskrivning"],
+["excentrisk", "Avvikande från det vanliga på ett särpräglat sätt"],
+["exekvera", "Utföra eller verkställa"],
+["exodus", "Massutvandring"],
+["exorbitant", "Orimligt hög eller överdriven"],
+["extrapolera", "Dra slutsatser utanför kända värden"],
+["fabulera", "Hitta på berättelser eller historier"],
+["facit", "Samling av rätta svar"],
+["fatalistisk", "Som tror att allt är förutbestämt"],
+["fiktiv", "Påhittad eller overklig"],
+["filantrop", "Person som arbetar för andras väl"],
+["flagrant", "Grovt och uppenbart"],
+["fluktuera", "Växla eller svänga i nivå"],
+["förebrå", "Anklaga eller klandra"],
+["föregiven", "Påstådd men inte nödvändigtvis verklig"],
+["förevändning", "Uppgivet skäl som döljer det verkliga"],
+["förgripa sig", "Begå ett övergrepp mot någon"],
+["förkasta", "Avvisa eller underkänna"],
+["förlägen", "Generad eller besvärad"],
+["förnummen", "Som har uppfattats med sinnena"],
+["försumbar", "Så liten att den kan bortses från"],
+["förtegen", "Som inte gärna berättar vad den vet"],
+["förtröstan", "Tillitsfull förhoppning"],
+["förvillelse", "Felaktig föreställning"],
+["generisk", "Allmän och inte knuten till ett särskilt varumärke"],
+["genuin", "Äkta och oförfalskad"],
+["grudna", "Fundera länge och bekymrat"],
+["habituell", "Vanemässig"],
+["hävdvunnen", "Som har stöd i gammal tradition"],
+["hätsk", "Aggressiv och fylld av ovilja"],
+["hedonism", "Livsåskådning där njutning sätts i centrum"],
+["hegemonisk", "Som har en dominerande ställning"],
+["hermetisk", "Helt tillsluten eller svår att förstå"],
+["heterogen", "Sammansatt av olikartade delar"],
+["hierarki", "Rangordnat system"],
+["homogen", "Enhetlig och likartad"],
+["hypotetisk", "Antagen som möjlighet utan att vara bevisad"],
+["illavarslande", "Som tyder på något olyckligt"],
+["illuster", "Berömd och ansedd"],
+["immanent", "Inneboende i något"],
+["imperativ", "Ovillkorligt krav eller uppmaning"],
+["improvisera", "Göra något utan förberedelse"],
+["incitament", "Något som motiverar till handling"],
+["indifferent", "Likgiltig"],
+["indoktrinera", "Påverka någon att okritiskt acceptera en lära"],
+["inert", "Trög och föga reaktiv"],
+["inferens", "Slutsats dragen från tillgängliga uppgifter"],
+["inherent", "Oskiljaktigt inneboende"],
+["inhibera", "Stoppa eller skjuta upp"],
+["inkonsekvent", "Motsägelsefull i handlande eller resonemang"],
+["inlemma", "Infoga i en större helhet"],
+["insinuera", "Antyda något nedsättande utan att säga det öppet"],
+["integritet", "Personlig självständighet och okränkbarhet"],
+["intermittent", "Som återkommer med avbrott"],
+["intrikat", "Invecklad och svår att reda ut"],
+["introspektion", "Själviakttagelse av egna tankar och känslor"],
+["intuitiv", "Grundad på omedelbar känsla snarare än analys"],
+["invändning", "Argument mot ett påstående"],
+["irrelevant", "Som saknar betydelse för saken"],
+["irreversibel", "Som inte kan göras ogjord"],
+["jovialisk", "Glad och gemytlig"],
+["katalysator", "Något som påskyndar en process"],
+["klandervärd", "Som förtjänar kritik"],
+["koherent", "Sammanhängande och logiskt följdriktig"],
+["kollationera", "Jämföra texter för att kontrollera överensstämmelse"],
+["kompatibel", "Som fungerar väl tillsammans med något annat"],
+["kompromettera", "Skada någons anseende eller röja känsliga uppgifter"],
+["konformism", "Anpassning till rådande normer"],
+["konjektur", "Antagande som ännu inte bevisats"],
+["konsekvent", "Följdriktig och utan motsägelser"],
+["kontemplera", "Betrakta eller begrunda stilla"],
+["kontradiktion", "Motsägelse"],
+["konvergera", "Närma sig samma punkt eller värde"],
+["korrodera", "Frätas eller brytas ned kemiskt"],
+["koryfé", "Framstående person inom sitt område"],
+["kosmopolit", "Person som känner sig hemma i många länder"],
+["krass", "Kyligt realistisk eller osentimental"],
+["kumulativ", "Som ökar genom successiv ansamling"],
+["kvintessens", "Det mest väsentliga hos något"],
+["lamentera", "Klaga eller beklaga sig högljutt"],
+["legitim", "Berättigad eller laglig"],
+["lekmannamässig", "Utan yrkesmässig sakkunskap"],
+["linjär", "Som följer en rät linje eller jämn utveckling"],
+["lobbyism", "Försök att påverka politiska beslut"],
+["löjeväckande", "Som framkallar hån eller skratt"],
+["marginalisera", "Tränga undan från inflytande"],
+["medgörlig", "Villig att anpassa sig till andra"],
+["melankolisk", "Djupt vemodig"],
+["meritokratisk", "Där ställning avgörs av meriter"],
+["metafor", "Bildligt uttryck utan jämförelseord"],
+["metodisk", "Systematisk och planmässig"],
+["misantrop", "Person som ogillar människor i allmänhet"],
+["moderat", "Måttfull"],
+["monoton", "Enformig och utan variation"],
+["moratorium", "Tillfälligt uppskov med en förpliktelse"],
+["mångtydig", "Som kan förstås på flera sätt"],
+["naiv", "Godtrogen eller barnsligt oerfaren"],
+["negligera", "Inte bry sig om eller försumma"],
+["nepotism", "Otillbörligt gynnande av släktingar"],
+["nihilism", "Åskådning som förnekar etablerade värden"],
+["nisch", "Särskilt avgränsat verksamhetsområde"],
+["normativ", "Som anger hur något bör vara"],
+["nyckfull", "Oförutsägbar och ombytlig"],
+["obsolet", "Föråldrad och inte längre användbar"],
+["oförblommerad", "Rakt på sak utan omskrivningar"],
+["ogenomtränglig", "Som är svår att tränga igenom eller förstå"],
+["olägenhet", "Besvär eller nackdel"],
+["ombesörja", "Se till att något blir utfört"],
+["omdömesgill", "Som visar gott omdöme"],
+["omfattande", "Som har stor utsträckning"],
+["opportunist", "Person som anpassar sig efter egen fördel"],
+["ortodox", "Som strikt följer vedertagen lära"],
+["ostentativ", "Avsiktligt iögonfallande"],
+["paradox", "Påstående som verkar motsägelsefullt men kan vara sant"],
+["parera", "Avvärja eller bemöta"],
+["partikulär", "Som gäller ett enskilt fall"],
+["patos", "Starkt känslomässigt engagemang"],
+["pedantisk", "Överdrivet noggrann med detaljer"],
+["perifer", "Som ligger i utkanten eller är mindre central"],
+["perplex", "Förbryllad och rådvill"],
+["persistens", "Ihållande fortbestånd"],
+["pertinent", "Som hör till saken och är träffande"],
+["polemik", "Skarp meningsstrid i tal eller skrift"],
+["postulat", "Grundläggande antagande"],
+["potentat", "Mäktig härskare eller makthavare"],
+["prejudikat", "Tidigare avgörande som vägleder rättstillämpning"],
+["premiss", "Förutsättning för ett resonemang"],
+["presumera", "Anta att något gäller tills motsatsen visas"],
+["pretentiös", "Som gör anspråk på mer än vad som är befogat"],
+["principiell", "Som rör grundläggande principer"],
+["profan", "Världslig eller inte religiös"],
+["proliferation", "Snabb spridning eller tillväxt"],
+["prominent", "Framstående eller väl synlig"],
+["proportionerlig", "Som står i rimligt förhållande till något"],
+["prosaisk", "Vardaglig och föga poetisk"],
+["protagonist", "Huvudperson i ett drama eller en berättelse"],
+["provokativ", "Som medvetet väcker starka reaktioner"],
+["pseudonym", "Påhittat namn som används i stället för det egna"],
+["puritan", "Person med sträng moralisk hållning"],
+["raffinerad", "Fint utvecklad eller sofistikerad"],
+["rabulist", "Bråkmakare som trotsar auktoriteter"],
+["rationell", "Grundad på förnuft och logik"],
+["reciprok", "Ömsesidig"],
+["reell", "Verklig och faktisk"],
+["refutera", "Vederlägga eller motbevisa"],
+["regress", "Återgång till ett tidigare stadium"],
+["rekvisit", "Villkor som måste vara uppfyllt i en rättsregel"],
+["relativisera", "Betrakta som beroende av sammanhang"],
+["renommé", "Rykte eller anseende"],
+["repressalie", "Hämndåtgärd"],
+["resignera", "Ge upp motstånd eller hopp"],
+["resonabel", "Rimlig och villig att diskutera"],
+["restriktiv", "Återhållsam eller begränsande"],
+["retorik", "Konsten att tala övertygande"],
+["revidera", "Granska och ändra"],
+["rudimentär", "Outvecklad och endast i grundläggande form"],
+["sakrosankt", "Som anses helig och okränkbar"],
+["sanktion", "Godkännande eller straffåtgärd beroende på sammanhang"],
+["sarkastisk", "Hånfullt ironisk"],
+["sekulär", "Världslig och inte religiös"],
+["semantik", "Läran om språklig betydelse"],
+["sentens", "Kortfattat tänkespråk"],
+["signifikant", "Betydelsefull eller statistiskt säkerställd"],
+["simultan", "Som sker samtidigt"],
+["skeptisk", "Tvivlande och kritiskt inställd"],
+["sofistikerad", "Förfinad och avancerad"],
+["solidarisk", "Som visar samhörighet och stöd"],
+["somnolent", "Sömnig eller dåsig"],
+["sporadisk", "Som förekommer då och då"],
+["stagnation", "Avstannad utveckling"],
+["stipulera", "Föreskriva som villkor"],
+["stoisk", "Lugn och oberörd inför motgångar"],
+["subjektiv", "Präglad av personliga uppfattningar"],
+["subvention", "Ekonomiskt bidrag för att hålla nere kostnad"],
+["succinkt", "Kortfattad och kärnfull"],
+["superlativ", "Högsta graden av ett adjektiv"],
+["synergi", "Samverkan som ger större effekt tillsammans"],
+["syntes", "Sammanfogning till en helhet"],
+["taciturn", "Tystlåten och fåordig"],
+["tangera", "Vidröra eller nästan nå"],
+["tautologi", "Onödig upprepning av samma innebörd"],
+["teoretisk", "Som bygger på teori snarare än praktik"],
+["tes", "Påstående som förs fram för att prövas"],
+["transcendent", "Som överskrider erfarenhetens gränser"],
+["transient", "Övergående eller kortvarig"],
+["trivial", "Vardaglig eller obetydlig"],
+["tumult", "Högljutt bråk och oordning"],
+["tvetalan", "Dubbeltydig eller undvikande hållning"],
+["umbärlig", "Som man kan klara sig utan"],
+["underminera", "Försvaga gradvis eller i det fördolda"],
+["unik", "Som är ensam i sitt slag"],
+["universell", "Allmängiltig eller som omfattar alla"],
+["uppvigla", "Förmå andra till uppror eller motstånd"],
+["utilitarism", "Etisk teori som bedömer handlingar efter deras nytta"],
+["vacklan", "Tvekan eller osäkerhet"],
+["vederbörande", "Den person som saken gäller"],
+["veritabel", "Verklig eller riktig i hög grad"],
+["verifiera", "Kontrollera att något stämmer"],
+["versatil", "Mångsidig och anpassningsbar"],
+["vestigial", "Kvarvarande som ett förkrympt spår av något tidigare"],
+["vigilant", "Vaksam och uppmärksam"],
+["vindikation", "Återkrav av egendom som tillhör en själv"],
+["virulent", "Mycket aggressiv eller smittsam"],
+["visionär", "Framtidsinriktad och idérik"],
+["volatil", "Lättflyktig eller snabbt föränderlig"],
+["vördnad", "Djup respekt"],
+["ömsesidig", "Som gäller åt båda håll"],
+["överskådlig", "Lätt att få en helhetsbild av"]
+];
+const URL_SUPABASE='https://hkijnyhmpcczihmnepww.supabase.co';
+const PUBLISHABLE_KEY='sb_publishable_Hn4cS6QdGCf4_853RjtICg_xV3WFV3b';
+const $=id=>document.getElementById(id),DAY=86400000,MINUTE=60000;
+const db=window.supabase?.createClient(URL_SUPABASE,PUBLISHABLE_KEY);
+let words=[], user=null, state={}, current=-1, answered=false, cardFlipped=false, shown=0, recent=[],showKnown=false;
+let saving=Promise.resolve(), ready=false;
+function notice(t){$('authMessage').textContent=t}
+function syncMsg(t){$('sync').textContent=t}
+function entry(i){return state[words[i]?.id]||{}}
+function status(i){const e=entry(i);return (e.status==='known'||(e.status==='learned'&&Number(e.streak)>=6))?'known':(e.status||'new')}
+// 'known' + streak>=6 marks mastery without changing the Supabase status constraint.
+function mastered(i){const e=entry(i);return status(i)==='known'&&Number(e.streak)>=6}
+function due(i){return !entry(i).due || entry(i).due<=Date.now()}
+function stats(){let masteredCount=0,learning=0,readyCount=0,unseen=0;
+words.forEach((_,i)=>{const st=status(i);if(st==='known')masteredCount++;else{if(st==='review'||st==='learned')learning++;if(st==='new')unseen++;if((st==='review'||st==='learned')&&due(i))readyCount++}});
+// Både "Kan redan" (streak 0) och sex rätt i rad (streak 6) räknas som bemästrade.
+const total=words.length||10000, percent=total?100*masteredCount/total:0;
+$('mastered').textContent=masteredCount.toLocaleString('sv-SE');$('learning').textContent=learning.toLocaleString('sv-SE');
+$('masteryPercent').textContent=percent.toLocaleString('sv-SE',{maximumFractionDigits:1})+' %';
+$('masteryFill').style.width=percent+'%';
+$('masteryProgress').setAttribute('aria-valuenow',String(Number(percent.toFixed(1))));
+$('masteryCaption').textContent=`${masteredCount.toLocaleString('sv-SE')} av ${total.toLocaleString('sv-SE')} ord bemästrade`;
+$('dueStats').textContent=`${readyCount} ord redo för repetition. ${unseen} nya ord väntar. Totalt ${words.length} ord i databasen.`}
+function pool(){const mode=$('mode').value;return words.map((_,i)=>i).filter(i=>{const st=status(i);if(mode==='allwords')return true;if(mode==='review')return (st==='review'||st==='learned')&&due(i);return st==='new'||((st==='review'||st==='learned')&&due(i))})}
+function distractors(i){const out=[],seen=new Set([words[i].definition]);for(let k=0;k<words.length&&out.length<4;k++){const meaning=words[(i*37+11+k*17)%words.length].definition;if(!seen.has(meaning)){seen.add(meaning);out.push(meaning)}}return out}
+function choose(){if(!ready)return;const p=pool();if(!p.length){current=-1;$('question').classList.add('hidden');$('empty').classList.remove('hidden');$('emptyMessage').textContent='Inga ord att träna på just nu. Prova ett annat träningsläge eller kom tillbaka när repetitionerna är dags.';stats();renderKnown();return}
+$('question').classList.remove('hidden');$('empty').classList.add('hidden');let candidates=p.filter(i=>i!==current&&!recent.includes(i));if(!candidates.length)candidates=p.filter(i=>i!==current);if(!candidates.length)candidates=p;
+const reviews=candidates.filter(i=>status(i)==='review'),unseen=candidates.filter(i=>status(i)==='new');let preferred=$('mode').value==='allwords'?candidates:reviews.length?reviews:unseen.length?unseen:candidates;
+current=preferred[Math.floor(Math.random()*preferred.length)];recent.push(current);if(recent.length>5)recent.shift();shown++;answered=false;cardFlipped=false;
+const w=words[current];$('word').textContent=w.term;$('cardDefinition').textContent=w.definition;$('flashcard').classList.remove('flipped');$('flashcard').disabled=false;$('flashcard').setAttribute('aria-label','Vänd kortet för att se definitionen');$('backHint').textContent='Tryck igen om du inte kunde ordet';$('counter').textContent=`ORD ${shown} • ${status(current)==='new'?'NYTT ORD':'REPETITION'}`;$('feedback').classList.add('hidden');$('feedback').textContent='';$('next').classList.add('hidden');$('markKnown').disabled=false;
+const options=[w.definition,...distractors(current)].map((value,i)=>({value,correct:i===0}));for(let j=options.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[options[j],options[k]]=[options[k],options[j]]}const holder=$('options');holder.replaceChildren();options.forEach(c=>{const b=document.createElement('button');b.className='option';b.textContent=c.value;b.dataset.correct=c.correct?'yes':'no';b.onclick=()=>respond(c.correct,b);holder.append(b)});stats()}
+function finish(msg){answered=true;cardFlipped=true;$('flashcard').classList.add('flipped');$('backHint').textContent='Definitionen visas ovan';document.querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.correct==='yes')b.classList.add('correct')});$('feedback').textContent=msg;$('feedback').classList.remove('hidden');$('next').classList.remove('hidden');$('markKnown').disabled=true;$('flashcard').disabled=true;stats()}
+async function persist(wordId, val){state[wordId]=val;syncMsg('Sparar…');saving=saving.catch(()=>{}).then(async()=>{const row={user_id:user.id,word_id:wordId,status:val.status,streak:val.streak||0,next_review_at:val.due?new Date(val.due).toISOString():null,last_seen_at:new Date(val.lastSeen||Date.now()).toISOString(),updated_at:new Date().toISOString()};const {error}=await db.from('user_word_progress').upsert(row,{onConflict:'user_id,word_id'});if(error)throw error;syncMsg('Synkroniserat')});try{await saving}catch(e){syncMsg('Kunde inte spara');notice('Synkroniseringsfel: '+e.message)}}
+function respond(correct,btn){if(answered||current<0)return;const old=entry(current),now=Date.now();if(correct){const streak=(old.streak||0)+1;if(streak>=6){void persist(words[current].id,{status:'known',streak:6,due:0,lastSeen:now});finish(`Rätt! ${words[current].term} är nu bemästrat efter sex rätt i rad och tas bort från normal repetition.`)}else{const days=[1,3,7,14,30][streak-1];void persist(words[current].id,{status:'learned',streak,due:now+days*DAY,lastSeen:now});finish(`Rätt! ${words[current].term} betyder: ${words[current].definition}. ${streak}/6 rätt i rad. Nästa repetition om ${days} dagar.`)}}else{void persist(words[current].id,{status:'review',streak:0,due:now+10*MINUTE,lastSeen:now});btn.classList.add('wrong');finish(`Inte riktigt. ${words[current].term} betyder: ${words[current].definition}. Repetition om cirka 10 minuter.`)}}
+$('markKnown').onclick=()=>{if(current<0||answered)return;void persist(words[current].id,{status:'known',streak:0,due:0,lastSeen:Date.now()});choose();renderKnown()};
+$('flashcard').onclick=()=>{if(current<0||answered)return;if(!cardFlipped){cardFlipped=true;$('flashcard').classList.add('flipped');$('flashcard').setAttribute('aria-label','Registrera ordet som fel och lägg till i repetition');return}const now=Date.now();void persist(words[current].id,{status:'review',streak:0,due:now+10*MINUTE,lastSeen:now});finish(`Du tittade på definitionen och markerade ordet som svårt. Det repeteras om cirka 10 minuter.`)};
+function closeMenu(){
+ $('mainMenu').classList.add('hidden');
+ $('menuToggle').setAttribute('aria-expanded','false');
+}
+function toggleMenu(){
+ const opening=$('mainMenu').classList.contains('hidden');
+ $('mainMenu').classList.toggle('hidden',!opening);
+ $('menuToggle').setAttribute('aria-expanded',String(opening));
+}
+$('menuToggle').addEventListener('click',e=>{e.stopPropagation();toggleMenu()});
+document.addEventListener('click',e=>{if(!$('menuWrap').contains(e.target))closeMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();$('menuToggle').focus()}});
+function showView(view, mode){
+ closeMenu();
+ const home=view==='home';
+ $('homeView').classList.toggle('view-hidden',!home);
+ $('trainingView').classList.toggle('view-hidden',home);
+ $('goHome').classList.toggle('active',home);$('goTraining').classList.toggle('active',!home);
+ $('goHome').setAttribute('aria-current',home?'page':'false');$('goTraining').setAttribute('aria-current',home?'false':'page');
+
+ if(!home&&mode){$('mode').value=mode;recent=[];choose()}
+ if(home)stats();
+ window.scrollTo({top:0,behavior:'instant'});
+}
+$('goHome').onclick=()=>showView('home');
+$('goTraining').onclick=()=>showView('training');
+$('homeStart').onclick=()=>showView('training','all');
+$('homeReview').onclick=()=>showView('training','review');
+$('next').onclick=choose;$('mode').onchange=()=>{recent=[];choose()};
+async function removeProgress(i){const id=words[i].id;const {error}=await db.from('user_word_progress').delete().eq('user_id',user.id).eq('word_id',id);if(error){notice(error.message);return}delete state[id];renderKnown();stats();if(current<0)choose()}
+function renderKnown(){const list=$('knownList');list.classList.toggle('hidden',!showKnown);$('toggleKnown').textContent=showKnown?'Dölj kända ord':'Visa kända och bemästrade ord';if(!showKnown)return;list.replaceChildren();const ids=words.map((_,i)=>i).filter(i=>status(i)==='known');if(!ids.length){list.textContent='Inga ord markerade som redan kända eller bemästrade.';return}ids.forEach(i=>{const row=document.createElement('div');row.className='manage-item';const name=document.createElement('span');name.textContent=words[i].term+(mastered(i)?' · Bemästrat':' · Kan redan');const b=document.createElement('button');b.className='btn tiny';b.textContent='Återaktivera';b.onclick=()=>void removeProgress(i);row.append(name,b);list.append(row)})}
+$('toggleKnown').onclick=()=>{showKnown=!showKnown;renderKnown()};
+$('reset').onclick=async()=>{if(!user||!confirm('Vill du radera ALLA dina framsteg i Supabase?'))return;const {error}=await db.from('user_word_progress').delete().eq('user_id',user.id);if(error){notice(error.message);return}state={};recent=[];current=-1;shown=0;choose();renderKnown()};
+async function allPages(table,columns,filters){let out=[];for(let from=0;from<50000;from+=1000){let q=db.from(table).select(columns).range(from,from+999);if(filters)q=filters(q);const {data,error}=await q;if(error)throw error;out.push(...data);if(data.length<1000)break}return out}
+async function loadApp(){ready=false;syncMsg('Hämtar ord…');try{const [w,progress]=await Promise.all([allPages('words','id,term,definition',q=>q.eq('active',true).order('term').order('id')) ,allPages('user_word_progress','word_id,status,streak,next_review_at,last_seen_at',q=>q.eq('user_id',user.id))]);// Keep existing word IDs to preserve each user's saved progress.
+// Six old duplicated terms may remain in the database; show each term once.
+const seenTerms=new Set();
+const progressed=new Set(progress.map(p=>p.word_id));
+const prioritized=[...w].sort((a,b)=>Number(progressed.has(b.id))-Number(progressed.has(a.id)));
+const preferredIds=new Map();for(const item of prioritized){const key=item.term.trim().toLocaleLowerCase('sv-SE');if(!preferredIds.has(key))preferredIds.set(key,item.id)}
+words=w.filter(item=>preferredIds.get(item.term.trim().toLocaleLowerCase('sv-SE'))===item.id);
+state={};for(const v of progress)state[v.word_id]={status:v.status,streak:v.streak,due:v.next_review_at?Date.parse(v.next_review_at):0,lastSeen:v.last_seen_at?Date.parse(v.last_seen_at):0};ready=true;$('appContent').classList.remove('hidden');current=-1;recent=[];choose();renderKnown();showView('home');syncMsg('Synkroniserat')}catch(e){notice('Kunde inte hämta databasen: '+e.message);syncMsg('Fel')}}
+async function setUser(u){user=u;ready=false;$('signedOut').classList.toggle('hidden',!!u);$('signedIn').classList.toggle('hidden',!u);$('appContent').classList.add('hidden');$('authSection').classList.toggle('hidden',!!u);$('menuWrap').classList.toggle('hidden',!u);closeMenu();if(!u){words=[];state={};$('account').textContent='';$('menuAccount').textContent='';return}$('account').textContent=u.email||'ditt konto';$('menuAccount').textContent='Inloggad som '+(u.email||'ditt konto');await loadApp()}
+$('login').onclick=async()=>{if(!db)return notice('Kunde inte ladda Supabase-biblioteket. Kontrollera internetanslutningen.');const {error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:'Inloggad!')};
+$('signup').onclick=async()=>{if(!db)return notice('Supabase-biblioteket kunde inte laddas.');const {data,error}=await db.auth.signUp({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:data.session?'Kontot är skapat och du är inloggad.':'Kontot är skapat. Kontrollera din e-post för bekräftelselänk, om bekräftelse krävs.')};
+$('logout').onclick=async()=>{closeMenu();await db.auth.signOut();notice('Utloggad.')};
+(async()=>{if(!db)return notice('Det gick inte att ladda Supabase. Använd webbserver och internetanslutning.');const {data,error}=await db.auth.getSession();if(error)notice(error.message);await setUser(data.session?.user||null);db.auth.onAuthStateChange((_event,session)=>{if(session?.user?.id!==user?.id){setTimeout(()=>void setUser(session?.user||null),0)}})})();
+</script></body></html>
