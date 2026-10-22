@@ -163,11 +163,48 @@
 
 @media(prefers-reduced-motion:reduce){.progress-marker{transition:none!important}}
 
+
+/* v17: återställd tvåkolumnslayout, full bild och tydliga kontraster */
+#homeView .hero{background:linear-gradient(125deg,#e7eefb 0%,#dce7f7 55%,#ecf3ff 100%);border:1px solid #ccd9ef;color:#162c50}
+#homeView .hero-grid{display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);align-items:center;gap:24px;padding:24px}
+#homeView .hero-copy{padding:4px 0}
+#homeView .hero-copy .hero-eyebrow{color:#274a9b}
+#homeView .hero-copy h1{font-size:clamp(29px,4vw,43px);color:#172c53;margin:12px 0 16px}
+#homeView .hero-copy p{color:#344c6e;max-width:420px;font-size:15px;line-height:1.7;margin:0 0 20px}
+#homeView .journey-pill{background:#fff;color:#1d3976;border:1px solid #c9d7ef}
+#homeView .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+#homeView .hero-actions .btn.primary{background:#294db7;color:#fff;border-color:#294db7}
+#homeView .hero-actions .btn.secondary{background:#fff;color:#1d355e;border:1px solid #b9cae7}
+#homeView .hero-journey{min-width:0;gap:13px}
+#homeView .mountain-panel{width:100%;height:auto;min-height:0;aspect-ratio:1/1;border-radius:24px;background:#7797cc;border:1px solid #bdccea;box-shadow:0 12px 30px #1b37631b}
+#homeView .mountain-art{position:absolute;inset:0}
+#homeView .mountain-art img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+#homeView .mountain-shade{background:transparent}
+#homeView .mountain-meta{gap:10px;align-items:center}
+#homeView .mountain-text strong{font-size:21px;color:#182e58}
+#homeView .mountain-text span{font-size:13px;color:#405578}
+#homeView .camp-note{background:#fff;color:#2d4466}
+#homeView .mastery-heading{color:#213b68}
+#homeView .mastery-caption{color:#405675}
+#homeView .progress-marker span{background:#203968;color:#fff}
+@media(max-width:760px){
+  #homeView .hero-grid{grid-template-columns:minmax(0,1fr);gap:20px;padding:20px}
+  #homeView .hero-copy p{max-width:none}
+  #homeView .hero-actions{margin-top:16px}
+  #homeView .mountain-panel{max-width:520px;margin-inline:auto}
+}
+@media(max-width:480px){
+  #homeView .hero-grid{padding:14px}
+  #homeView .hero-copy h1{font-size:30px}
+  #homeView .hero-actions .btn{flex:1;min-width:0}
+  #homeView .mountain-panel{border-radius:18px}
+}
+
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header><div><div class="brand">📘 HP-Ord</div><div class="sub">Din personliga ordtränare · 10 000 ord</div></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></header>
 <section class="card" id="authSection"><div class="eyebrow">Ditt konto – synkroniseras med Supabase</div><div id="signedOut"><p class="hint">Skapa ett konto eller logga in. Dina ord och framsteg sparas därefter säkert i Supabase.</p><div class="toolbar"><input id="email" type="email" autocomplete="email" placeholder="E-postadress" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"><input id="password" type="password" autocomplete="current-password" placeholder="Lösenord (minst 6 tecken)" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"></div><div class="toolbar" style="margin-top:12px"><button class="btn primary" id="login">Logga in</button><button class="btn" id="signup">Skapa konto</button></div></div><div id="signedIn" class="hidden"><p class="hint">Inloggad som <strong id="account"></strong> · <span id="sync">Synkroniserat</span></p></div><p id="authMessage" role="status" aria-live="polite" class="hint"></p></section><div id="appContent" class="hidden">
 
 <div id="homeView">
-<section class="card hero"><div class="hero-grid"><div class="hero-copy"><div class="hero-eyebrow">Din resa mot toppen</div><h1>Ord för ord tar du dig högre upp.</h1><p>Bygg ditt ordförråd inför högskoleprovet och följ hur långt du har kommit på vägen mot ett starkare HP-resultat.</p><div class="journey-pill">🏔️ &nbsp;<span id="mountainPercentText">0 % mot toppen</span></div></div><div class="hero-journey"><div class="mountain-panel" aria-hidden="true"><div class="mountain-art"><img src="mountain-hero.webp" alt="Pixel art med en bergsklättrare som klättrar uppför en brant klippa högt över molnen."></div><div class="mountain-shade"></div><div class="mountain-route"><div class="progress-marker" id="mountainClimber"><span>Du är här</span></div></div></div><div class="mountain-meta"><div class="mountain-text"><strong id="mountainCaption">0 av 10 000 ord bemästrade</strong><span id="mountainSubcaption">Du står vid foten av berget – ett ord i taget tar dig högre upp.</span></div><div class="camp-note" id="nextCampNote"><strong>Nästa delmål:</strong> 2 500 ord kvar till första etappen.</div></div><div class="mountain-progress"><div class="mastery-progress"><div class="mastery-heading"><span>Din väg mot 10 000 bemästrade ord</span><strong id="masteryPercent">0 %</strong></div><div class="mastery-track" id="masteryProgress" role="progressbar" aria-label="Andel bemästrade ord" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="mastery-fill" id="masteryFill"></div></div><div class="mastery-caption" id="masteryCaption">0 av 10 000 ord bemästrade</div></div><div class="hero-actions"><button class="btn primary" id="homeStart" type="button">Börja träna →</button><button class="btn secondary" id="homeReview" type="button">Repetera ord ↻</button></div></div></div></div></section>
+<section class="card hero"><div class="hero-grid"><div class="hero-copy"><div class="hero-eyebrow">Din resa mot toppen</div><h1>Ord för ord tar du dig högre upp.</h1><p>Bygg ditt ordförråd inför högskoleprovet och följ hur långt du har kommit på vägen mot ett starkare HP-resultat.</p><div class="journey-pill">🏔️ &nbsp;<span id="mountainPercentText">0 % mot toppen</span></div><div class="hero-actions"><button class="btn primary" id="homeStart" type="button">Börja träna →</button><button class="btn secondary" id="homeReview" type="button">Repetera ord ↻</button></div></div><div class="hero-journey"><div class="mountain-panel" aria-hidden="true"><div class="mountain-art"><img src="mountain-hero.webp" alt="Pixel art med en bergsklättrare som klättrar uppför en brant klippa högt över molnen."></div><div class="mountain-shade"></div><div class="mountain-route"><div class="progress-marker" id="mountainClimber"><span>Du är här</span></div></div></div><div class="mountain-meta"><div class="mountain-text"><strong id="mountainCaption">0 av 10 000 ord bemästrade</strong><span id="mountainSubcaption">Du står vid foten av berget – ett ord i taget tar dig högre upp.</span></div><div class="camp-note" id="nextCampNote"><strong>Nästa delmål:</strong> 2 500 ord kvar till första etappen.</div></div><div class="mountain-progress"><div class="mastery-progress"><div class="mastery-heading"><span>Din väg mot 10 000 bemästrade ord</span><strong id="masteryPercent">0 %</strong></div><div class="mastery-track" id="masteryProgress" role="progressbar" aria-label="Andel bemästrade ord" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="mastery-fill" id="masteryFill"></div></div><div class="mastery-caption" id="masteryCaption">0 av 10 000 ord bemästrade</div></div></div></div></div></section>
 <section class="card"><div class="eyebrow">Din utveckling</div><div class="stats" style="margin-top:15px"><div class="stat"><div class="num" id="learning">0</div><div class="label">Övar</div></div><div class="stat"><div class="num" id="mastered">0</div><div class="label">Bemästrat</div></div></div><div class="note" id="dueStats" aria-live="polite"></div></section>
 <section class="card"><h2 class="section-title">Så fungerar träningen</h2><p class="section-lead">Tre enkla steg hjälper dig att komma ihåg fler ord.</p><div class="home-guide"><div class="guide-tile"><span class="guide-num">1</span><h3>Träna</h3><p>Försök hitta rätt betydelse bland svarsalternativen.</p></div><div class="guide-tile"><span class="guide-num">2</span><h3>Vänd kortet</h3><p>Se definitionen direkt. Vänd igen om du inte kunde ordet.</p></div><div class="guide-tile"><span class="guide-num">3</span><h3>Repetera</h3><p>Svåra ord återkommer så att kunskapen fastnar.</p></div></div></section>
 </div>
