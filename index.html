@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HP-Ord – Träna inför högskoleprovet</title>
 <style>
-:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#182542;background:#f4f6fb}*{box-sizing:border-box}body{margin:0}main{max-width:850px;margin:auto;padding:26px 18px 70px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.brand{font-size:25px;font-weight:850;color:#293e9d}.sub{color:#71809a;font-size:13px}.card{background:white;border:1px solid #e3e8f2;border-radius:20px;padding:26px;margin-bottom:17px;box-shadow:0 6px 20px #24396009}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#f4f6fd;border-radius:12px;padding:15px}.num{font-size:26px;font-weight:850;color:#3146a0}.label{font-size:12px;color:#71809a}.eyebrow{text-transform:uppercase;font-size:12px;letter-spacing:1px;color:#70809c;font-weight:750}.word{font-size:clamp(32px,6vw,48px);letter-spacing:-1.5px;margin:10px 0 22px}.options{display:grid;gap:9px;margin:22px 0}.option{border:1px solid #dce2ef;background:#fafbfe;color:#21304b;border-radius:13px;padding:14px;text-align:left;font:inherit;cursor:pointer}.option:hover:not(:disabled){border-color:#536bd4;background:#f4f6ff}.option:disabled{cursor:default}.correct{border-color:#45a67d;background:#e8f8ef}.wrong{border-color:#db7474;background:#fff0f0}.actions{display:flex;flex-wrap:wrap;gap:10px}.btn{font:inherit;font-weight:700;border-radius:12px;padding:12px 17px;border:1px solid #dbe2f0;background:white;cursor:pointer;color:#3146a0}.btn.primary{background:#344bbb;border-color:#344bbb;color:white}.btn.green{background:#edfaf1;border-color:#b7dec5;color:#217144}.btn:disabled{opacity:.5;cursor:default}.hint{font-size:13px;color:#70809c;line-height:1.6}.feedback{padding:15px;background:#f1f4fb;border-radius:12px;margin:15px 0;line-height:1.6}.hidden{display:none}select{border:1px solid #dfe5ee;border-radius:10px;padding:10px;background:white}footer{font-size:12px;color:#8290a8;margin-top:20px}@media(max-width:500px){.card{padding:19px}.stats{gap:7px}.stat{padding:12px}.num{font-size:21px}}
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#16233d;background:#edf2fa}*{box-sizing:border-box}body{margin:0;color:#16233d;background:linear-gradient(180deg,#eef3fb 0%,#f7f9fe 100%)}main{max-width:980px;margin:auto;padding:28px 18px 74px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.brand{font-size:25px;font-weight:850;color:#203165}.sub{color:#556884;font-size:13px}.card{background:#fff;border:1px solid #dbe4f2;border-radius:22px;padding:26px;margin-bottom:18px;box-shadow:0 10px 26px #2439600b}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#f4f7fd;border:1px solid #e1e8f6;border-radius:14px;padding:15px;box-shadow:inset 0 1px 0 #fff}.num{font-size:26px;font-weight:850;color:#203165}.label{font-size:12px;color:#566884}.eyebrow{text-transform:uppercase;font-size:12px;letter-spacing:1px;color:#5a6d89;font-weight:800}.word{font-size:clamp(32px,6vw,48px);letter-spacing:-1.5px;margin:10px 0 22px;color:#16233d}.options{display:grid;gap:10px;margin:22px 0}.option{border:1px solid #d6dfef;background:#fff;color:#182946;border-radius:14px;padding:14px;text-align:left;font:inherit;cursor:pointer;box-shadow:0 2px 6px #24396005}.option:hover:not(:disabled){border-color:#3d58c5;background:#f5f8ff}.option:disabled{cursor:default}.correct{border-color:#268b63;background:#ecfaf3}.wrong{border-color:#cb5050;background:#fff1f1}.actions{display:flex;flex-wrap:wrap;gap:10px}.btn{font:inherit;font-weight:700;border-radius:13px;padding:12px 16px;border:1px solid #ccd6ea;background:#fff;cursor:pointer;color:#1c2d4c}.btn.primary{background:#2747bf;border-color:#2747bf;color:#fff}.btn.green{background:#ecfaf3;border-color:#bfe2cf;color:#1f7144}.btn:disabled{opacity:.5;cursor:default}.hint{font-size:13px;color:#566884;line-height:1.6}.feedback{padding:15px;background:#f5f8fd;border:1px solid #e0e8f6;border-radius:14px;margin:15px 0;line-height:1.6;color:#20314f}.hidden{display:none}select{border:1px solid #d7e0ef;border-radius:10px;padding:10px;background:#fff;color:#16233d}footer{font-size:12px;color:#677b98;margin-top:20px}@media(max-width:500px){.card{padding:19px}.stats{gap:7px}.stat{padding:12px}.num{font-size:21px}}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.manage{max-height:290px;overflow:auto;display:grid;gap:8px}.manage-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid #e4e8f2;border-radius:10px}.manage-item span{font-weight:650}.tiny{font-size:12px;padding:7px 10px}.note{background:#edf3ff;border-radius:12px;padding:13px;margin-top:14px;color:#31446b;font-size:13px;line-height:1.6}button:focus-visible,select:focus-visible{outline:3px solid #819aff;outline-offset:2px}
 
 /* Vändbart ordkort */
 .flashcard{display:block;width:100%;height:245px;padding:0;margin:22px 0 10px;border:0;background:transparent;cursor:pointer;perspective:1100px;text-align:center;color:inherit;font:inherit}
 .flashcard-inner{display:block;position:relative;width:100%;height:100%;transition:transform .48s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
 .flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
-.flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;padding:28px;border:1px solid #ccd7fa;border-radius:24px;background:linear-gradient(140deg,#ffffff 10%,#ecf0ff 100%);box-shadow:0 14px 32px #253b8316;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;padding:28px;border:1px solid #c9d6f5;border-radius:24px;background:linear-gradient(140deg,#ffffff 10%,#eef3ff 100%);box-shadow:0 16px 34px #253b8315;backface-visibility:hidden;-webkit-backface-visibility:hidden;color:#16233d}
 .flashcard-back{transform:rotateY(180deg);background:linear-gradient(140deg,#eefaf5,#fff);border-color:#b5dec9}
 .flashcard-word{font-size:clamp(28px,6vw,46px);font-weight:830;line-height:1.15;overflow-wrap:anywhere}
 .flashcard-definition{font-size:clamp(19px,3.2vw,28px);font-weight:700;line-height:1.35;max-height:155px;overflow:auto;overflow-wrap:anywhere}
-.flashcard-caption{font-size:13px;color:#64749d;font-weight:650;line-height:1.4}
+.flashcard-caption{font-size:13px;color:#51627d;font-weight:650;line-height:1.4}
 .flashcard:focus-visible{outline:3px solid #4266e8;outline-offset:5px;border-radius:24px}
 .flashcard:disabled{cursor:default;opacity:1}
 .options-heading{font-size:14px;font-weight:750;color:#415078;margin:17px 0 4px}
@@ -23,16 +23,16 @@
 
 /* V7: Startvy och navigation */
 .site-nav{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 20px}
-.nav-btn{border:1px solid #dce4f4;background:#fff;color:#415073;border-radius:12px;padding:12px 19px;font:inherit;font-weight:750;cursor:pointer}
+.nav-btn{border:1px solid #d9e2f2;background:#fff;color:#20314f;border-radius:12px;padding:12px 19px;font:inherit;font-weight:750;cursor:pointer}
 .nav-btn.active{background:#344bbb;color:#fff;border-color:#344bbb}
 .hero{background:linear-gradient(125deg,#253d9e 0%,#5369ce 100%);border:0;color:#fff;box-shadow:0 16px 35px #263c941c;padding:38px}
-.hero-eyebrow{color:#cad5ff;font-size:12px;letter-spacing:1.5px;font-weight:800;text-transform:uppercase}
+.hero-eyebrow{color:#dfe7ff;font-size:12px;letter-spacing:1.5px;font-weight:800;text-transform:uppercase}
 .hero h1{font-size:clamp(28px,5vw,42px);letter-spacing:-1.3px;line-height:1.15;margin:12px 0}
-.hero p{color:#e2e9ff;line-height:1.65;max-width:540px;margin:0 0 22px}
+.hero p{color:#edf2ff;line-height:1.65;max-width:560px;margin:0 0 22px}
 .hero-actions{display:flex;gap:11px;flex-wrap:wrap}
 .hero-actions .btn{min-width:165px}
 .hero-actions .btn.primary{background:#fff;color:#293e9d;border-color:#fff}
-.hero-actions .btn.secondary{color:#fff;border-color:#a8b7ff;background:#ffffff18}
+.hero-actions .btn.secondary{color:#fff;border-color:#bfd0ff;background:#ffffff18}
 .home-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .guide-tile{border:1px solid #e4e9f5;border-radius:15px;padding:16px;background:#fafbff}
 .guide-num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:10px;background:#e6ebff;color:#3048b3;font-weight:800}
@@ -68,57 +68,69 @@
 
 /* v12: mountain progress hero */
 .hero{padding:0;overflow:hidden;background:linear-gradient(140deg,#f7f9ff 0%,#eef3ff 38%,#ffffff 100%);border:1px solid #dfe7fb;color:#21304b}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:center;padding:28px}
+.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:26px;align-items:center;padding:30px}
 .hero-copy{padding-right:6px}
 .hero-copy .hero-eyebrow{color:#5570d8}
 .hero-copy h1{font-size:clamp(28px,5vw,44px);letter-spacing:-1.35px;line-height:1.1;margin:10px 0 12px;color:#203165}
 .hero-copy p{color:#5d6f8f;max-width:560px;margin:0 0 16px;line-height:1.65}
-.hero-journey{display:grid;gap:15px}
+.hero-journey{display:grid;gap:16px}
 .journey-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#eef3ff;color:#3550be;font-weight:750;font-size:13px;width:max-content}
-.mountain-panel{position:relative;min-height:410px;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#d8edff 0%,#f3f9ff 34%,#edf2ff 35%,#f8fbff 100%);border:1px solid #dbe6fb;box-shadow:inset 0 1px 0 #ffffffa8,0 20px 40px #2a438917}
-.sky-glow{position:absolute;inset:0;background:radial-gradient(circle at 70% 18%,#ffffffd8 0 10%,transparent 30%),radial-gradient(circle at 22% 20%,#ffffff99 0 8%,transparent 26%)}
+.mountain-panel{position:relative;min-height:520px;border-radius:30px;overflow:hidden;background:linear-gradient(180deg,#cfe7ff 0%,#eaf5ff 26%,#f5faff 40%,#eef3ff 100%);border:1px solid #cfe0f8;box-shadow:inset 0 1px 0 #ffffffc7,0 28px 52px #213a781c}
+.sky-glow{position:absolute;inset:0;background:radial-gradient(circle at 73% 14%,#fffef7 0 8%,#fff6c0 9%,transparent 24%),radial-gradient(circle at 22% 18%,#ffffffbf 0 8%,transparent 24%),linear-gradient(180deg,transparent 0%,transparent 54%,#f7fbff 90%)}
 .mountain-range{position:absolute;inset:0}
 .mountain-back,.mountain-front{position:absolute;left:0;right:0;bottom:0}
-.mountain-back{height:68%;background:linear-gradient(180deg,#9fb4f5 0%,#7c95e5 100%);clip-path:polygon(0% 100%,18% 63%,32% 72%,43% 54%,53% 63%,65% 34%,78% 48%,89% 28%,100% 44%,100% 100%)}
-.mountain-front{height:78%;background:linear-gradient(180deg,#5b74d5 0%,#3f57b2 62%,#344b9f 100%);clip-path:polygon(0% 100%,12% 78%,24% 82%,37% 63%,44% 67%,55% 46%,65% 56%,76% 27%,87% 16%,94% 28%,100% 22%,100% 100%)}
-.snow-cap{position:absolute;right:6%;top:11%;width:28%;height:20%;background:linear-gradient(180deg,#ffffff,#eef5ff);clip-path:polygon(52% 0%,70% 20%,88% 44%,74% 56%,66% 70%,54% 58%,44% 72%,33% 55%,18% 48%,31% 28%);filter:drop-shadow(0 4px 6px #ffffff4f)}
-.mountain-route{position:absolute;left:17%;bottom:13%;width:64%;height:70%;pointer-events:none}
+.mountain-back{height:72%;background:linear-gradient(180deg,#9bb2ea 0%,#7f97df 50%,#6982cf 100%);clip-path:polygon(0% 100%,8% 89%,17% 72%,26% 78%,36% 60%,43% 66%,52% 44%,61% 55%,73% 29%,84% 42%,93% 20%,100% 31%,100% 100%)}
+.mountain-front{height:82%;background:linear-gradient(180deg,#526bcb 0%,#3d58b0 48%,#314896 100%);clip-path:polygon(0% 100%,10% 82%,20% 85%,28% 70%,36% 73%,45% 57%,52% 61%,61% 42%,69% 49%,77% 30%,86% 14%,93% 24%,100% 19%,100% 100%)}
+.snow-cap{position:absolute;right:4%;top:8%;width:32%;height:23%;background:linear-gradient(180deg,#ffffff,#edf5ff);clip-path:polygon(52% 0%,68% 14%,86% 38%,76% 54%,68% 66%,54% 58%,46% 72%,35% 57%,16% 46%,28% 24%);filter:drop-shadow(0 8px 10px #ffffff5e)}
+.mountain-route{position:absolute;left:12%;bottom:11%;width:75%;height:76%;pointer-events:none}
 .route-line{position:absolute;inset:0}
 .route-line svg{width:100%;height:100%}
-.route-line path{stroke:#f5f8ff;stroke-width:4.5;fill:none;stroke-linecap:round;stroke-dasharray:7 9;opacity:.95;filter:drop-shadow(0 1px 1px #30406b29)}
+.route-line path{stroke:#f8fbff;stroke-width:5.5;fill:none;stroke-linecap:round;stroke-dasharray:8 10;opacity:.98;filter:drop-shadow(0 2px 3px #22335930)}
 .milestone{position:absolute;transform:translate(-50%,50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:#f4f7ff;font-size:11px;font-weight:700;text-shadow:0 1px 2px #20325d6e}
 .milestone-dot{width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid #88b7ff;box-shadow:0 0 0 4px #ffffff1a}
 .milestone.reached .milestone-dot{background:#ffd86b;border-color:#fff3c0;box-shadow:0 0 0 5px #ffe08d2e}
-.summit-flag{position:absolute;right:9%;top:16%;width:44px;height:44px}
-.summit-flag::before{content:'';position:absolute;left:14px;top:8px;width:3px;height:28px;background:#e9f0ff;border-radius:4px}
-.summit-flag::after{content:'';position:absolute;left:17px;top:8px;width:17px;height:12px;background:linear-gradient(135deg,#ff7d7d,#ff4f75);clip-path:polygon(0 0,100% 22%,68% 53%,100% 82%,0 100%)}
+.summit-flag{position:absolute;right:8%;top:13%;width:52px;height:52px}
+.summit-flag::before{content:'';position:absolute;left:15px;top:8px;width:3px;height:34px;background:#edf3ff;border-radius:4px}
+.summit-flag::after{content:'';position:absolute;left:18px;top:8px;width:22px;height:14px;background:linear-gradient(135deg,#ff8a76,#ff4d63);clip-path:polygon(0 0,100% 22%,68% 53%,100% 82%,0 100%)}
 .cloud{position:absolute;background:#ffffffc7;border-radius:999px;filter:blur(.2px);box-shadow:0 6px 20px #ffffff6e}
-.cloud.c1{width:86px;height:26px;left:9%;top:16%;animation:cloudFloat 8s ease-in-out infinite}
-.cloud.c2{width:66px;height:22px;right:20%;top:11%;animation:cloudFloat 11s ease-in-out infinite reverse}
+.cloud.c1{width:100px;height:30px;left:7%;top:15%;animation:cloudFloat 8s ease-in-out infinite}
+.cloud.c2{width:82px;height:26px;right:19%;top:10%;animation:cloudFloat 11s ease-in-out infinite reverse}
 .cloud::before,.cloud::after{content:'';position:absolute;background:inherit;border-radius:inherit}
 .cloud::before{width:30px;height:30px;left:12px;bottom:8px}
 .cloud::after{width:36px;height:36px;right:12px;bottom:5px}
 @keyframes cloudFloat{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
-.climber{position:absolute;left:18%;bottom:13%;width:34px;height:34px;transform:translate(-50%,50%);transition:left .6s ease,bottom .6s ease;z-index:3}
+.climber{position:absolute;left:18%;bottom:13%;width:48px;height:48px;transform:translate(-50%,50%);transition:left .8s ease,bottom .8s ease;z-index:3;filter:drop-shadow(0 8px 10px #14214c33)}
 .climber-figure{position:relative;width:100%;height:100%;animation:climbBob 2.4s ease-in-out infinite;transform-origin:50% 80%}
 @keyframes climbBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
-.climber-head{position:absolute;left:11px;top:1px;width:9px;height:9px;border-radius:50%;background:#f7d7bb;box-shadow:0 0 0 1px #eabf95 inset}
-.climber-body{position:absolute;left:12px;top:10px;width:8px;height:13px;background:#ff9a2f;border-radius:6px 6px 5px 5px;transform:skew(-7deg)}
+.climber-head{position:absolute;left:17px;top:2px;width:12px;height:12px;border-radius:50%;background:#f6d5b8;box-shadow:0 0 0 1px #e2b78d inset}
+.climber-body{position:absolute;left:17px;top:14px;width:11px;height:18px;background:linear-gradient(180deg,#ffad3c,#f67f19);border-radius:8px 8px 6px 6px;transform:skew(-8deg)}
 .climber-arm1,.climber-arm2,.climber-leg1,.climber-leg2,.climber-rope{position:absolute;background:#263b85;border-radius:4px;transform-origin:left center}
-.climber-arm1{left:7px;top:13px;width:11px;height:3px;transform:rotate(-36deg)}
-.climber-arm2{left:18px;top:13px;width:9px;height:3px;transform:rotate(55deg)}
-.climber-leg1{left:10px;top:21px;width:11px;height:3px;transform:rotate(36deg)}
-.climber-leg2{left:16px;top:22px;width:10px;height:3px;transform:rotate(-48deg)}
-.climber-rope{left:22px;top:-10px;width:2px;height:21px;background:#f7faff;transform:rotate(12deg);opacity:.95}
-.climber-shadow{position:absolute;inset:auto 6px -5px 6px;height:8px;border-radius:50%;background:#0b18451f;filter:blur(3px)}
+.climber-arm1{left:9px;top:18px;width:15px;height:4px;transform:rotate(-36deg)}
+.climber-arm2{left:26px;top:18px;width:13px;height:4px;transform:rotate(57deg)}
+.climber-leg1{left:13px;top:31px;width:15px;height:4px;transform:rotate(34deg)}
+.climber-leg2{left:24px;top:31px;width:14px;height:4px;transform:rotate(-50deg)}
+.climber-rope{left:31px;top:-14px;width:2px;height:28px;background:#f8fbff;transform:rotate(12deg);opacity:.96}
+.climber-shadow{position:absolute;inset:auto 8px -8px 8px;height:10px;border-radius:50%;background:#10204b22;filter:blur(4px)}
 .mountain-meta{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap}
-.mountain-text strong{display:block;font-size:26px;color:#203165;letter-spacing:-.6px}
-.mountain-text span{font-size:13px;color:#62718e}
-.camp-note{font-size:13px;color:#50617f;background:#f7faff;border:1px solid #e1e9fb;padding:11px 14px;border-radius:14px}
+.mountain-text strong{display:block;font-size:28px;color:#162b66;letter-spacing:-.7px}
+.mountain-text span{font-size:14px;color:#50617d}
+.camp-note{font-size:14px;color:#374d6b;background:#f7faff;border:1px solid #dce7fb;padding:12px 15px;border-radius:14px;box-shadow:0 6px 16px #2644870b}
 .camp-note strong{color:#203165}
 .mountain-progress .mastery-progress{margin-top:0}
 @media(max-width:920px){.hero-grid{grid-template-columns:1fr}.mountain-panel{min-height:360px}}
-@media(max-width:590px){.hero-grid{padding:20px}.mountain-panel{min-height:310px;border-radius:22px}.hero-copy h1{font-size:32px}.mountain-text strong{font-size:22px}.milestone{font-size:10px}}
+@media(max-width:590px){.hero-grid{padding:20px}.mountain-panel{min-height:360px;border-radius:22px}.hero-copy h1{font-size:32px}.mountain-text strong{font-size:22px}.milestone{font-size:10px}.camp-note{font-size:13px}}
+
+.mountain-panel::before{content:'';position:absolute;right:10%;top:8%;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#fff7c2 0%,#ffe492 35%,#ffd87055 60%,transparent 70%);filter:blur(1px);opacity:.9}
+.mountain-panel::after{content:'';position:absolute;left:0;right:0;bottom:-12px;height:95px;background:linear-gradient(180deg,transparent 0%,#ffffff1a 20%,#d6e3ff55 55%,#ffffff00 100%);pointer-events:none}
+.mountain-front::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 0 39%,#6b86e512 39% 43%,transparent 43% 100%),linear-gradient(112deg,transparent 0 55%,#ffffff12 55% 58%,transparent 58% 100%),linear-gradient(130deg,transparent 0 72%,#ffffff14 72% 74%,transparent 74% 100%)}
+.mountain-back::before{content:'';position:absolute;inset:0;background:linear-gradient(125deg,transparent 0 36%,#ffffff12 36% 38%,transparent 38% 100%),linear-gradient(110deg,transparent 0 62%,#ffffff12 62% 64%,transparent 64% 100%)}
+.climber-body::after{content:'';position:absolute;right:-6px;top:2px;width:8px;height:12px;border-radius:4px;background:#203165;box-shadow:0 0 0 1px #4259ba44}
+.climber-arm2::after{content:'';position:absolute;right:-2px;top:-1px;width:10px;height:2px;background:#d8e4ff;border-radius:3px;transform:rotate(-42deg);transform-origin:right center}
+.mastery-track{box-shadow:inset 0 1px 2px #21396914}
+.mastery-fill{background:linear-gradient(90deg,#4a7bff 0%,#5570d8 50%,#2f56d0 100%)}
+.stat{box-shadow:inset 0 1px 0 #fff}
+.guide-tile{background:#ffffff;border:1px solid #e0e7f5;box-shadow:0 6px 16px #26448708}
+
 @media(prefers-reduced-motion:reduce){.climber,.climber-figure,.cloud{transition:none!important;animation:none!important}}
 
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header><div><div class="brand">📘 HP-Ord</div><div class="sub">Din personliga ordtränare · 10 000 ord</div></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></header>
