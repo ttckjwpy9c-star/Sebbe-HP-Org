@@ -65,14 +65,68 @@
 .mastery-fill{width:0;height:100%;background:linear-gradient(90deg,#4f69d5,#43ad84);border-radius:inherit;transition:width .35s ease}
 .mastery-caption{margin-top:10px;color:#6c7a91;font-size:13px;font-variant-numeric:tabular-nums}
 @media(prefers-reduced-motion:reduce){.mastery-fill{transition:none}}
+
+/* v12: mountain progress hero */
+.hero{padding:0;overflow:hidden;background:linear-gradient(140deg,#f7f9ff 0%,#eef3ff 38%,#ffffff 100%);border:1px solid #dfe7fb;color:#21304b}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:center;padding:28px}
+.hero-copy{padding-right:6px}
+.hero-copy .hero-eyebrow{color:#5570d8}
+.hero-copy h1{font-size:clamp(28px,5vw,44px);letter-spacing:-1.35px;line-height:1.1;margin:10px 0 12px;color:#203165}
+.hero-copy p{color:#5d6f8f;max-width:560px;margin:0 0 16px;line-height:1.65}
+.hero-journey{display:grid;gap:15px}
+.journey-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#eef3ff;color:#3550be;font-weight:750;font-size:13px;width:max-content}
+.mountain-panel{position:relative;min-height:410px;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#d8edff 0%,#f3f9ff 34%,#edf2ff 35%,#f8fbff 100%);border:1px solid #dbe6fb;box-shadow:inset 0 1px 0 #ffffffa8,0 20px 40px #2a438917}
+.sky-glow{position:absolute;inset:0;background:radial-gradient(circle at 70% 18%,#ffffffd8 0 10%,transparent 30%),radial-gradient(circle at 22% 20%,#ffffff99 0 8%,transparent 26%)}
+.mountain-range{position:absolute;inset:0}
+.mountain-back,.mountain-front{position:absolute;left:0;right:0;bottom:0}
+.mountain-back{height:68%;background:linear-gradient(180deg,#9fb4f5 0%,#7c95e5 100%);clip-path:polygon(0% 100%,18% 63%,32% 72%,43% 54%,53% 63%,65% 34%,78% 48%,89% 28%,100% 44%,100% 100%)}
+.mountain-front{height:78%;background:linear-gradient(180deg,#5b74d5 0%,#3f57b2 62%,#344b9f 100%);clip-path:polygon(0% 100%,12% 78%,24% 82%,37% 63%,44% 67%,55% 46%,65% 56%,76% 27%,87% 16%,94% 28%,100% 22%,100% 100%)}
+.snow-cap{position:absolute;right:6%;top:11%;width:28%;height:20%;background:linear-gradient(180deg,#ffffff,#eef5ff);clip-path:polygon(52% 0%,70% 20%,88% 44%,74% 56%,66% 70%,54% 58%,44% 72%,33% 55%,18% 48%,31% 28%);filter:drop-shadow(0 4px 6px #ffffff4f)}
+.mountain-route{position:absolute;left:17%;bottom:13%;width:64%;height:70%;pointer-events:none}
+.route-line{position:absolute;inset:0}
+.route-line svg{width:100%;height:100%}
+.route-line path{stroke:#f5f8ff;stroke-width:4.5;fill:none;stroke-linecap:round;stroke-dasharray:7 9;opacity:.95;filter:drop-shadow(0 1px 1px #30406b29)}
+.milestone{position:absolute;transform:translate(-50%,50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:#f4f7ff;font-size:11px;font-weight:700;text-shadow:0 1px 2px #20325d6e}
+.milestone-dot{width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid #88b7ff;box-shadow:0 0 0 4px #ffffff1a}
+.milestone.reached .milestone-dot{background:#ffd86b;border-color:#fff3c0;box-shadow:0 0 0 5px #ffe08d2e}
+.summit-flag{position:absolute;right:9%;top:16%;width:44px;height:44px}
+.summit-flag::before{content:'';position:absolute;left:14px;top:8px;width:3px;height:28px;background:#e9f0ff;border-radius:4px}
+.summit-flag::after{content:'';position:absolute;left:17px;top:8px;width:17px;height:12px;background:linear-gradient(135deg,#ff7d7d,#ff4f75);clip-path:polygon(0 0,100% 22%,68% 53%,100% 82%,0 100%)}
+.cloud{position:absolute;background:#ffffffc7;border-radius:999px;filter:blur(.2px);box-shadow:0 6px 20px #ffffff6e}
+.cloud.c1{width:86px;height:26px;left:9%;top:16%;animation:cloudFloat 8s ease-in-out infinite}
+.cloud.c2{width:66px;height:22px;right:20%;top:11%;animation:cloudFloat 11s ease-in-out infinite reverse}
+.cloud::before,.cloud::after{content:'';position:absolute;background:inherit;border-radius:inherit}
+.cloud::before{width:30px;height:30px;left:12px;bottom:8px}
+.cloud::after{width:36px;height:36px;right:12px;bottom:5px}
+@keyframes cloudFloat{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+.climber{position:absolute;left:18%;bottom:13%;width:34px;height:34px;transform:translate(-50%,50%);transition:left .6s ease,bottom .6s ease;z-index:3}
+.climber-figure{position:relative;width:100%;height:100%;animation:climbBob 2.4s ease-in-out infinite;transform-origin:50% 80%}
+@keyframes climbBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
+.climber-head{position:absolute;left:11px;top:1px;width:9px;height:9px;border-radius:50%;background:#f7d7bb;box-shadow:0 0 0 1px #eabf95 inset}
+.climber-body{position:absolute;left:12px;top:10px;width:8px;height:13px;background:#ff9a2f;border-radius:6px 6px 5px 5px;transform:skew(-7deg)}
+.climber-arm1,.climber-arm2,.climber-leg1,.climber-leg2,.climber-rope{position:absolute;background:#263b85;border-radius:4px;transform-origin:left center}
+.climber-arm1{left:7px;top:13px;width:11px;height:3px;transform:rotate(-36deg)}
+.climber-arm2{left:18px;top:13px;width:9px;height:3px;transform:rotate(55deg)}
+.climber-leg1{left:10px;top:21px;width:11px;height:3px;transform:rotate(36deg)}
+.climber-leg2{left:16px;top:22px;width:10px;height:3px;transform:rotate(-48deg)}
+.climber-rope{left:22px;top:-10px;width:2px;height:21px;background:#f7faff;transform:rotate(12deg);opacity:.95}
+.climber-shadow{position:absolute;inset:auto 6px -5px 6px;height:8px;border-radius:50%;background:#0b18451f;filter:blur(3px)}
+.mountain-meta{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap}
+.mountain-text strong{display:block;font-size:26px;color:#203165;letter-spacing:-.6px}
+.mountain-text span{font-size:13px;color:#62718e}
+.camp-note{font-size:13px;color:#50617f;background:#f7faff;border:1px solid #e1e9fb;padding:11px 14px;border-radius:14px}
+.camp-note strong{color:#203165}
+.mountain-progress .mastery-progress{margin-top:0}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr}.mountain-panel{min-height:360px}}
+@media(max-width:590px){.hero-grid{padding:20px}.mountain-panel{min-height:310px;border-radius:22px}.hero-copy h1{font-size:32px}.mountain-text strong{font-size:22px}.milestone{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.climber,.climber-figure,.cloud{transition:none!important;animation:none!important}}
+
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header><div><div class="brand">📘 HP-Ord</div><div class="sub">Din personliga ordtränare · 10 000 ord</div></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></header>
 <section class="card" id="authSection"><div class="eyebrow">Ditt konto – synkroniseras med Supabase</div><div id="signedOut"><p class="hint">Skapa ett konto eller logga in. Dina ord och framsteg sparas därefter säkert i Supabase.</p><div class="toolbar"><input id="email" type="email" autocomplete="email" placeholder="E-postadress" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"><input id="password" type="password" autocomplete="current-password" placeholder="Lösenord (minst 6 tecken)" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"></div><div class="toolbar" style="margin-top:12px"><button class="btn primary" id="login">Logga in</button><button class="btn" id="signup">Skapa konto</button></div></div><div id="signedIn" class="hidden"><p class="hint">Inloggad som <strong id="account"></strong> · <span id="sync">Synkroniserat</span></p></div><p id="authMessage" role="status" aria-live="polite" class="hint"></p></section><div id="appContent" class="hidden">
 
 <div id="homeView">
-<section class="card hero"><div class="hero-eyebrow">Välkommen till HP-Ord</div><h1>Varje nytt ord tar dig närmare ditt mål.</h1><p>Öva på ord inför högskoleprovet, repetera det du tycker är svårt och följ dina framsteg i din egen takt.</p><div class="hero-actions"><button class="btn primary" id="homeStart" type="button">Börja träna →</button><button class="btn secondary" id="homeReview" type="button">Repetera ord ↻</button></div></section>
-<section class="card"><div class="eyebrow">Din utveckling</div><div class="stats" style="margin-top:15px"><div class="stat"><div class="num" id="learning">0</div><div class="label">Övar</div></div><div class="stat"><div class="num" id="mastered">0</div><div class="label">Bemästrat</div></div></div>
-<div class="mastery-progress"><div class="mastery-heading"><span>Din väg mot 10 000 bemästrade ord</span><strong id="masteryPercent">0 %</strong></div><div class="mastery-track" id="masteryProgress" role="progressbar" aria-label="Andel bemästrade ord" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="mastery-fill" id="masteryFill"></div></div><div class="mastery-caption" id="masteryCaption">0 av 10 000 ord bemästrade</div></div>
-<div class="note" id="dueStats" aria-live="polite"></div></section>
+<section class="card hero"><div class="hero-grid"><div class="hero-copy"><div class="hero-eyebrow">Din resa mot toppen</div><h1>Ord för ord tar du dig högre upp.</h1><p>Bygg ditt ordförråd inför högskoleprovet, bemästra fler ord och följ hur din klättrare tar sig närmare toppen för varje framsteg.</p><div class="journey-pill">🏔️ &nbsp;<span id="mountainPercentText">0 % mot toppen</span></div><div class="hero-actions"><button class="btn primary" id="homeStart" type="button">Börja träna →</button><button class="btn secondary" id="homeReview" type="button">Repetera ord ↻</button></div></div><div class="hero-journey"><div class="mountain-panel" aria-hidden="true"><div class="sky-glow"></div><div class="cloud c1"></div><div class="cloud c2"></div><div class="mountain-range"><div class="mountain-back"></div><div class="mountain-front"></div><div class="snow-cap"></div></div><div class="summit-flag"></div><div class="mountain-route"><div class="route-line"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M6,92 C16,90 19,80 26,73 C34,63 42,68 49,54 C56,42 60,46 68,33 C73,24 80,20 93,7"/></svg></div><div class="milestone" data-threshold="2500" style="left:26%;bottom:29%"><div class="milestone-dot"></div><span>2 500</span></div><div class="milestone" data-threshold="5000" style="left:49%;bottom:49%"><div class="milestone-dot"></div><span>5 000</span></div><div class="milestone" data-threshold="7500" style="left:69%;bottom:66%"><div class="milestone-dot"></div><span>7 500</span></div><div class="milestone" data-threshold="10000" style="left:93%;bottom:92%"><div class="milestone-dot"></div><span>10 000</span></div><div class="climber" id="mountainClimber"><div class="climber-figure"><div class="climber-rope"></div><div class="climber-head"></div><div class="climber-body"></div><div class="climber-arm1"></div><div class="climber-arm2"></div><div class="climber-leg1"></div><div class="climber-leg2"></div><div class="climber-shadow"></div></div></div></div></div><div class="mountain-meta"><div class="mountain-text"><strong id="mountainCaption">0 av 10 000 ord bemästrade</strong><span id="mountainSubcaption">Du står vid foten av berget – första delmålet är 2 500 ord.</span></div><div class="camp-note" id="nextCampNote"><strong>Nästa delmål:</strong> 2 500 ord kvar till första lägerplatsen.</div></div><div class="mountain-progress"><div class="mastery-progress"><div class="mastery-heading"><span>Din väg mot 10 000 bemästrade ord</span><strong id="masteryPercent">0 %</strong></div><div class="mastery-track" id="masteryProgress" role="progressbar" aria-label="Andel bemästrade ord" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="mastery-fill" id="masteryFill"></div></div><div class="mastery-caption" id="masteryCaption">0 av 10 000 ord bemästrade</div></div></div></div></div></section>
+<section class="card"><div class="eyebrow">Din utveckling</div><div class="stats" style="margin-top:15px"><div class="stat"><div class="num" id="learning">0</div><div class="label">Övar</div></div><div class="stat"><div class="num" id="mastered">0</div><div class="label">Bemästrat</div></div></div><div class="note" id="dueStats" aria-live="polite"></div></section>
 <section class="card"><h2 class="section-title">Så fungerar träningen</h2><p class="section-lead">Tre enkla steg hjälper dig att komma ihåg fler ord.</p><div class="home-guide"><div class="guide-tile"><span class="guide-num">1</span><h3>Träna</h3><p>Försök hitta rätt betydelse bland svarsalternativen.</p></div><div class="guide-tile"><span class="guide-num">2</span><h3>Vänd kortet</h3><p>Se definitionen direkt. Vänd igen om du inte kunde ordet.</p></div><div class="guide-tile"><span class="guide-num">3</span><h3>Repetera</h3><p>Svåra ord återkommer så att kunskapen fastnar.</p></div></div></section>
 </div>
 <div id="trainingView" class="view-hidden">
@@ -423,13 +477,27 @@ function mastered(i){const e=entry(i);return status(i)==='known'&&Number(e.strea
 function due(i){return !entry(i).due || entry(i).due<=Date.now()}
 function stats(){let masteredCount=0,learning=0,readyCount=0,unseen=0;
 words.forEach((_,i)=>{const st=status(i);if(st==='known')masteredCount++;else{if(st==='review'||st==='learned')learning++;if(st==='new')unseen++;if((st==='review'||st==='learned')&&due(i))readyCount++}});
-// Både "Kan redan" (streak 0) och sex rätt i rad (streak 6) räknas som bemästrade.
 const total=words.length||10000, percent=total?100*masteredCount/total:0;
 $('mastered').textContent=masteredCount.toLocaleString('sv-SE');$('learning').textContent=learning.toLocaleString('sv-SE');
 $('masteryPercent').textContent=percent.toLocaleString('sv-SE',{maximumFractionDigits:1})+' %';
 $('masteryFill').style.width=percent+'%';
 $('masteryProgress').setAttribute('aria-valuenow',String(Number(percent.toFixed(1))));
-$('masteryCaption').textContent=`${masteredCount.toLocaleString('sv-SE')} av ${total.toLocaleString('sv-SE')} ord bemästrade`;
+const masteredText=`${masteredCount.toLocaleString('sv-SE')} av ${total.toLocaleString('sv-SE')} ord bemästrade`;
+$('masteryCaption').textContent=masteredText;
+$('mountainCaption').textContent=masteredText;
+$('mountainPercentText').textContent=percent.toLocaleString('sv-SE',{maximumFractionDigits:1})+' % mot toppen';
+const checkpoints=[2500,5000,7500,10000];
+const next=checkpoints.find(x=>masteredCount<x);
+$('mountainSubcaption').textContent=next
+? `Du är på väg uppför berget – nästa delmål är ${next.toLocaleString('sv-SE')} bemästrade ord.`
+: 'Du har nått toppen – alla 10 000 ord är bemästrade!';
+$('nextCampNote').innerHTML= next
+? `<strong>Nästa delmål:</strong> ${(next-masteredCount).toLocaleString('sv-SE')} ord kvar till ${next.toLocaleString('sv-SE')}.`
+: '<strong>Toppen nådd!</strong> Du har bemästrat hela ordlistan.';
+const p=Math.max(0,Math.min(1,total?masteredCount/total:0));
+const x=6 + p*87; const y=92 - p*85;
+$('mountainClimber').style.left=x+'%'; $('mountainClimber').style.bottom=y+'%';
+[...document.querySelectorAll('.milestone')].forEach(el=>{el.classList.toggle('reached', masteredCount>=Number(el.dataset.threshold||0));});
 $('dueStats').textContent=`${readyCount} ord redo för repetition. ${unseen} nya ord väntar. Totalt ${words.length} ord i databasen.`}
 function pool(){const mode=$('mode').value;return words.map((_,i)=>i).filter(i=>{const st=status(i);if(mode==='allwords')return true;if(mode==='review')return (st==='review'||st==='learned')&&due(i);return st==='new'||((st==='review'||st==='learned')&&due(i))})}
 function distractors(i){const out=[],seen=new Set([words[i].definition]);for(let k=0;k<words.length&&out.length<4;k++){const meaning=words[(i*37+11+k*17)%words.length].definition;if(!seen.has(meaning)){seen.add(meaning);out.push(meaning)}}return out}
