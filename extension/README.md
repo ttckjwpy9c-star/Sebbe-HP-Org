@@ -52,7 +52,7 @@ Läsassistenten fortsätter att visa svenska Wiktionary som vanligt. Under defin
 6. Klicka på tilläggets ikon och logga in med ditt befintliga Ordtoppen-konto. Lösenordet skickas till Supabase Auth, inte till OpenAI, och sparas inte i tillägget. När du markerar ett ord kan du klicka **Förklara enklare med GPT**.
 
 ### Kostnadsskydd
-- 5 GPT-anrop per inloggat konto och dag.
+- 20 GPT-anrop per inloggat konto och dag.
 - Totalt högst 50 GPT-anrop/dag för piloten.
 - Ett anrop får högst 180 utmatningstoken; modellen är `gpt-6-luna`.
 - Det här begränsar antal möjliga anrop; sätt också en separat budget/utgiftsgräns hos OpenAI. Budgeten kan bero på projektets faktureringsfunktioner och är inte samma sak som anropsbegränsningen.
