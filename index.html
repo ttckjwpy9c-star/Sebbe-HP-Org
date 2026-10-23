@@ -214,7 +214,41 @@
 .streak-track{height:8px;background:#e0e7f5;border-radius:999px;overflow:hidden;margin-top:10px}
 .streak-fill{width:0%;height:100%;background:linear-gradient(90deg,#4b74d8,#2c9e73);border-radius:inherit;transition:width .25s ease}
 @media(max-width:520px){.daily-session{padding:12px}.daily-session-data{width:100%}.daily-session-data span{flex:1;text-align:center}}
-</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header><div><div class="brand">📘 HP-Ord</div><div class="sub">Din personliga ordtränare · 10 000 ord</div></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></header>
+
+/* Högskoleprovsläge: separerat från ordkort och repetitionssystem */
+.exam-title{font-size:clamp(25px,4vw,36px);line-height:1.2;margin:11px 0 12px;color:#172f5a}
+.exam-lead{max-width:680px;color:#415572;line-height:1.7}
+.exam-intro-facts{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 24px}
+.exam-intro-facts span{padding:10px 14px;background:#eaf1ff;color:#173869;font-size:14px;font-weight:800;border-radius:12px;border:1px solid #d1dff7}
+.exam-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.exam-topline strong{display:block;font-size:17px;color:#203760;margin-top:4px}
+.exam-clock{font-variant-numeric:tabular-nums;font-size:26px;font-weight:900;letter-spacing:.4px;color:#162f60;background:#eaf1ff;border:1px solid #bfd1f3;padding:10px 15px;border-radius:14px}
+.exam-clock.low{background:#fff1ed;color:#a52d25;border-color:#efb2a8}
+.exam-track{height:9px;border-radius:999px;background:#e1e9f8;overflow:hidden;margin:18px 0 28px}
+.exam-track>div{height:100%;background:linear-gradient(90deg,#4565ce,#2b9d86);width:0%;transition:width .2s}
+.exam-word{font-size:clamp(32px,6vw,52px);font-weight:850;color:#1a3157;line-height:1.2;margin:30px 0 7px;overflow-wrap:anywhere}
+.exam-prompt{font-size:14px;color:#52657f;margin:0 0 23px}
+.exam-options{display:grid;gap:11px}
+.exam-choice{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:16px;background:#fff;border:2px solid #d5dfed;border-radius:14px;color:#1b2c49;font:inherit;line-height:1.45;cursor:pointer;min-height:62px}
+.exam-choice:hover:not(:disabled){background:#f5f8ff;border-color:#7495d5}
+.exam-choice.selected{background:#e9f1ff;border-color:#345bc5}
+.exam-choice .exam-letter{flex:0 0 30px;width:30px;height:30px;border-radius:9px;background:#edf2fa;color:#243f74;display:grid;place-items:center;font-size:13px;font-weight:900}
+.exam-choice.selected .exam-letter{background:#345bc5;color:#fff}
+.exam-choice:disabled{cursor:default}
+.exam-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+.exam-response-hint{font-size:13px;color:#50627d}
+.exam-footnote{margin:26px 0 0;color:#62728b;font-size:12px;line-height:1.55}
+.exam-result-summary{font-size:19px;font-weight:750;color:#1c3f73;background:#edf4ff;border:1px solid #cfe0fb;padding:18px;border-radius:16px;margin:18px 0}
+.exam-result-details{display:grid;gap:10px;margin:18px 0}
+.exam-result-item{border:1px solid #dfe5f0;background:#fff;padding:15px 17px;border-radius:13px}
+.exam-result-item.correct{border-color:#a6d9bf;background:#f0fcf5}
+.exam-result-item.incorrect{border-color:#edc3b6;background:#fff8f6}
+.exam-result-item strong{color:#1b3156}
+.exam-result-item p{margin:6px 0 0;color:#344967;line-height:1.5;font-size:13px}
+.exam-result-actions{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:600px){.exam-choice{padding:12px;min-height:54px}.exam-word{margin-top:18px}.exam-nav .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.exam-track>div{transition:none}}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header><div><div class="brand">📘 HP-Ord</div><div class="sub">Din personliga ordtränare · 10 000 ord</div></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><button class="menu-item" type="button" id="goExam">◷ &nbsp;Högskoleprovsläge</button><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></header>
 <section class="card" id="authSection"><div class="eyebrow">Ditt konto – synkroniseras med Supabase</div><div id="signedOut"><p class="hint">Skapa ett konto eller logga in. Dina ord och framsteg sparas därefter säkert i Supabase.</p><div class="toolbar"><input id="email" type="email" autocomplete="email" placeholder="E-postadress" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"><input id="password" type="password" autocomplete="current-password" placeholder="Lösenord (minst 6 tecken)" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"></div><div class="toolbar" style="margin-top:12px"><button class="btn primary" id="login">Logga in</button><button class="btn" id="signup">Skapa konto</button></div></div><div id="signedIn" class="hidden"><p class="hint">Inloggad som <strong id="account"></strong> · <span id="sync">Synkroniserat</span></p></div><p id="authMessage" role="status" aria-live="polite" class="hint"></p></section><div id="appContent" class="hidden">
 
 <div id="homeView">
@@ -225,6 +259,33 @@
 <div id="trainingView" class="view-hidden">
 <section class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="eyebrow" id="counter">ORDTRÄNING</span><select id="mode" aria-label="Välj träningsläge"><option value="all">Nya och repetition</option><option value="review">Repetition som är dags</option><option value="allwords">Alla ord, även bemästrade</option></select></div><div class="daily-session" id="dailySession" role="status" aria-live="polite"><div><strong>Dagens träningspass</strong><span id="dailySessionHint">Repetitionerna går först. Upp till 20 nya ord per dag.</span></div><div class="daily-session-data"><span id="todayReviewCount">0 att repetera</span><span id="todayNewCount">0/20 nya ord</span></div></div><div id="question"><div class="streak-indicator" id="streakIndicator"><div class="streak-label"><span id="streakLabel">Nytt ord</span><strong id="streakCount">0/6 rätt i rad</strong></div><div class="streak-track" id="streakTrack" role="progressbar" aria-label="Rätt i rad mot bemästrat" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><div class="streak-fill" id="streakFill"></div></div></div><button type="button" class="flashcard" id="flashcard" aria-label="Vänd kortet för att se definitionen"><span class="flashcard-inner"><span class="flashcard-face flashcard-front"><span class="flashcard-caption">VAD BETYDER ORDET?</span><span class="flashcard-word" id="word"></span><span class="flashcard-caption">Tryck på kortet för att vända det</span></span><span class="flashcard-face flashcard-back"><span class="flashcard-caption">BETYDELSE</span><span class="flashcard-definition" id="cardDefinition"></span><span class="flashcard-caption" id="backHint">Tryck igen om du inte kunde ordet</span></span></span></button><p class="options-heading">Välj rätt betydelse</p><div class="options" id="options"></div><div class="feedback hidden" id="feedback" role="status" aria-live="polite"></div><div class="actions"><button class="btn primary hidden" id="next">Nästa ord →</button></div><div class="known-row"><button class="btn green" id="markKnown">✓ Kan redan ordet</button></div><p class="hint">Ord vars definition avslöjar själva ordet pausas från flervalsfrågor tills förklaringen förbättrats. Inga definitioner eller träningsresultat raderas.</p><p class="hint">Vänd kortet för att se definitionen. Klicka en gång till på det vända kortet för att registrera ett fel och schemalägga repetition. Du kan också välja bland svarsalternativen. Efter sex rätt i rad blir ordet bemästrat och tas bort från normal repetition. ”Kan redan ordet” räknas direkt som bemästrat och tas bort från normal träning.</p></div><div id="empty" class="hidden"><h2>Du är klar med den här omgången! 🎉</h2><p id="emptyMessage">Byt träningsläge eller kom tillbaka när fler ord är redo för repetition.</p></div></section>
 <p class="hint" style="margin:12px 0">Ordkälla: nya definitioner från <a href="https://www.sprakbanken.gu.se/" target="_blank" rel="noopener noreferrer">Språkbanken / LEXIN</a> (CC BY 4.0). Tidigare ord och definitioner har behållits för att skydda dina framsteg. Ordlistan är ett övningsurval och inte en officiell ordlista från UHR.</p><section class="card"><div class="eyebrow">Din ordlista</div><h2>Hantera ord du kan och har bemästrat</h2><p class="hint">Här kan du återaktivera ord du redan kan eller har bemästrat. Dina framsteg sparas automatiskt på ditt konto.</p><div class="toolbar"><button class="btn" id="toggleKnown">Visa kända och bemästrade ord</button></div><div id="knownList" class="manage hidden"></div></section>
+</div>
+<div id="examView" class="view-hidden">
+<section class="card" id="examIntro">
+  <div class="eyebrow">Högskoleprovsläge</div>
+  <h2 class="exam-title">20 ord. 6 minuter. Ett försök.</h2>
+  <p class="exam-lead">Träna under tidspress som på ett prov: fem svarsalternativ, ett svar per ord och inga ledtrådar. Du måste besvara frågan innan du kan gå vidare. Facit och poäng visas först när provet är slut.</p>
+  <div class="exam-intro-facts"><span>◷ 06:00</span><span>20 frågor</span><span>5 alternativ</span></div>
+  <button class="btn primary" type="button" id="examStart">Starta provet →</button>
+  <p class="hint">Detta är ett övningsprov med ord ur HP-Ord, inte ett officiellt högskoleprov. Dina ords repetitionsstatus påverkas inte.</p>
+</section>
+<section class="card view-hidden" id="examActive">
+  <div class="exam-topline"><div><div class="eyebrow">ORD-DELEN</div><strong id="examStep">Fråga 1 av 20</strong></div><div class="exam-clock" id="examClock" role="timer" aria-live="off" aria-label="Återstående tid">06:00</div></div>
+  <div class="exam-track" aria-hidden="true"><div id="examTrackFill"></div></div>
+  <div class="exam-word" id="examWord"></div>
+  <p class="exam-prompt">Vilket svar beskriver ordet bäst?</p>
+  <div class="exam-options" id="examOptions" role="radiogroup" aria-label="Välj ett svar"></div>
+  <div class="exam-nav"><span class="exam-response-hint" id="examResponseHint">Välj ett alternativ för att kunna fortsätta.</span><button id="examNext" class="btn primary" type="button" disabled>Nästa fråga →</button></div>
+  <p class="exam-footnote">Inga definitioner eller rätta svar visas under provet. Timern fortsätter tills tiden tar slut eller alla 20 svar lämnats.</p>
+</section>
+<section class="card view-hidden" id="examResults">
+  <div class="eyebrow">Provet avslutat</div>
+  <h2 id="examResultHeading" class="exam-title">Ditt resultat</h2>
+  <div id="examResultSummary" class="exam-result-summary"></div>
+  <div id="examResultDetails" class="exam-result-details"></div>
+  <div class="exam-result-actions"><button id="examRetry" class="btn primary" type="button">Gör ett nytt prov</button><button id="examBack" class="btn" type="button">Till Hem</button></div>
+  <p class="hint">Detta provresultat påverkar inte dina bemästrade ord eller repetitionsintervall.</p>
+</section>
 </div></div><footer>HP-Ord · 10 000 unika ord · vändbara ordkort · sparade framsteg i Supabase.</footer></main>
 <script>
 const legacyWords=[
@@ -686,15 +747,122 @@ function toggleMenu(){
 $('menuToggle').addEventListener('click',e=>{e.stopPropagation();toggleMenu()});
 document.addEventListener('click',e=>{if(!$('menuWrap').contains(e.target))closeMenu()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();$('menuToggle').focus()}});
-function showView(view, mode){
- closeMenu();
- const home=view==='home';
- $('homeView').classList.toggle('view-hidden',!home);
- $('trainingView').classList.toggle('view-hidden',home);
- $('goHome').classList.toggle('active',home);$('goTraining').classList.toggle('active',!home);
- $('goHome').setAttribute('aria-current',home?'page':'false');$('goTraining').setAttribute('aria-current',home?'false':'page');
 
- if(!home){if(mode){$('mode').value=mode;recent=[];recentReviewsInRow=0;}choose()}
+/* Isolerat provläge. Inga skrivningar till user_word_progress. */
+const EXAM_COUNT=20,EXAM_SECONDS=360;
+let exam={active:false,finished:false,questions:[],answers:[],index:0,deadline:0,interval:null,startedAt:0};
+function stopExamClock(){if(exam.interval!==null){clearInterval(exam.interval);exam.interval=null;}}
+function examSecondsLeft(){return Math.max(0,Math.ceil((exam.deadline-Date.now())/1000));}
+function examTimerTick(){
+ if(!exam.active)return;
+ const left=examSecondsLeft();
+ $('examClock').textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');
+ $('examClock').classList.toggle('low',left<=60);
+ if(left<=0)finishExam(true);
+}
+function examShuffle(items){const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function examChoiceSet(i){
+ const word=words[i],candidates=new Set([word.definition]);
+ // Samma källfilter som vanliga quiz: exkludera uppenbara ledtrådar.
+ for(let attempt=0;attempt<Math.min(300,words.length*2)&&candidates.size<5;attempt++){
+  const j=Math.floor(Math.random()*words.length),d=words[j].definition;
+  if(d&&d!==word.definition&&!givesAwayAnswer(word.term,d))candidates.add(d);
+ }
+ if(candidates.size!==5)return null;
+ return examShuffle([...candidates]).map(d=>({label:d,correct:d===word.definition}));
+}
+function createExamQuestions(){
+ const valid=examShuffle(words.map((_,i)=>i).filter(quizEligible));
+ const questions=[];
+ for(const i of valid){const choices=examChoiceSet(i);if(choices)questions.push({term:words[i].term,definition:words[i].definition,choices});if(questions.length===EXAM_COUNT)break;}
+ return questions;
+}
+function examPanels(which){
+ $('examIntro').classList.toggle('view-hidden',which!=='intro');
+ $('examActive').classList.toggle('view-hidden',which!=='active');
+ $('examResults').classList.toggle('view-hidden',which!=='results');
+}
+function startExam(){
+ if(!ready){return;}
+ stopExamClock();
+ const qs=createExamQuestions();
+ if(qs.length!==EXAM_COUNT){$('examIntro').querySelector('.exam-lead').textContent='Det finns för få ord med tydliga svarsalternativ för att starta provet.';return;}
+ exam={active:true,finished:false,questions:qs,answers:Array(EXAM_COUNT).fill(null),index:0,startedAt:Date.now(),deadline:Date.now()+EXAM_SECONDS*1000,interval:null};
+ examPanels('active');renderExamQuestion();examTimerTick();
+ exam.interval=setInterval(examTimerTick,250);
+}
+function renderExamQuestion(){
+ if(!exam.active)return;
+ examTimerTick();if(!exam.active)return;
+ const q=exam.questions[exam.index],selected=exam.answers[exam.index];
+ $('examStep').textContent='Fråga '+(exam.index+1)+' av '+EXAM_COUNT;
+ $('examTrackFill').style.width=((exam.index+1)/EXAM_COUNT*100)+'%';
+ $('examWord').textContent=q.term;
+ const list=$('examOptions');list.replaceChildren();
+ q.choices.forEach((c,idx)=>{
+  const btn=document.createElement('button');btn.type='button';btn.className='exam-choice'+(selected===idx?' selected':'');
+  btn.setAttribute('role','radio');btn.setAttribute('aria-checked',String(selected===idx));
+  const letter=document.createElement('span');letter.className='exam-letter';letter.textContent='ABCDE'[idx];
+  const label=document.createElement('span');label.textContent=c.label;
+  btn.append(letter,label);btn.onclick=()=>{
+   if(!exam.active||examSecondsLeft()<=0){examTimerTick();return;}
+   exam.answers[exam.index]=idx;
+   list.querySelectorAll('.exam-choice').forEach((node,k)=>{node.classList.toggle('selected',k===idx);node.setAttribute('aria-checked',String(k===idx));});
+   $('examNext').disabled=false;
+   $('examResponseHint').textContent='Svaret är markerat. Du kan gå vidare.';
+  };
+  list.append(btn);
+ });
+ $('examNext').disabled=selected===null;
+ $('examNext').textContent=exam.index===EXAM_COUNT-1?'Avsluta och visa resultat →':'Nästa fråga →';
+ $('examResponseHint').textContent=selected===null?'Välj ett alternativ för att kunna fortsätta.':'Svaret är markerat. Du kan gå vidare.';
+}
+function examNext(){
+ if(!exam.active)return;
+ examTimerTick();if(!exam.active||exam.answers[exam.index]===null)return;
+ if(exam.index===EXAM_COUNT-1){finishExam(false);return;}
+ exam.index++;renderExamQuestion();
+}
+function finishExam(timedOut){
+ if(!exam.active)return;
+ stopExamClock();exam.active=false;exam.finished=true;
+ const score=exam.questions.reduce((n,q,i)=>n+Number(exam.answers[i]!==null&&q.choices[exam.answers[i]].correct),0);
+ const answeredCount=exam.answers.filter(x=>x!==null).length;
+ const remaining=Math.max(0,EXAM_SECONDS-Math.floor((Date.now()-exam.startedAt)/1000));
+ examPanels('results');
+ $('examResultHeading').textContent=timedOut?'Tiden är ute!':'Provet är avslutat!';
+ $('examResultSummary').textContent=score+' av '+EXAM_COUNT+' rätt · '+answeredCount+' besvarade · '+String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0')+' kvar';
+ const detail=$('examResultDetails');detail.replaceChildren();
+ exam.questions.forEach((q,i)=>{
+   const choice=exam.answers[i],correct=choice!==null&&q.choices[choice].correct;
+   const box=document.createElement('div');box.className='exam-result-item '+(correct?'correct':'incorrect');
+   const h=document.createElement('strong');h.textContent=(i+1)+'. '+q.term+' — '+(correct?'Rätt':'Fel');
+   const answer=document.createElement('p');answer.textContent='Ditt svar: '+(choice===null?'Ej besvarad':q.choices[choice].label);
+   const proper=document.createElement('p');proper.textContent='Rätt svar: '+q.definition;
+   box.append(h,answer,proper);detail.append(box);
+ });
+}
+$('goExam').onclick=()=>showView('exam');
+$('examStart').onclick=startExam;
+$('examNext').onclick=examNext;
+$('examRetry').onclick=()=>{examPanels('intro');startExam()};
+$('examBack').onclick=()=>showView('home');
+
+function showView(view, mode){
+ if(exam.active&&view!=='exam'){
+  if(!confirm('Vill du lämna provet? Provet avslutas och obesvarade frågor räknas som fel.'))return;
+  finishExam(false);
+ }
+ closeMenu();
+ const home=view==='home',training=view==='training',examMode=view==='exam';
+ $('homeView').classList.toggle('view-hidden',!home);
+ $('trainingView').classList.toggle('view-hidden',!training);
+ $('examView').classList.toggle('view-hidden',!examMode);
+ $('goHome').classList.toggle('active',home);$('goTraining').classList.toggle('active',training);$('goExam').classList.toggle('active',examMode);
+ $('goHome').setAttribute('aria-current',home?'page':'false');
+ $('goTraining').setAttribute('aria-current',training?'page':'false');
+ $('goExam').setAttribute('aria-current',examMode?'page':'false');
+ if(training){if(mode){$('mode').value=mode;recent=[];recentReviewsInRow=0;}choose();}
  if(home)stats();
  window.scrollTo({top:0,behavior:'instant'});
 }
@@ -716,7 +884,7 @@ const prioritized=[...w].sort((a,b)=>Number(progressed.has(b.id))-Number(progres
 const preferredIds=new Map();for(const item of prioritized){const key=item.term.trim().toLocaleLowerCase('sv-SE');if(!preferredIds.has(key))preferredIds.set(key,item.id)}
 words=w.filter(item=>preferredIds.get(item.term.trim().toLocaleLowerCase('sv-SE'))===item.id);
 state={};for(const v of progress)state[v.word_id]={status:v.status,streak:v.streak,due:v.next_review_at?Date.parse(v.next_review_at):0,lastSeen:v.last_seen_at?Date.parse(v.last_seen_at):0};ready=true;$('appContent').classList.remove('hidden');current=-1;recent=[];recentReviewsInRow=0;dailyNewCache={key:'',ids:[]};renderKnown();showView('home');syncMsg('Synkroniserat')}catch(e){notice('Kunde inte hämta databasen: '+e.message);syncMsg('Fel')}}
-async function setUser(u){user=u;ready=false;$('signedOut').classList.toggle('hidden',!!u);$('signedIn').classList.toggle('hidden',!u);$('appContent').classList.add('hidden');$('authSection').classList.toggle('hidden',!!u);$('menuWrap').classList.toggle('hidden',!u);closeMenu();if(!u){words=[];state={};$('account').textContent='';$('menuAccount').textContent='';return}$('account').textContent=u.email||'ditt konto';$('menuAccount').textContent='Inloggad som '+(u.email||'ditt konto');await loadApp()}
+async function setUser(u){stopExamClock();exam.active=false;exam.finished=false;examPanels('intro');user=u;ready=false;$('signedOut').classList.toggle('hidden',!!u);$('signedIn').classList.toggle('hidden',!u);$('appContent').classList.add('hidden');$('authSection').classList.toggle('hidden',!!u);$('menuWrap').classList.toggle('hidden',!u);closeMenu();if(!u){words=[];state={};$('account').textContent='';$('menuAccount').textContent='';return}$('account').textContent=u.email||'ditt konto';$('menuAccount').textContent='Inloggad som '+(u.email||'ditt konto');await loadApp()}
 $('login').onclick=async()=>{if(!db)return notice('Kunde inte ladda Supabase-biblioteket. Kontrollera internetanslutningen.');const {error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:'Inloggad!')};
 $('signup').onclick=async()=>{if(!db)return notice('Supabase-biblioteket kunde inte laddas.');const {data,error}=await db.auth.signUp({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:data.session?'Kontot är skapat och du är inloggad.':'Kontot är skapat. Kontrollera din e-post för bekräftelselänk, om bekräftelse krävs.')};
 $('logout').onclick=async()=>{closeMenu();await db.auth.signOut();notice('Utloggad.')};
