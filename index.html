@@ -300,6 +300,9 @@ footer{color:#9aa4ba;padding:10px 0}
 @media(max-width:480px){main{padding:0 13px 50px}.topbar{height:78px}.brandmark{width:43px;height:43px;border-radius:13px}.brandcopy strong{font-size:22px}.brandcopy>span{font-size:9px}.top-streak{display:none}.ot-hero{border-radius:22px}.ot-hero-left{padding:29px 24px 4px}.ot-hero h1{font-size:36px;letter-spacing:-1.7px;margin:20px 0 12px}.ot-hero p{font-size:13px}.ot-hero-buttons{gap:10px;margin-top:19px}.ot-hero-buttons button{padding:11px 13px;font-size:12px;min-height:48px}.ot-hero-art{min-height:260px;height:260px}.ot-hero-art img{max-height:240px}.ot-hero-sticker{font-size:10px;top:2px;right:15px}.ot-overview{gap:13px;margin-top:20px}.ot-surface{padding:20px}.ot-section-row h2{font-size:20px}.ot-mission-cell{padding:13px}.ot-figure{font-size:26px}.ot-mission-bottom{align-items:flex-start;flex-direction:column}.ot-section-heading{margin:28px 0 13px}.ot-section-heading h2{font-size:21px}.ot-action-card{min-height:162px}.ot-achievements{padding:17px}.ot-medal{flex:1}}
 @media(prefers-reduced-motion:reduce){.ot-action-card,.ot-progress-fill{transition:none!important}}
 
+.ot-learning .known-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.ot-too-easy{background:#fff8ed;border:1px solid #edd8af;border-radius:12px;color:#8a6327;padding:11px 13px;font-size:12px;font-weight:900;cursor:pointer}
+.ot-too-easy:hover:not(:disabled){background:#fff0cf}.ot-too-easy:disabled{opacity:.5;cursor:default}
 /* Ordtoppen 2.0 – godkänd ordträning och högskoleprovsläge */
 .ot-view-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0 21px}
 .ot-view-overline{font-size:11px;color:#6072ad;font-weight:1000;letter-spacing:1.7px;text-transform:uppercase;display:block}
@@ -434,7 +437,7 @@ footer{color:#9aa4ba;padding:10px 0}
     <button type="button" class="flashcard" id="flashcard" aria-label="Vänd kortet för att se definitionen"><span class="flashcard-inner"><span class="flashcard-face flashcard-front"><span class="ot-word-star">✦</span><span class="flashcard-word" id="word"></span><span class="flashcard-caption">Tryck på kortet för att se betydelsen ↻</span></span><span class="flashcard-face flashcard-back"><span class="flashcard-caption">BETYDELSE</span><span class="flashcard-definition" id="cardDefinition"></span><span class="flashcard-caption" id="backHint">Tryck igen om du inte kunde ordet</span></span></span></button>
     <div class="ot-answers-header"><strong>Vad betyder ordet?</strong><span>Välj ett alternativ</span></div><div class="options" id="options"></div>
     <div class="feedback hidden" id="feedback" role="status" aria-live="polite"></div>
-    <div class="ot-training-bottom"><div class="known-row"><button class="btn green" id="markKnown">✓ Jag kan redan ordet</button></div><div class="actions"><button class="btn primary hidden" id="next">Nästa ord →</button></div></div>
+    <div class="ot-training-bottom"><div class="known-row"><button class="btn green" id="markKnown">✓ Jag kan redan ordet</button><button class="ot-too-easy" id="reportTooEasy" type="button" title="Rapportera ordet som för lätt och gå vidare">🚩 För lätt ord?</button></div><div class="actions"><button class="btn primary hidden" id="next">Nästa ord →</button></div></div>
   </div>
   <div id="empty" class="hidden"><h2>Du är klar med den här omgången! 🎉</h2><p id="emptyMessage">Byt träningsläge eller kom tillbaka när fler ord är redo för repetition.</p></div>
 </section>
@@ -809,7 +812,7 @@ const PUBLISHABLE_KEY='sb_publishable_Hn4cS6QdGCf4_853RjtICg_xV3WFV3b';
 const $=id=>document.getElementById(id),DAY=86400000,MINUTE=60000;
 const db=window.supabase?.createClient(URL_SUPABASE,PUBLISHABLE_KEY);
 let words=[], user=null, state={}, current=-1, answered=false, cardFlipped=false, shown=0, recent=[],showKnown=false;
-let saving=Promise.resolve(), ready=false;
+let saving=Promise.resolve(), ready=false, reportedEasy=new Set();
 function notice(t){$('authMessage').textContent=t}
 function syncMsg(t){$('sync').textContent=t}
 function entry(i){return state[words[i]?.id]||{}}
@@ -905,7 +908,8 @@ function quizEligible(i){
  const w=words[i];
  // Preliminär HP-nivåindelning i databasen. Bevara ord och sparade framsteg,
  // men ställ inte frågor på grundläggande vardagsord i något av träningslägena.
- return Number(w.hp_relevance??3)>=3
+ return !reportedEasy.has(w.id)
+   && Number(w.hp_relevance??3)>=3
    && Number(w.difficulty??3)>=3
    && !givesAwayAnswer(w.term,w.definition);
 }
@@ -1122,14 +1126,30 @@ if(mode==='all'){
 }
 recent.push(current);if(recent.length>5)recent.shift();shown++;answered=false;cardFlipped=false;
  $('otTrainFill').style.width=Math.min(100,dailyNew().length/DAILY_NEW_LIMIT*100)+'%';
-const w=words[current];updateDailyUI();updateStreakUI();$('word').textContent=w.term;$('cardDefinition').textContent=w.definition;$('flashcard').classList.remove('flipped');$('flashcard').disabled=false;$('flashcard').setAttribute('aria-label','Vänd kortet för att se definitionen');$('backHint').textContent='Tryck igen om du inte kunde ordet';$('counter').textContent=`ORD ${shown} • ${status(current)==='new'?'NYTT ORD':'REPETITION'}`;$('feedback').classList.add('hidden');$('feedback').textContent='';$('next').classList.add('hidden');$('markKnown').disabled=false;
+const w=words[current];updateDailyUI();updateStreakUI();$('word').textContent=w.term;$('cardDefinition').textContent=w.definition;$('flashcard').classList.remove('flipped');$('flashcard').disabled=false;$('flashcard').setAttribute('aria-label','Vänd kortet för att se definitionen');$('backHint').textContent='Tryck igen om du inte kunde ordet';$('counter').textContent=`ORD ${shown} • ${status(current)==='new'?'NYTT ORD':'REPETITION'}`;$('feedback').classList.add('hidden');$('feedback').textContent='';$('next').classList.add('hidden');$('markKnown').disabled=false;$('reportTooEasy').disabled=false;
 const alternatives=distractors(current);
 if(alternatives.length!==4){$('emptyMessage').textContent='Inga tillförlitliga svarsalternativ kunde byggas. Prova ett annat ord.';current=-1;choose();return;}
 const options=[w.definition,...alternatives].map((value,i)=>({value,correct:i===0}));for(let j=options.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[options[j],options[k]]=[options[k],options[j]]}const holder=$('options');holder.replaceChildren();options.forEach((c,index)=>{const b=document.createElement('button');b.className='option';b.dataset.letter='ABCDE'[index];b.textContent=c.value;b.dataset.correct=c.correct?'yes':'no';b.onclick=()=>respond(c.correct,b);holder.append(b)});stats()}
-function finish(msg){updateStreakUI();answered=true;cardFlipped=true;$('flashcard').classList.add('flipped');$('backHint').textContent='Definitionen visas ovan';document.querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.correct==='yes')b.classList.add('correct')});$('feedback').textContent=msg;$('feedback').classList.remove('hidden');$('next').classList.remove('hidden');$('markKnown').disabled=true;$('flashcard').disabled=true;stats()}
+function finish(msg){updateStreakUI();answered=true;cardFlipped=true;$('flashcard').classList.add('flipped');$('backHint').textContent='Definitionen visas ovan';document.querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.correct==='yes')b.classList.add('correct')});$('feedback').textContent=msg;$('feedback').classList.remove('hidden');$('next').classList.remove('hidden');$('markKnown').disabled=true;$('reportTooEasy').disabled=true;$('flashcard').disabled=true;stats()}
 async function persist(wordId, val){state[wordId]=val;syncMsg('Sparar…');saving=saving.catch(()=>{}).then(async()=>{const row={user_id:user.id,word_id:wordId,status:val.status,streak:val.streak||0,next_review_at:val.due?new Date(val.due).toISOString():null,last_seen_at:new Date(val.lastSeen||Date.now()).toISOString(),updated_at:new Date().toISOString()};const {error}=await db.from('user_word_progress').upsert(row,{onConflict:'user_id,word_id'});if(error)throw error;syncMsg('Synkroniserat')});try{await saving}catch(e){syncMsg('Kunde inte spara');notice('Synkroniseringsfel: '+e.message)}}
 function respond(correct,btn){if(answered||current<0)return;const old=entry(current),now=Date.now();if(correct){const streak=(old.streak||0)+1;if(streak>=6){void persist(words[current].id,{status:'known',streak:6,due:0,lastSeen:now});finish(`Rätt! ${words[current].term} är nu bemästrat efter sex rätt i rad och tas bort från normal repetition.`)}else{const days=[1,3,7,14,30][streak-1];void persist(words[current].id,{status:'learned',streak,due:now+days*DAY,lastSeen:now});finish(`Rätt! ${words[current].term} betyder: ${words[current].definition}. ${streak}/6 rätt i rad. Nästa repetition om ${days} dagar.`)}}else{void persist(words[current].id,{status:'review',streak:0,due:now+10*MINUTE,lastSeen:now});btn.classList.add('wrong');finish(`Inte riktigt. ${words[current].term} betyder: ${words[current].definition}. Repetition om cirka 10 minuter.`)}}
 $('markKnown').onclick=()=>{if(current<0||answered)return;void persist(words[current].id,{status:'known',streak:0,due:0,lastSeen:Date.now()});choose();renderKnown()};
+$('reportTooEasy').onclick=async()=>{
+ if(!user||current<0||answered)return;
+ const wordId=words[current].id;
+ const btn=$('reportTooEasy');
+ btn.disabled=true;
+ const {error}=await db.from('word_difficulty_feedback').insert({user_id:user.id,word_id:wordId,feedback:'too_easy'});
+ if(error&&error.code!=='23505'){
+  btn.disabled=false;
+  $('feedback').textContent='Det gick inte att skicka rapporten. Prova igen.';
+  $('feedback').classList.remove('hidden');
+  return;
+ }
+ reportedEasy.add(wordId);
+ choose();
+};
+
 $('flashcard').onclick=()=>{if(current<0||answered)return;if(!cardFlipped){cardFlipped=true;$('flashcard').classList.add('flipped');$('flashcard').setAttribute('aria-label','Registrera ordet som fel och lägg till i repetition');return}const now=Date.now();void persist(words[current].id,{status:'review',streak:0,due:now+10*MINUTE,lastSeen:now});finish(`Du tittade på definitionen och markerade ordet som svårt. Det repeteras om cirka 10 minuter.`)};
 
 /* Läsassistent: skickar bara på/av-inställningen till installerat Chrome/Edge-tillägg. */
@@ -1310,14 +1330,14 @@ function renderKnown(){const list=$('knownList');list.classList.toggle('hidden',
 $('toggleKnown').onclick=()=>{showKnown=!showKnown;renderKnown()};
 $('reset').onclick=async()=>{if(!user||!confirm('Vill du radera ALLA dina framsteg i Supabase?'))return;const {error}=await db.from('user_word_progress').delete().eq('user_id',user.id);if(error){notice(error.message);return}state={};recent=[];current=-1;shown=0;choose();renderKnown()};
 async function allPages(table,columns,filters){let out=[];for(let from=0;from<50000;from+=1000){let q=db.from(table).select(columns).range(from,from+999);if(filters)q=filters(q);const {data,error}=await q;if(error)throw error;out.push(...data);if(data.length<1000)break}return out}
-async function loadApp(){ready=false;syncMsg('Hämtar ord…');try{const [w,progress]=await Promise.all([allPages('words','id,term,definition,difficulty,hp_relevance',q=>q.eq('active',true).order('term').order('id')) ,allPages('user_word_progress','word_id,status,streak,next_review_at,last_seen_at',q=>q.eq('user_id',user.id))]);// Keep existing word IDs to preserve each user's saved progress.
+async function loadApp(){ready=false;syncMsg('Hämtar ord…');try{const [w,progress,tooEasy]=await Promise.all([allPages('words','id,term,definition,difficulty,hp_relevance',q=>q.eq('active',true).order('term').order('id')),allPages('user_word_progress','word_id,status,streak,next_review_at,last_seen_at',q=>q.eq('user_id',user.id)),allPages('word_difficulty_feedback','word_id',q=>q.eq('user_id',user.id))]);// Keep existing word IDs to preserve each user's saved progress.
 // Six old duplicated terms may remain in the database; show each term once.
 const seenTerms=new Set();
 const progressed=new Set(progress.map(p=>p.word_id));
 const prioritized=[...w].sort((a,b)=>Number(progressed.has(b.id))-Number(progressed.has(a.id)));
 const preferredIds=new Map();for(const item of prioritized){const key=item.term.trim().toLocaleLowerCase('sv-SE');if(!preferredIds.has(key))preferredIds.set(key,item.id)}
 words=w.filter(item=>preferredIds.get(item.term.trim().toLocaleLowerCase('sv-SE'))===item.id);
-state={};for(const v of progress)state[v.word_id]={status:v.status,streak:v.streak,due:v.next_review_at?Date.parse(v.next_review_at):0,lastSeen:v.last_seen_at?Date.parse(v.last_seen_at):0};ready=true;$('appContent').classList.remove('hidden');current=-1;recent=[];recentReviewsInRow=0;dailyNewCache={key:'',ids:[]};renderKnown();showView('home');syncMsg('Synkroniserat')}catch(e){notice('Kunde inte hämta databasen: '+e.message);syncMsg('Fel')}}
+reportedEasy=new Set(tooEasy.map(x=>x.word_id));state={};for(const v of progress)state[v.word_id]={status:v.status,streak:v.streak,due:v.next_review_at?Date.parse(v.next_review_at):0,lastSeen:v.last_seen_at?Date.parse(v.last_seen_at):0};ready=true;$('appContent').classList.remove('hidden');current=-1;recent=[];recentReviewsInRow=0;dailyNewCache={key:'',ids:[]};renderKnown();showView('home');syncMsg('Synkroniserat')}catch(e){notice('Kunde inte hämta databasen: '+e.message);syncMsg('Fel')}}
 async function setUser(u){stopExamClock();exam.active=false;exam.finished=false;examPanels('intro');user=u;ready=false;$('signedOut').classList.toggle('hidden',!!u);$('signedIn').classList.toggle('hidden',!u);$('appContent').classList.add('hidden');$('authSection').classList.toggle('hidden',!!u);$('menuWrap').classList.toggle('hidden',!u);closeMenu();if(!u){words=[];state={};$('account').textContent='';$('menuAccount').textContent='';return}$('account').textContent=u.email||'ditt konto';$('menuAccount').textContent='Inloggad som '+(u.email||'ditt konto');await loadApp()}
 $('login').onclick=async()=>{if(!db)return notice('Kunde inte ladda Supabase-biblioteket. Kontrollera internetanslutningen.');const {error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:'Inloggad!')};
 $('signup').onclick=async()=>{if(!db)return notice('Supabase-biblioteket kunde inte laddas.');const {data,error}=await db.auth.signUp({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:data.session?'Kontot är skapat och du är inloggad.':'Kontot är skapat. Kontrollera din e-post för bekräftelselänk, om bekräftelse krävs.')};
