@@ -426,7 +426,7 @@ footer{color:#9aa4ba;padding:10px 0}
 <div id="trainingView" class="view-hidden ot-learning">
 <section class="ot-view-header"><div><span class="ot-view-overline">✦ ORDTOPPEN · DIN EXPEDITION</span><h1>Dagens klättring 🏔️</h1><p>Varje rätt svar tar dig ett steg närmare toppen.</p></div><div class="ot-view-tabs"><button id="tabTrain" class="selected" type="button">📚 Ordträning</button><button id="tabExam" type="button">⏱️ Högskoleprovsläge</button></div></section>
 <div class="ot-training-grid"><section class="ot-work-surface">
-  <div class="ot-work-head"><div class="ot-work-small"><span>✦</span> DAGENS TRÄNING</div><span class="ot-work-chip" id="counter">ORDTRÄNING</span></div>
+  <div class="ot-work-head"><div class="ot-work-small"><span>✦</span> HP-ANPASSAD ORDFÖRRÅDSTRÄNING</div><span class="ot-work-chip" id="counter">ORDTRÄNING</span></div>
   <div class="ot-session-track" aria-hidden="true"><span id="otTrainFill"></span></div>
   <div class="ot-mode-row"><label for="mode">Träningsläge</label><select id="mode" aria-label="Välj träningsläge"><option value="all">Nya och repetition</option><option value="review">Repetition som är dags</option><option value="allwords">Alla ord, även bemästrade</option></select></div>
   <div id="question">
@@ -447,7 +447,7 @@ footer{color:#9aa4ba;padding:10px 0}
   </section>
   <section class="ot-tip-surface"><span>💡</span><h3>Smart repetition</h3><p>Ord du tycker är svåra återkommer oftare. Varje repetition för dig närmare toppen!</p></section>
 </aside></div>
-<details class="ot-help"><summary>Så fungerar träningen och ordlistan</summary><p>Vänd kortet för att se definitionen. Klicka igen på det vända kortet för att registrera ett fel och schemalägga repetition, eller välj ett svarsalternativ. Efter sex rätt i rad över flera repetitionsdagar blir ordet bemästrat. ”Jag kan redan ordet” markerar det direkt som känt.</p><p>Ord vars förklaring avslöjar själva ordet hoppas över i flervalsfrågorna tills definitionen förbättrats.</p><p>Ordkälla: bland annat <a href="https://www.sprakbanken.gu.se/" target="_blank" rel="noopener noreferrer">Språkbanken / LEXIN</a> (CC BY 4.0). Ordtoppen är inte en officiell ordlista från UHR.</p></details>
+<details class="ot-help"><summary>Så fungerar träningen och ordlistan</summary><p>Vänd kortet för att se definitionen. Klicka igen på det vända kortet för att registrera ett fel och schemalägga repetition, eller välj ett svarsalternativ. Efter sex rätt i rad över flera repetitionsdagar blir ordet bemästrat. ”Jag kan redan ordet” markerar det direkt som känt.</p><p>Ord vars förklaring avslöjar själva ordet hoppas över i flervalsfrågorna tills definitionen förbättrats. Även grundläggande vardagsord med låg HP-relevans filtreras bort från både ordträning och provläge.</p><p>Ordkälla: bland annat <a href="https://www.sprakbanken.gu.se/" target="_blank" rel="noopener noreferrer">Språkbanken / LEXIN</a> (CC BY 4.0). Ordtoppen är inte en officiell ordlista från UHR.</p></details>
 <section class="card ot-word-management"><div class="eyebrow">Din ordsamling</div><h2>Kända och bemästrade ord</h2><p class="hint">Här kan du återaktivera ord du redan kan. Framstegen sparas automatiskt på ditt konto.</p><div class="toolbar"><button class="btn" id="toggleKnown">Visa kända och bemästrade ord</button></div><div id="knownList" class="manage hidden"></div></section>
 </div>
 <div id="examView" class="view-hidden ot-examination">
@@ -901,7 +901,14 @@ function givesAwayAnswer(term,definition){
    (d.length>=6&&t.length>=5&&t.startsWith(d.slice(0,4))&&d.length>=t.length-3)
  ));
 }
-function quizEligible(i){return !givesAwayAnswer(words[i].term,words[i].definition)}
+function quizEligible(i){
+ const w=words[i];
+ // Preliminär HP-nivåindelning i databasen. Bevara ord och sparade framsteg,
+ // men ställ inte frågor på grundläggande vardagsord i något av träningslägena.
+ return Number(w.hp_relevance??3)>=3
+   && Number(w.difficulty??3)>=3
+   && !givesAwayAnswer(w.term,w.definition);
+}
 function pool(){
  const mode=$('mode').value;
  if(mode==='allwords')return words.map((_,i)=>i).filter(quizEligible);
@@ -1303,7 +1310,7 @@ function renderKnown(){const list=$('knownList');list.classList.toggle('hidden',
 $('toggleKnown').onclick=()=>{showKnown=!showKnown;renderKnown()};
 $('reset').onclick=async()=>{if(!user||!confirm('Vill du radera ALLA dina framsteg i Supabase?'))return;const {error}=await db.from('user_word_progress').delete().eq('user_id',user.id);if(error){notice(error.message);return}state={};recent=[];current=-1;shown=0;choose();renderKnown()};
 async function allPages(table,columns,filters){let out=[];for(let from=0;from<50000;from+=1000){let q=db.from(table).select(columns).range(from,from+999);if(filters)q=filters(q);const {data,error}=await q;if(error)throw error;out.push(...data);if(data.length<1000)break}return out}
-async function loadApp(){ready=false;syncMsg('Hämtar ord…');try{const [w,progress]=await Promise.all([allPages('words','id,term,definition',q=>q.eq('active',true).order('term').order('id')) ,allPages('user_word_progress','word_id,status,streak,next_review_at,last_seen_at',q=>q.eq('user_id',user.id))]);// Keep existing word IDs to preserve each user's saved progress.
+async function loadApp(){ready=false;syncMsg('Hämtar ord…');try{const [w,progress]=await Promise.all([allPages('words','id,term,definition,difficulty,hp_relevance',q=>q.eq('active',true).order('term').order('id')) ,allPages('user_word_progress','word_id,status,streak,next_review_at,last_seen_at',q=>q.eq('user_id',user.id))]);// Keep existing word IDs to preserve each user's saved progress.
 // Six old duplicated terms may remain in the database; show each term once.
 const seenTerms=new Set();
 const progressed=new Set(progress.map(p=>p.word_id));
