@@ -299,6 +299,89 @@ footer{color:#9aa4ba;padding:10px 0}
 @media(max-width:800px){main{padding:0 17px 55px}.ot-hero{grid-template-columns:1fr;min-height:0}.ot-hero-left{padding:34px 30px 15px}.ot-hero h1{max-width:570px;font-size:43px}.ot-hero-art{min-height:300px;height:300px;padding:4px 24px 20px}.ot-hero-art img{max-height:280px}.ot-hero-sticker{top:10px;right:22px}.ot-overview{grid-template-columns:1fr}.ot-actions{grid-template-columns:repeat(2,1fr)}.ot-achievement-head{flex-basis:100%}}
 @media(max-width:480px){main{padding:0 13px 50px}.topbar{height:78px}.brandmark{width:43px;height:43px;border-radius:13px}.brandcopy strong{font-size:22px}.brandcopy>span{font-size:9px}.top-streak{display:none}.ot-hero{border-radius:22px}.ot-hero-left{padding:29px 24px 4px}.ot-hero h1{font-size:36px;letter-spacing:-1.7px;margin:20px 0 12px}.ot-hero p{font-size:13px}.ot-hero-buttons{gap:10px;margin-top:19px}.ot-hero-buttons button{padding:11px 13px;font-size:12px;min-height:48px}.ot-hero-art{min-height:260px;height:260px}.ot-hero-art img{max-height:240px}.ot-hero-sticker{font-size:10px;top:2px;right:15px}.ot-overview{gap:13px;margin-top:20px}.ot-surface{padding:20px}.ot-section-row h2{font-size:20px}.ot-mission-cell{padding:13px}.ot-figure{font-size:26px}.ot-mission-bottom{align-items:flex-start;flex-direction:column}.ot-section-heading{margin:28px 0 13px}.ot-section-heading h2{font-size:21px}.ot-action-card{min-height:162px}.ot-achievements{padding:17px}.ot-medal{flex:1}}
 @media(prefers-reduced-motion:reduce){.ot-action-card,.ot-progress-fill{transition:none!important}}
+
+/* Ordtoppen 2.0 – godkänd ordträning och högskoleprovsläge */
+.ot-view-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0 21px}
+.ot-view-overline{font-size:11px;color:#6072ad;font-weight:1000;letter-spacing:1.7px;text-transform:uppercase;display:block}
+.ot-view-header h1{font-size:35px;line-height:1.2;letter-spacing:-1.1px;margin:4px 0 1px;font-weight:1000;color:#1e2a5a}
+.ot-view-header p{margin:3px 0 0;color:#8290ab;font-size:13px;font-weight:850}
+.ot-view-tabs{display:inline-flex;gap:5px;background:#e9edfc;padding:5px;border-radius:16px}
+.ot-view-tabs button{border:0;background:transparent;padding:12px 17px;border-radius:12px;font-size:13px;font-weight:1000;color:#647498;cursor:pointer}
+.ot-view-tabs button.selected{background:white;color:#3f57d6;box-shadow:0 4px 15px #243b6f13}
+.ot-training-grid{display:grid;grid-template-columns:minmax(0,1fr) 284px;gap:20px;align-items:start}
+.ot-work-surface,.ot-goal-surface,.ot-tip-surface{background:white;border:1px solid #e6eafa;box-shadow:0 8px 24px #192d6e09;border-radius:25px}
+.ot-work-surface{padding:25px 28px 26px}
+.ot-work-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ot-work-small{display:flex;align-items:center;gap:9px;font-weight:1000;letter-spacing:.8px;font-size:11px;color:#7584a7}
+.ot-work-small>span{display:grid;place-items:center;width:30px;height:30px;background:#eff2ff;border-radius:9px;color:#6178f9;font-size:18px}
+.ot-work-chip{font-size:11px;font-weight:1000;padding:9px 12px;background:#eff3ff;border-radius:999px;color:#5870d8;white-space:nowrap}
+.ot-session-track{height:8px;background:#eef1fb;border-radius:999px;overflow:hidden;margin:19px 0 12px}
+.ot-session-track span{display:block;height:100%;width:0%;border-radius:inherit;background:#5d73fd;transition:width .2s}
+.ot-mode-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.ot-mode-row label{font-size:11px;font-weight:950;color:#8090af}
+.ot-mode-row select{background:#f8f9ff;border:1px solid #e2e7f8;color:#465b8b;font-size:12px;font-weight:900;max-width:65%}
+.ot-learning .streak-indicator{background:#f9faff;border-color:#edf0ff;margin:0 0 15px;padding:10px 13px}
+.ot-learning .streak-track{height:6px;margin-top:7px}
+.ot-learning .flashcard{height:255px;margin:0 0 20px;perspective:1100px}
+.ot-learning .flashcard-face{border:1px solid #d9dffb;background:linear-gradient(150deg,#f9faff,#f0f1ff 90%);border-radius:25px;box-shadow:0 8px 0 #e5e9fc,0 18px 30px #3c53a216}
+.ot-learning .flashcard-back{background:linear-gradient(150deg,#eefff7,#fff);border-color:#bbe4d3}
+.ot-learning .flashcard-word{font-weight:1000;font-size:clamp(38px,5.4vw,57px);letter-spacing:-1.9px}
+.ot-learning .flashcard-caption{font-size:12px;color:#7f8db0;font-weight:950}
+.ot-learning .flashcard-definition{font-size:clamp(19px,3vw,26px)}
+.ot-word-star{font-size:28px;color:#6079ee}
+.ot-answers-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:30px 0 13px}
+.ot-answers-header strong{font-size:16px;font-weight:1000}.ot-answers-header span{font-size:11px;color:#9aa4ba;font-weight:850}
+.ot-learning .options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:0}
+.ot-learning .option{display:flex;align-items:center;gap:11px;padding:13px;border:1px solid #e3e8f8;border-radius:13px;background:white;color:#314269;font-size:13px;font-weight:900;min-height:64px;box-shadow:none;text-align:left}
+.ot-learning .option::before{content:attr(data-letter);display:grid;place-items:center;background:#eef1fc;border-radius:9px;width:32px;height:32px;flex:none;font-size:12px;color:#6980d5;font-weight:1000}
+.ot-learning .option.correct{background:#e8faef;border-color:#66cda0}.ot-learning .option.correct::before{background:#b9efd2;color:#1e7a54}
+.ot-learning .option.wrong{background:#fff0f0;border-color:#e79d9d}.ot-learning .option.wrong::before{background:#ffd9d9;color:#b73e50}
+.ot-learning .feedback{margin:15px 0 0;padding:12px 14px;background:#effcf5;border-radius:12px;color:#17694c;font-size:13px;font-weight:900}
+.ot-training-bottom{display:flex;align-items:center;gap:9px;justify-content:space-between;margin-top:23px;flex-wrap:wrap}
+.ot-training-bottom .known-row{margin:0}.ot-training-bottom .known-row .btn{width:auto;max-width:none;background:white;border-color:#e2e7f7;color:#546680;font-size:13px;font-weight:1000}
+.ot-training-bottom .actions{margin:0}.ot-training-bottom .btn.primary{background:#526af4;border-color:#526af4;color:white;box-shadow:0 5px 0 #3449bd}
+.ot-learning-aside{display:grid;gap:16px}.ot-goal-surface{padding:23px 22px}.ot-goal-overline{font-size:11px;letter-spacing:1.2px;color:#8390aa;font-weight:1000}
+.ot-goal-surface h2{font-size:18px;margin:8px 0 3px;font-weight:1000;letter-spacing:-.3px}.ot-goal-surface>p{color:#8290ab;font-size:12px;font-weight:850;line-height:1.5;margin:3px 0 20px}
+.ot-goal-donut{width:144px;height:144px;border-radius:50%;margin:0 auto 17px;display:grid;place-items:center;background:conic-gradient(#6477fa 0%,#edf1fd 0% 100%)}
+.ot-goal-donut>div{width:111px;height:111px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.ot-goal-donut strong{font-size:31px;line-height:1;font-weight:1000}.ot-goal-donut strong small{font-size:17px;color:#9aa6c0}
+.ot-goal-donut>div>span{font-size:11px;font-weight:900;color:#9da8c0}.ot-goal-meta{display:flex;justify-content:space-between;font-size:12px;font-weight:950;color:#7a87a4}.ot-goal-meta strong{color:#354a9f}
+.ot-goal-surface .daily-session{background:transparent;border:0;padding:0;margin:15px 0 0;box-shadow:none}.ot-goal-surface .daily-session>div:first-child{display:none}.ot-goal-surface .daily-session-data{gap:6px}.ot-goal-surface .daily-session-data span{font-size:11px;padding:7px 8px;border:0;background:#f1f5ff;border-radius:999px;color:#6371a4}
+.ot-tip-surface{padding:22px;background:#fff8e9;border-color:#ffedcc}.ot-tip-surface>span{font-size:29px}.ot-tip-surface h3{font-size:15px;margin:4px 0 10px}.ot-tip-surface p{color:#8f7850;font-size:12px;font-weight:850;line-height:1.6;margin:0}
+.ot-help{max-width:850px;margin:26px auto;color:#71819e;font-size:12px;line-height:1.6}.ot-help summary{cursor:pointer;font-weight:900;color:#6276bb}.ot-help p{margin:10px 0}
+.ot-word-management{max-width:850px;margin:25px auto!important}
+.ot-exam-shell{max-width:880px;margin:auto}
+#examView #examIntro,#examView #examActive,#examView #examResults{max-width:none;border-radius:25px;border:1px solid #e6eafa;box-shadow:0 8px 24px #192d6e09}
+#examView #examIntro{padding:34px 42px;overflow:hidden}
+.ot-exam-banner{display:grid;grid-template-columns:1fr 210px;gap:20px;align-items:center;background:linear-gradient(110deg,#526df6,#8793fd);padding:28px;border-radius:22px;color:white}
+.ot-exam-banner>div:first-child>span{letter-spacing:1.6px;font-size:11px;font-weight:1000}
+.ot-exam-banner h2{font-size:36px;letter-spacing:-1px;line-height:1.17;margin:11px 0;color:white}
+.ot-exam-banner p{font-size:13px;line-height:1.65;color:#e9edff;font-weight:800;max-width:410px}
+.ot-exam-art{display:grid;place-items:center;font-size:102px;filter:drop-shadow(0 10px 5px #283b982e)}
+.ot-exam-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
+.ot-exam-facts>div{background:#f6f7ff;border-radius:16px;padding:17px;text-align:center}.ot-exam-facts strong{font-size:23px;display:block;letter-spacing:-.5px}.ot-exam-facts span{font-size:11px;font-weight:900;color:#8c99b1}
+.ot-exam-lead{font-size:13px!important;line-height:1.6;color:#8491a9!important;margin:0 0 18px!important}
+#examIntro .btn.primary{display:block;width:100%;padding:16px;background:#526af4;border-color:#526af4;box-shadow:0 5px 0 #3449bd}
+.ot-exam-notice{text-align:center;color:#8a94ab;font-size:12px;font-weight:800;line-height:1.6}
+#examView #examActive{padding:27px 32px}.ot-examination .exam-topline .eyebrow{font-size:11px;letter-spacing:1px;color:#7785a7}.ot-examination #examStep{display:block;margin:7px 0 0;font-size:24px}
+.ot-examination .exam-clock{background:#fff2dc;border:1px solid #ffe2aa;border-radius:14px;padding:12px 19px;font-size:25px;letter-spacing:1px;color:#9c6a25;font-weight:1000;box-shadow:none}
+.ot-examination .exam-track{height:9px;background:#edf1ff;border-radius:99px;margin:21px 0 38px}.ot-examination #examTrackFill{background:#6276fa}
+.ot-exam-word-label{text-align:center;font-size:12px;letter-spacing:1.6px;color:#8794b3;font-weight:1000}
+.ot-examination .exam-word{text-align:center;font-size:clamp(42px,6vw,62px);font-weight:1000;letter-spacing:-1.8px;margin:10px 0 9px}
+.ot-examination .exam-prompt{text-align:center;font-size:13px;color:#8996b0;font-weight:850;margin:0 0 28px}
+.ot-examination .exam-options{display:grid;grid-template-columns:1fr;gap:10px}
+.ot-examination .exam-choice{display:flex;align-items:center;gap:15px;text-align:left;border:1.5px solid #e1e7f7;background:white;border-radius:15px;padding:15px 17px;min-height:62px;font-size:14px;font-weight:900;color:#334466;box-shadow:none}
+.ot-examination .exam-letter{width:36px;height:36px;flex:none;border-radius:9px;background:#eef1fc;color:#6980d5;display:grid;place-items:center}
+.ot-examination .exam-choice.selected{background:#edf0ff;border-color:#526af4}.ot-examination .exam-choice.selected .exam-letter{background:#526af4;color:white}
+.ot-examination .exam-nav{display:flex;align-items:center;justify-content:space-between;gap:13px;margin-top:25px}.ot-examination .exam-response-hint{color:#98a2b7;font-size:12px;font-weight:850}
+.ot-examination #examNext{background:#526af4;border-color:#526af4;box-shadow:0 5px 0 #3449bd}
+.ot-examination .exam-footnote{color:#98a2b7;font-size:11px}
+#examView #examResults{text-align:center;padding:45px}.ot-result-trophy{font-size:66px}
+#examResults .exam-title{font-size:31px;margin:12px 0 5px}#examResults .exam-result-summary{font-size:19px;color:#526af4;font-weight:1000}
+#examResults .exam-result-details{text-align:left}#examResults .exam-result-actions{justify-content:center}
+@media(max-width:970px){.ot-training-grid{grid-template-columns:1fr}.ot-learning-aside{grid-template-columns:1fr 1fr}.ot-goal-surface{display:block}}
+@media(max-width:690px){.ot-view-header h1{font-size:28px}.ot-view-tabs{width:100%}.ot-view-tabs button{flex:1;padding:11px 6px;font-size:12px}.ot-work-surface{padding:17px}.ot-learning .options{grid-template-columns:1fr}.ot-learning .flashcard{height:215px}.ot-answers-header{margin-top:24px}.ot-learning-aside{grid-template-columns:1fr}.ot-tip-surface{display:none}#examView #examIntro{padding:17px}.ot-exam-banner{grid-template-columns:1fr;padding:23px}.ot-exam-banner h2{font-size:31px}.ot-exam-art{font-size:65px}.ot-exam-facts{gap:7px}.ot-exam-facts>div{padding:10px}.ot-exam-facts strong{font-size:19px}#examView #examActive{padding:19px}.ot-examination .exam-nav{align-items:flex-start;flex-direction:column}.ot-examination #examNext{width:100%}#examView #examResults{padding:25px}}
+
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header class="topbar">
 <div class="brand"><div class="brandmark" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M4 30 16 12l6 7 6-10 9 21Z" fill="#fff"/><path d="m16 12 5 6-3 3-4-3-4 8-6 4Z" fill="#e6eaff"/><path d="M23 20h8v3h-8z" fill="#ffd866"/></svg></div><div class="brandcopy"><strong>Ordtoppen<span class="brand-dot">.</span></strong><span>VARJE ORD TAR DIG HÖGRE</span></div></div>
 <div class="topbar-actions"><nav class="toplinks" aria-label="Snabbnavigation"><button type="button" class="toplink active" id="topHome">Hem</button><button type="button" class="toplink" id="topTraining">Träna ord</button><button type="button" class="toplink" id="topExam">Högskoleprovsläge</button></nav><div class="top-streak" id="topProgress" title="Bemästrade ord">🏔️ <span>0 ord</span></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><button class="menu-item" type="button" id="goExam">◷ &nbsp;Högskoleprovsläge</button><div class="menu-divider"></div><button class="menu-item" type="button" id="readerToggle">📖 &nbsp;Läsassistent – kontrollerar…</button><div class="menu-user" id="readerStatus" aria-live="polite">Ansluter till webbläsartillägget…</div><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></div>
@@ -340,37 +423,58 @@ footer{color:#9aa4ba;padding:10px 0}
 <div class="ot-achievements"><div class="ot-achievement-head"><h3>🏅 Dina utmärkelser</h3><p>Varje milstolpe är värd att fira.</p></div><div class="ot-medal" id="badgeFirst"><span>🌱</span><div><b>Första steget</b><small>10 ord bemästrade</small></div></div><div class="ot-medal" id="badgeSecond"><span>🔥</span><div><b>På väg upp</b><small>50 ord bemästrade</small></div></div><div class="ot-medal" id="badgeThird"><span>⭐</span><div><b>Ordklättrare</b><small>250 ord bemästrade</small></div></div></div>
 <div class="ot-hidden-stats" aria-hidden="true"><span id="learning">0</span><span id="masteryPercent">0 %</span><span id="masteryCaption">0 av 10 000 ord bemästrade</span><span id="mountainCaption"></span><span id="mountainSubcaption"></span><span id="mountainClimber"></span><span id="dueStats"></span></div>
 </div>
-<div id="trainingView" class="view-hidden">
-<section class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="eyebrow" id="counter">ORDTRÄNING</span><select id="mode" aria-label="Välj träningsläge"><option value="all">Nya och repetition</option><option value="review">Repetition som är dags</option><option value="allwords">Alla ord, även bemästrade</option></select></div><div class="daily-session" id="dailySession" role="status" aria-live="polite"><div><strong>Dagens träningspass</strong><span id="dailySessionHint">Repetitionerna går först. Upp till 20 nya ord per dag.</span></div><div class="daily-session-data"><span id="todayReviewCount">0 att repetera</span><span id="todayNewCount">0/20 nya ord</span></div></div><div id="question"><div class="streak-indicator" id="streakIndicator"><div class="streak-label"><span id="streakLabel">Nytt ord</span><strong id="streakCount">0/6 rätt i rad</strong></div><div class="streak-track" id="streakTrack" role="progressbar" aria-label="Rätt i rad mot bemästrat" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><div class="streak-fill" id="streakFill"></div></div></div><button type="button" class="flashcard" id="flashcard" aria-label="Vänd kortet för att se definitionen"><span class="flashcard-inner"><span class="flashcard-face flashcard-front"><span class="flashcard-caption">VAD BETYDER ORDET?</span><span class="flashcard-word" id="word"></span><span class="flashcard-caption">Tryck på kortet för att vända det</span></span><span class="flashcard-face flashcard-back"><span class="flashcard-caption">BETYDELSE</span><span class="flashcard-definition" id="cardDefinition"></span><span class="flashcard-caption" id="backHint">Tryck igen om du inte kunde ordet</span></span></span></button><p class="options-heading">Välj rätt betydelse</p><div class="options" id="options"></div><div class="feedback hidden" id="feedback" role="status" aria-live="polite"></div><div class="actions"><button class="btn primary hidden" id="next">Nästa ord →</button></div><div class="known-row"><button class="btn green" id="markKnown">✓ Kan redan ordet</button></div><p class="hint">Ord vars definition avslöjar själva ordet pausas från flervalsfrågor tills förklaringen förbättrats. Inga definitioner eller träningsresultat raderas.</p><p class="hint">Vänd kortet för att se definitionen. Klicka en gång till på det vända kortet för att registrera ett fel och schemalägga repetition. Du kan också välja bland svarsalternativen. Efter sex rätt i rad blir ordet bemästrat och tas bort från normal repetition. ”Kan redan ordet” räknas direkt som bemästrat och tas bort från normal träning.</p></div><div id="empty" class="hidden"><h2>Du är klar med den här omgången! 🎉</h2><p id="emptyMessage">Byt träningsläge eller kom tillbaka när fler ord är redo för repetition.</p></div></section>
-<p class="hint" style="margin:12px 0">Ordkälla: nya definitioner från <a href="https://www.sprakbanken.gu.se/" target="_blank" rel="noopener noreferrer">Språkbanken / LEXIN</a> (CC BY 4.0). Tidigare ord och definitioner har behållits för att skydda dina framsteg. Ordlistan är ett övningsurval och inte en officiell ordlista från UHR.</p><section class="card"><div class="eyebrow">Din ordlista</div><h2>Hantera ord du kan och har bemästrat</h2><p class="hint">Här kan du återaktivera ord du redan kan eller har bemästrat. Dina framsteg sparas automatiskt på ditt konto.</p><div class="toolbar"><button class="btn" id="toggleKnown">Visa kända och bemästrade ord</button></div><div id="knownList" class="manage hidden"></div></section>
+<div id="trainingView" class="view-hidden ot-learning">
+<section class="ot-view-header"><div><span class="ot-view-overline">✦ ORDTOPPEN · DIN EXPEDITION</span><h1>Dagens klättring 🏔️</h1><p>Varje rätt svar tar dig ett steg närmare toppen.</p></div><div class="ot-view-tabs"><button id="tabTrain" class="selected" type="button">📚 Ordträning</button><button id="tabExam" type="button">⏱️ Högskoleprovsläge</button></div></section>
+<div class="ot-training-grid"><section class="ot-work-surface">
+  <div class="ot-work-head"><div class="ot-work-small"><span>✦</span> DAGENS TRÄNING</div><span class="ot-work-chip" id="counter">ORDTRÄNING</span></div>
+  <div class="ot-session-track" aria-hidden="true"><span id="otTrainFill"></span></div>
+  <div class="ot-mode-row"><label for="mode">Träningsläge</label><select id="mode" aria-label="Välj träningsläge"><option value="all">Nya och repetition</option><option value="review">Repetition som är dags</option><option value="allwords">Alla ord, även bemästrade</option></select></div>
+  <div id="question">
+    <div class="streak-indicator" id="streakIndicator"><div class="streak-label"><span id="streakLabel">Nytt ord</span><strong id="streakCount">0/6 rätt i rad</strong></div><div class="streak-track" id="streakTrack" role="progressbar" aria-label="Rätt i rad mot bemästrat" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><div class="streak-fill" id="streakFill"></div></div></div>
+    <button type="button" class="flashcard" id="flashcard" aria-label="Vänd kortet för att se definitionen"><span class="flashcard-inner"><span class="flashcard-face flashcard-front"><span class="ot-word-star">✦</span><span class="flashcard-word" id="word"></span><span class="flashcard-caption">Tryck på kortet för att se betydelsen ↻</span></span><span class="flashcard-face flashcard-back"><span class="flashcard-caption">BETYDELSE</span><span class="flashcard-definition" id="cardDefinition"></span><span class="flashcard-caption" id="backHint">Tryck igen om du inte kunde ordet</span></span></span></button>
+    <div class="ot-answers-header"><strong>Vad betyder ordet?</strong><span>Välj ett alternativ</span></div><div class="options" id="options"></div>
+    <div class="feedback hidden" id="feedback" role="status" aria-live="polite"></div>
+    <div class="ot-training-bottom"><div class="known-row"><button class="btn green" id="markKnown">✓ Jag kan redan ordet</button></div><div class="actions"><button class="btn primary hidden" id="next">Nästa ord →</button></div></div>
+  </div>
+  <div id="empty" class="hidden"><h2>Du är klar med den här omgången! 🎉</h2><p id="emptyMessage">Byt träningsläge eller kom tillbaka när fler ord är redo för repetition.</p></div>
+</section>
+<aside class="ot-learning-aside">
+  <section class="ot-goal-surface">
+    <div class="ot-goal-overline">✦ MIN DAGLIGA UTMANING</div><h2>Du är på väg upp!</h2><p>Lite varje dag gör stor skillnad.</p>
+    <div class="ot-goal-donut" id="otGoalDonut"><div><strong><span id="otDailyNumber">0</span><small>/20</small></strong><span>nya ord idag</span></div></div>
+    <div class="ot-goal-meta"><span>⚡ Dagens mål</span><strong id="otDailyPercent">0 % klart</strong></div>
+    <div class="daily-session" id="dailySession" role="status" aria-live="polite"><div><strong>Dagens träningspass</strong><span id="dailySessionHint">Upp till 20 nya ord per dag.</span></div><div class="daily-session-data"><span id="todayReviewCount">0 att repetera</span><span id="todayNewCount">0/20 nya ord</span></div></div>
+  </section>
+  <section class="ot-tip-surface"><span>💡</span><h3>Smart repetition</h3><p>Ord du tycker är svåra återkommer oftare. Varje repetition för dig närmare toppen!</p></section>
+</aside></div>
+<details class="ot-help"><summary>Så fungerar träningen och ordlistan</summary><p>Vänd kortet för att se definitionen. Klicka igen på det vända kortet för att registrera ett fel och schemalägga repetition, eller välj ett svarsalternativ. Efter sex rätt i rad över flera repetitionsdagar blir ordet bemästrat. ”Jag kan redan ordet” markerar det direkt som känt.</p><p>Ord vars förklaring avslöjar själva ordet hoppas över i flervalsfrågorna tills definitionen förbättrats.</p><p>Ordkälla: bland annat <a href="https://www.sprakbanken.gu.se/" target="_blank" rel="noopener noreferrer">Språkbanken / LEXIN</a> (CC BY 4.0). Ordtoppen är inte en officiell ordlista från UHR.</p></details>
+<section class="card ot-word-management"><div class="eyebrow">Din ordsamling</div><h2>Kända och bemästrade ord</h2><p class="hint">Här kan du återaktivera ord du redan kan. Framstegen sparas automatiskt på ditt konto.</p><div class="toolbar"><button class="btn" id="toggleKnown">Visa kända och bemästrade ord</button></div><div id="knownList" class="manage hidden"></div></section>
 </div>
-<div id="examView" class="view-hidden">
+<div id="examView" class="view-hidden ot-examination">
+<section class="ot-view-header"><div><span class="ot-view-overline">✦ ORDTOPPEN · TESTA DINA KUNSKAPER</span><h1>Högskoleprovsläge ⏱️</h1><p>20 frågor, 6 minuter – hur högt kan du klättra?</p></div><div class="ot-view-tabs"><button id="examTabTrain" type="button">📚 Ordträning</button><button id="examTabExam" class="selected" type="button">⏱️ Högskoleprovsläge</button></div></section>
+<div class="ot-exam-shell">
 <section class="card" id="examIntro">
-  <div class="eyebrow">Högskoleprovsläge</div>
-  <h2 class="exam-title">20 ord. 6 minuter. Ett försök.</h2>
-  <p class="exam-lead">Träna under tidspress som på ett prov: fem svarsalternativ, ett svar per ord och inga ledtrådar. Du måste besvara frågan innan du kan gå vidare. Facit och poäng visas först när provet är slut.</p>
-  <div class="exam-intro-facts"><span>◷ 06:00</span><span>20 frågor</span><span>5 alternativ</span></div>
-  <button class="btn primary" type="button" id="examStart">Starta provet →</button>
-  <p class="hint">Detta är ett övningsprov med ord ur Ordtoppen, inte ett officiellt högskoleprov. Dina ords repetitionsstatus påverkas inte.</p>
+  <div class="ot-exam-banner"><div><span>✦ DAGS ATT TESTA DINA KUNSKAPER</span><h2>Antar du<br>utmaningen?</h2><p>Precis som på högskoleprovet. Samla poäng, utmana dig själv och klättra vidare!</p></div><div class="ot-exam-art" aria-hidden="true">⏱️</div></div>
+  <div class="ot-exam-facts"><div><strong>20</strong><span>ORD</span></div><div><strong>06:00</strong><span>MINUTER</span></div><div><strong>5</strong><span>SVARSALTERNATIV</span></div></div>
+  <p class="exam-lead ot-exam-lead">Fem svarsalternativ, ett svar per ord och inga ledtrådar. Du måste besvara frågan innan du går vidare. Facit visas först när provet är klart.</p>
+  <button class="btn primary" type="button" id="examStart">Starta högskoleprovet →</button>
+  <p class="hint ot-exam-notice">Det här är ett övningsprov, inte ett officiellt högskoleprov. Dina ords repetitionsstatus påverkas inte.</p>
 </section>
 <section class="card view-hidden" id="examActive">
-  <div class="exam-topline"><div><div class="eyebrow">ORD-DELEN</div><strong id="examStep">Fråga 1 av 20</strong></div><div class="exam-clock" id="examClock" role="timer" aria-live="off" aria-label="Återstående tid">06:00</div></div>
-  <div class="exam-track" aria-hidden="true"><div id="examTrackFill"></div></div>
-  <div class="exam-word" id="examWord"></div>
-  <p class="exam-prompt">Vilket svar beskriver ordet bäst?</p>
-  <div class="exam-options" id="examOptions" role="radiogroup" aria-label="Välj ett svar"></div>
-  <div class="exam-nav"><span class="exam-response-hint" id="examResponseHint">Välj ett alternativ för att kunna fortsätta.</span><button id="examNext" class="btn primary" type="button" disabled>Nästa fråga →</button></div>
-  <p class="exam-footnote">Inga definitioner eller rätta svar visas under provet. Timern fortsätter tills tiden tar slut eller alla 20 svar lämnats.</p>
+ <div class="exam-topline"><div><div class="eyebrow">⏱️ HÖGSKOLEPROVSLÄGE</div><strong id="examStep">Fråga 1 av 20</strong></div><div class="exam-clock" id="examClock" role="timer" aria-live="off" aria-label="Återstående tid">06:00</div></div>
+ <div class="exam-track" aria-hidden="true"><div id="examTrackFill"></div></div>
+ <div class="ot-exam-word-label">VAD BETYDER ORDET?</div><div class="exam-word" id="examWord"></div>
+ <p class="exam-prompt">Välj det alternativ som bäst beskriver ordet</p>
+ <div class="exam-options" id="examOptions" role="radiogroup" aria-label="Välj ett svar"></div>
+ <div class="exam-nav"><span class="exam-response-hint" id="examResponseHint">Välj ett alternativ för att kunna fortsätta.</span><button id="examNext" class="btn primary" type="button" disabled>Bekräfta svar &amp; fortsätt →</button></div>
+ <p class="exam-footnote">🔒 Inga rätta svar visas under provet. Timern fortsätter tills alla frågor är besvarade eller tiden tar slut.</p>
 </section>
 <section class="card view-hidden" id="examResults">
-  <div class="eyebrow">Provet avslutat</div>
-  <h2 id="examResultHeading" class="exam-title">Ditt resultat</h2>
-  <div id="examResultSummary" class="exam-result-summary"></div>
-  <div id="examResultDetails" class="exam-result-details"></div>
-  <div class="exam-result-actions"><button id="examRetry" class="btn primary" type="button">Gör ett nytt prov</button><button id="examBack" class="btn" type="button">Till Hem</button></div>
-  <p class="hint">Detta provresultat påverkar inte dina bemästrade ord eller repetitionsintervall.</p>
-</section>
-</div></div><footer>Ordtoppen © 2026 · Varje ord tar dig högre.</footer></main>
+ <div class="ot-result-trophy">🏆</div><div class="eyebrow">UTMANINGEN AVKLARAD</div><h2 id="examResultHeading" class="exam-title">Ditt resultat</h2>
+ <div id="examResultSummary" class="exam-result-summary"></div><div id="examResultDetails" class="exam-result-details"></div>
+ <div class="exam-result-actions"><button id="examRetry" class="btn primary" type="button">Gör ett nytt prov ↻</button><button id="examBack" class="btn" type="button">Till Hem</button></div>
+ <p class="hint">Ditt provresultat påverkar inte repetitionsintervallen eller statusen för dina ord.</p>
+</section></div></div></div></div><footer>Ordtoppen © 2026 · Varje ord tar dig högre.</footer></main>
 <script>
 const legacyWords=[
 ['ambivalent','Att ha motstridiga känslor','Att vara helt säker','Att vara ovanligt vänlig','Att tänka mycket snabbt','Att visa förakt'],
@@ -766,6 +870,9 @@ function updateDailyUI(){
  const dueCount=words.reduce((n,_,i)=>n+(reviewDue(i)?1:0),0);
  $('todayReviewCount').textContent=dueCount+' att repetera';
  $('todayNewCount').textContent=ids.length+'/'+DAILY_NEW_LIMIT+' nya ord';
+ $('otDailyNumber').textContent=String(ids.length);
+ $('otDailyPercent').textContent=Math.round(ids.length/DAILY_NEW_LIMIT*100)+' % klart';
+ $('otGoalDonut').style.background='conic-gradient(#6477fa 0% '+(ids.length/DAILY_NEW_LIMIT*100)+'%, #edf1fd '+(ids.length/DAILY_NEW_LIMIT*100)+'% 100%)';
  $('dailySessionHint').textContent=ids.length>=DAILY_NEW_LIMIT
  ? 'Dagens nya ord är klara. Repetitionerna finns alltid kvar.'
  : 'Repetitioner prioriteras. Högst 20 nya ord per dag.';
@@ -820,6 +927,7 @@ if(mode==='all'){
   else recentReviewsInRow++;
 }
 recent.push(current);if(recent.length>5)recent.shift();shown++;answered=false;cardFlipped=false;
+ $('otTrainFill').style.width=Math.min(100,dailyNew().length/DAILY_NEW_LIMIT*100)+'%';
 const w=words[current];updateDailyUI();updateStreakUI();$('word').textContent=w.term;$('cardDefinition').textContent=w.definition;$('flashcard').classList.remove('flipped');$('flashcard').disabled=false;$('flashcard').setAttribute('aria-label','Vänd kortet för att se definitionen');$('backHint').textContent='Tryck igen om du inte kunde ordet';$('counter').textContent=`ORD ${shown} • ${status(current)==='new'?'NYTT ORD':'REPETITION'}`;$('feedback').classList.add('hidden');$('feedback').textContent='';$('next').classList.add('hidden');$('markKnown').disabled=false;
 const options=[w.definition,...distractors(current)].map((value,i)=>({value,correct:i===0}));for(let j=options.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[options[j],options[k]]=[options[k],options[j]]}const holder=$('options');holder.replaceChildren();options.forEach(c=>{const b=document.createElement('button');b.className='option';b.textContent=c.value;b.dataset.correct=c.correct?'yes':'no';b.onclick=()=>respond(c.correct,b);holder.append(b)});stats()}
 function finish(msg){updateStreakUI();answered=true;cardFlipped=true;$('flashcard').classList.add('flipped');$('backHint').textContent='Definitionen visas ovan';document.querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.correct==='yes')b.classList.add('correct')});$('feedback').textContent=msg;$('feedback').classList.remove('hidden');$('next').classList.remove('hidden');$('markKnown').disabled=true;$('flashcard').disabled=true;stats()}
@@ -990,6 +1098,8 @@ function showView(view, mode){
  if(home)stats();
  window.scrollTo({top:0,behavior:'instant'});
 }
+$('tabTrain').onclick=()=>showView('training');$('tabExam').onclick=()=>showView('exam');
+$('examTabTrain').onclick=()=>showView('training');$('examTabExam').onclick=()=>showView('exam');
 $('goHome').onclick=()=>showView('home');
 $('goTraining').onclick=()=>showView('training');
 $('homeStart').onclick=()=>showView('training','all');
