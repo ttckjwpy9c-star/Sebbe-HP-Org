@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Ordtoppen Läsassistent",
+  "version": "0.1.0",
+  "description": "Markera ett svenskt ord på en webbsida och slå upp betydelsen i svenska Wiktionary.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://sv.wiktionary.org/*"],
+  "content_scripts": [{
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle",
+    "all_frames": false
+  }],
+  "background": {"service_worker": "background.js"},
+  "action": {"default_title": "Ordtoppen Läsassistent", "default_popup": "popup.html"}
+}
