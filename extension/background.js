@@ -38,12 +38,66 @@ async function lookupWord(input){
  }catch(e){return {word,definitions:[],url:'https://sv.wiktionary.org/wiki/'+encodeURIComponent(word),error:'Ordboken kunde inte nås just nu.'};}
  finally{clearTimeout(timer);}
 }
-chrome.runtime.onMessage.addListener((message,sender,sendResponse)=>{
- if(message?.type!=='ORDTOPPEN_LOOKUP')return;
- (async()=>{
-  const {enabled}=await chrome.storage.sync.get({enabled:true});
-  if(enabled===false)return {error:'Läsassistenten är avstängd.'};
-  return lookupWord(String(message.word||''));
- })().then(sendResponse).catch(()=>sendResponse({error:'Uppslagningen misslyckades.'}));
- return true;
+
+const PROJECT_URL='https://hkijnyhmpcczihmnepww.supabase.co';
+const PUBLISHABLE='sb_publishable_Hn4cS6QdGCf4_853RjtICg_xV3WFV3b';
+function authHeaders(token){return {'apikey':PUBLISHABLE,...(token?{'authorization':'Bearer '+token}:{})};}
+async function loginToOrdtoppen(email,password){
+ if(typeof email!=='string'||typeof password!=='string'||email.length>200||password.length>200)return {error:'Fyll i e-post och lösenord.'};
+ const res=await fetch(PROJECT_URL+'/auth/v1/token?grant_type=password',{
+ method:'POST',headers:{...authHeaders(),'content-type':'application/json'},
+ body:JSON.stringify({email:email.trim(),password})});
+ const data=await res.json();
+ if(!res.ok||!data.access_token)return {error:'Inloggningen misslyckades. Kontrollera dina uppgifter.'};
+ await chrome.storage.local.set({ordtoppenAuth:{access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+data.expires_in*1000,email:email.trim()}});
+ return {signedIn:true,email:email.trim()};
+}
+async function logoutFromOrdtoppen(){await chrome.storage.local.remove('ordtoppenAuth');return {signedIn:false};}
+async function getSessionToken(){
+ const local=await chrome.storage.local.get('ordtoppenAuth');const sess=local.ordtoppenAuth;
+ if(!sess?.access_token)return null;
+ if(sess.expires_at>Date.now()+60000)return sess.access_token;
+ if(!sess.refresh_token)return null;
+ const res=await fetch(PROJECT_URL+'/auth/v1/token?grant_type=refresh_token',{
+  method:'POST',headers:{...authHeaders(),'content-type':'application/json'},
+  body:JSON.stringify({refresh_token:sess.refresh_token})});
+ const data=await res.json().catch(()=>({}));
+ if(!res.ok||!data.access_token){await chrome.storage.local.remove('ordtoppenAuth');return null;}
+ const next={access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+data.expires_in*1000,email:sess.email};
+ await chrome.storage.local.set({ordtoppenAuth:next});return next.access_token;
+}
+async function gptExplanation(word,sentence){
+ const {enabled}=await chrome.storage.sync.get({enabled:true});
+ if(enabled===false)return {error:'Läsassistenten är avstängd.'};
+ const token=await getSessionToken();if(!token)return {error:'Logga in med ditt Ordtoppen-konto via tilläggets ikon för att använda GPT.'};
+ const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),15000);
+ try{
+  const res=await fetch(PROJECT_URL+'/functions/v1/ordtoppen-gpt-pilot',{
+  method:'POST',signal:controller.signal,
+  headers:{...authHeaders(token),'content-type':'application/json'},
+  body:JSON.stringify({word,sentence})});
+  const data=await res.json().catch(()=>({}));
+  return res.ok?data:{error:data.error||'GPT-förklaringen kunde inte hämtas.'};
+ }catch(_){return {error:'Kunde inte nå GPT-tjänsten. Prova Wiktionary.'};}
+ finally{clearTimeout(timeout);}
+}
+chrome.runtime.onMessage.addListener((msg,_sender,sendResponse)=>{
+ const run=async()=>{
+  switch(msg?.type){
+   case 'ORDTOPPEN_LOOKUP': {
+    const {enabled}=await chrome.storage.sync.get({enabled:true});
+    return enabled===false?{error:'Läsassistenten är avstängd.'}:lookupWord(String(msg.word||''));
+   }
+   case 'ORDTOPPEN_AUTH_LOGIN': return loginToOrdtoppen(msg.email,msg.password);
+   case 'ORDTOPPEN_AUTH_LOGOUT': return logoutFromOrdtoppen();
+   case 'ORDTOPPEN_AUTH_STATUS': {
+    const token=await getSessionToken();
+    const ss=await chrome.storage.local.get('ordtoppenAuth');
+    return {signedIn:!!token,email:token?ss.ordtoppenAuth?.email:''};
+   }
+   case 'ORDTOPPEN_GPT': return gptExplanation(String(msg.word||''),String(msg.sentence||'').slice(0,260));
+   default: return {error:'Okänd förfrågan.'};
+  }
+ };
+ run().then(sendResponse).catch(()=>sendResponse({error:'Det gick inte att utföra åtgärden.'}));return true;
 });
