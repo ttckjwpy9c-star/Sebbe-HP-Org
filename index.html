@@ -1146,6 +1146,13 @@ $('reportTooEasy').onclick=async()=>{
   $('feedback').classList.remove('hidden');
   return;
  }
+ // Att flagga ett ord som för lätt ska inte förbruka en av dagens 20 nya ord.
+ const fresh=Object.keys(state).includes(wordId)===false;
+ if(fresh){
+  const list=dailyNew();
+  const p=list.indexOf(wordId);
+  if(p!==-1){list.splice(p,1);try{localStorage.setItem(dailyNewCache.key,JSON.stringify(list))}catch(_){}}
+ }
  reportedEasy.add(wordId);
  choose();
 };
