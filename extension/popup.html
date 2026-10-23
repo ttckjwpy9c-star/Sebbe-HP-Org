@@ -7,11 +7,13 @@ h1{font-size:18px;margin:0 0 5px}p{line-height:1.5;color:#435a79;margin:8px 0 16
 .switchrow{display:flex;justify-content:space-between;align-items:center;gap:14px;font-weight:750}
 input{width:20px;height:20px;accent-color:#3154c2;cursor:pointer}
 a{color:#244cb7;font-weight:700}small{display:block;margin-top:12px;color:#59708d;line-height:1.45}
+
+.authbox{margin-top:16px;padding-top:14px;border-top:1px solid #dbe4f4}.authlabel{font-weight:850;color:#203a70}.authdesc{font-size:12px;margin:5px 0 10px}input[type=email],input[type=password]{display:block;width:100%;margin:8px 0;padding:10px;border:1px solid #c9d6ea;border-radius:8px;color:#182e52;background:white;font:inherit}.authbox button{width:100%;padding:10px;background:#2c4fba;color:#fff;border:0;border-radius:9px;cursor:pointer;font-weight:750}.authmsg{font-size:12px;color:#415575;margin:8px 0;min-height:14px}#userEmail{overflow-wrap:anywhere;color:#1b335d;font-weight:700}[hidden]{display:none!important}
 </style></head><body><div class="panel">
 <h1>📘 Ordtoppen Läsassistent</h1>
 <p>Markera ett ord i en artikel så visas en ordförklaring utan att du behöver lämna sidan.</p>
 <label class="switchrow"><span>Aktivera läsassistenten</span><input type="checkbox" id="enabled"></label>
 <small id="status">Läser inställningen…</small>
 <p style="margin:14px 0 0"><a href="https://ttckjwpy9c-star.github.io/Sebbe-HP-Org/" target="_blank" rel="noreferrer">Öppna Ordtoppen ↗</a></p>
-<small>Uppslagningar görs mot svenska Wiktionary. Enbart det markerade ordet skickas. Fungerar inte på webbläsarens interna sidor eller skyddade dokument.</small>
+<div class="authbox" id="authbox"><div class="authlabel">Valfri GPT-förklaring</div><p class="authdesc">Logga in med ditt befintliga Ordtoppen-konto för att kunna få en enkel AI-förklaring när du ber om det.</p><div id="loggedOut"><input type="email" id="email" placeholder="Din e-postadress" autocomplete="email"><input type="password" id="password" placeholder="Ditt lösenord" autocomplete="current-password"><button id="loginBtn" type="button">Logga in för GPT</button></div><div id="loggedIn" hidden><p id="userEmail"></p><button id="logoutBtn" type="button">Logga ut från GPT</button></div><div class="authmsg" id="authMsg" role="status" aria-live="polite"></div><small>Max 5 GPT-uppslagningar per konto och dag under piloten. Wiktionary kräver ingen inloggning.</small></div><small>Uppslagningar görs mot svenska Wiktionary. Enbart det markerade ordet skickas. Fungerar inte på webbläsarens interna sidor eller skyddade dokument.</small>
 </div><script src="popup.js"></script></body></html>
