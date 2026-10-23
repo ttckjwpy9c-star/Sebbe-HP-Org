@@ -909,7 +909,194 @@ function pool(){
  const canTakeNew=dailyNew().length<DAILY_NEW_LIMIT;
  return words.map((_,i)=>i).filter(i=>quizEligible(i)&&(reviewDue(i)||(canTakeNew&&status(i)==='new')));
 }
-function distractors(i){const out=[],seen=new Set([words[i].definition]);for(let k=0;k<words.length&&out.length<4;k++){const meaning=words[(i*37+11+k*17)%words.length].definition;if(!seen.has(meaning)&&!givesAwayAnswer(words[i].term,meaning)){seen.add(meaning);out.push(meaning)}}return out}
+// Gemensam svarsmotor för ordträning och provläge.
+// 20 manuellt utformade pilotfrågor; övriga ord får strukturellt matchade alternativ.
+const REVIEWED_DISTRACTORS={
+ "adekvat": [
+  "Överdrivet omfattande",
+  "Noggrant dokumenterad",
+  "Särskilt ovanlig",
+  "Formellt bindande"
+ ],
+ "ambivalent": [
+  "Att vara känslomässigt likgiltig",
+  "Att vara starkt övertygad",
+  "Att ofta ändra åsikt utan eftertanke",
+  "Att vara misstänksam mot andra"
+ ],
+ "arbiträr": [
+  "Grundad på fasta regler",
+  "Avgjord efter noggrann prövning",
+  "Präglad av opartiskhet",
+  "Förankrad i vedertagen praxis"
+ ],
+ "eklektisk": [
+  "Som strikt följer en enda tradition",
+  "Som helt saknar sammanhängande uttryck",
+  "Som kopierar ett enda föredöme",
+  "Som avvisar främmande influenser"
+ ],
+ "esoterisk": [
+  "Avsedd för en bred allmänhet",
+  "Grundad på vetenskapliga experiment",
+  "Lättbegriplig även för nybörjare",
+  "Inriktad på praktisk vardagsnytta"
+ ],
+ "explicit": [
+  "Antydd utan att sägas direkt",
+  "Medvetet undanhållen",
+  "Möjlig att tolka på flera sätt",
+  "Uttryckt med försiktiga omskrivningar"
+ ],
+ "flegmatisk": [
+  "Lättretlig och häftig",
+  "Snabb och rastlös",
+  "Utåtriktad och pratsam",
+  "Orädd och äventyrslysten"
+ ],
+ "förbehåll": [
+  "Ett bindande löfte utan villkor",
+  "En slutlig överenskommelse",
+  "Ett uttryckligt godkännande",
+  "Ett formellt avslag"
+ ],
+ "förmäten": [
+  "Diskret och anspråkslös",
+  "Osäker på sin egen förmåga",
+  "Lätt att påverka av andra",
+  "Återhållsam med sina krav"
+ ],
+ "försumma": [
+  "Medvetet skjuta upp ett beslut",
+  "Aktivt försvåra någon annans arbete",
+  "Genomföra en uppgift trots hinder",
+  "Avbryta en verksamhet efter beslut"
+ ],
+ "idiosynkrasi": [
+  "Ett allmänt accepterat beteendemönster",
+  "En tillfällig förändring i sinnesstämning",
+  "En förmåga att anpassa sig socialt",
+  "Ett beteende som uppstår i grupp"
+ ],
+ "illojal": [
+  "Stark i sin övertygelse",
+  "Ovillig att ta ansvar",
+  "Bristande i sin noggrannhet",
+  "Öppet kritisk men fortsatt trogen"
+ ],
+ "implicit": [
+  "Uttryckligen formulerad",
+  "Avsiktligt förnekad",
+  "Tydligt definierad i förväg",
+  "Noggrant dokumenterad"
+ ],
+ "koncis": [
+  "Utförlig och detaljrik",
+  "Vag och svårtolkad",
+  "Formell och högtidlig",
+  "Snabbt uttalad utan eftertanke"
+ ],
+ "lakonisk": [
+  "Utförlig och omständlig",
+  "Högtidlig och ceremoniel",
+  "Ironisk och raljant",
+  "Pratsam och utåtriktad"
+ ],
+ "plädera": [
+  "Att redovisa fakta utan att ta ställning",
+  "Att avstå från att uttrycka en åsikt",
+  "Att ifrågasätta en person utan sakskäl",
+  "Att acceptera motståndarens argument"
+ ],
+ "prekär": [
+  "Trygg och stabil",
+  "Svår men fullt kontrollerad",
+  "Ovanligt gynnsam",
+  "Lätt att förutse"
+ ],
+ "redundant": [
+  "Nödvändig för helheten",
+  "Otillräcklig i omfattning",
+  "Särskilt värdefull",
+  "Avsiktligt förenklad"
+ ],
+ "vankelmodig": [
+  "Överdrivet självsäker",
+  "Snabb att ta beslut",
+  "Oförmögen att ändra sig",
+  "Likgiltig inför följderna"
+ ],
+ "vederlägga": [
+  "Bekräfta ett påstående",
+  "Förklara ett resonemang",
+  "Framföra en invändning utan belägg",
+  "Undersöka om något stämmer"
+ ]
+};
+function cleanMeaning(text){return String(text||'').normalize('NFC').toLocaleLowerCase('sv-SE').replace(/[^a-zåäö0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
+function meaningWords(text){
+ const stop=new Set(['att','och','eller','som','är','en','ett','den','det','av','för','till','på','med','inte','om','i','någon','något','vara','göra','ha','sig','sin','sitt','sina','kan','utan','vid','från','har','blir','bli']);
+ return cleanMeaning(text).split(' ').filter(w=>w.length>=4&&!stop.has(w));
+}
+function meaningPattern(def){
+ const raw=cleanMeaning(def);
+ if(/^(att |vara |göra |bli |kunna |ge |ta |få |ha |underlåta |argumentera |motbevisa )/.test(raw))return 'action';
+ if(/^(som |vilken |vilket |den som |det som )/.test(raw))return 'relative';
+ if(/^(en |ett |något |person |föremål |det |tillstånd |förhållande |känsla )/.test(raw))return 'noun';
+ if(/^(mycket |ovanligt |särskilt |överdrivet |inte |lugn |kort |godtycklig |osäker |lämplig )/.test(raw))return 'quality';
+ // Definitions with very few words are often short adjective/adverb synonyms.
+ return raw.split(' ').length<=4?'quality':'other';
+}
+function similarMeaning(a,b){
+ const x=cleanMeaning(a),y=cleanMeaning(b);
+ if(!x||!y||x===y||x.includes(y)||y.includes(x))return true;
+ const xa=meaningWords(a),ya=meaningWords(b);
+ if(!xa.length||!ya.length)return false;
+ const stems=new Set(xa.map(w=>w.slice(0,Math.min(5,w.length))));
+ const shared=ya.filter(w=>stems.has(w.slice(0,Math.min(5,w.length)))).length;
+ // Err on the side of rejecting obvious synonym overlap.
+ return shared>=2||(shared>=1&&Math.min(xa.length,ya.length)<=2);
+}
+function qualityDistractors(i){
+ const target=words[i],correct=target.definition;
+ const curated=REVIEWED_DISTRACTORS[target.term.trim().toLocaleLowerCase('sv-SE')];
+ if(curated&&curated.length===4&&!curated.some(d=>similarMeaning(correct,d)||givesAwayAnswer(target.term,d)))return [...curated];
+ const expected=meaningPattern(correct),len=cleanMeaning(correct).length;
+ const n=words.length;
+ if(n<6)return [];
+ const candidatePool=[],seen=new Set([cleanMeaning(correct)]);
+ // Sample a broad and varied set without scanning all 10,000 words on every question.
+ const start=Math.floor(Math.random()*n);
+ const stride=37; // coprime with 10000; duplicates rejected via seen
+ const sample=Math.min(n,1200);
+ for(let k=0;k<sample;k++){
+  const word=words[(start+(i*13+k*stride))%n];
+  const d=word.definition,normalized=cleanMeaning(d);
+  if(!normalized||seen.has(normalized)||d.length<5||d.length>170)continue;
+  if(givesAwayAnswer(target.term,d)||similarMeaning(correct,d))continue;
+  // Reject an answer whose own key word is accidentally defined by the option.
+  if(givesAwayAnswer(word.term,d))continue;
+  seen.add(normalized);
+  const pattern=meaningPattern(d);
+  const sameStructure=pattern===expected;
+  const delta=Math.abs(cleanMeaning(d).length-len);
+  const sizePenalty=delta/Math.max(24,len);
+  const matchBonus=sameStructure?3:0;
+  const score=matchBonus-sizePenalty+Math.random()*0.6;
+  candidatePool.push({d,score,pattern});
+ }
+ candidatePool.sort((a,b)=>b.score-a.score);
+ const result=[];
+ for(const candidate of candidatePool){
+  if(result.length===4)break;
+  if(result.some(prev=>similarMeaning(prev,candidate.d)))continue;
+  // Favor same grammatical shape, only relax if insufficient alternatives exist.
+  if(candidate.pattern!==expected&&candidatePool.filter(x=>x.pattern===expected).length>=4)continue;
+  result.push(candidate.d);
+ }
+ return result;
+}
+function distractors(i){return qualityDistractors(i)}
 function choose(){if(!ready)return;const p=pool();if(!p.length){current=-1;$('question').classList.add('hidden');$('empty').classList.remove('hidden');$('emptyMessage').textContent=$('mode').value==='all'&&dailyNew().length>=DAILY_NEW_LIMIT?'Dagens 20 nya ord är genomgångna och inga repetitioner är dags. Bra jobbat! Kom tillbaka när fler ord ska repeteras.':'Inga ord att träna på just nu. Prova ett annat träningsläge eller kom tillbaka när repetitionerna är dags.';updateDailyUI();stats();renderKnown();return}
 $('question').classList.remove('hidden');$('empty').classList.add('hidden');let candidates=p.filter(i=>i!==current&&!recent.includes(i));if(!candidates.length)candidates=p.filter(i=>i!==current);if(!candidates.length)candidates=p;
 const reviews=candidates.filter(reviewDue),unseen=candidates.filter(i=>status(i)==='new');
@@ -929,7 +1116,9 @@ if(mode==='all'){
 recent.push(current);if(recent.length>5)recent.shift();shown++;answered=false;cardFlipped=false;
  $('otTrainFill').style.width=Math.min(100,dailyNew().length/DAILY_NEW_LIMIT*100)+'%';
 const w=words[current];updateDailyUI();updateStreakUI();$('word').textContent=w.term;$('cardDefinition').textContent=w.definition;$('flashcard').classList.remove('flipped');$('flashcard').disabled=false;$('flashcard').setAttribute('aria-label','Vänd kortet för att se definitionen');$('backHint').textContent='Tryck igen om du inte kunde ordet';$('counter').textContent=`ORD ${shown} • ${status(current)==='new'?'NYTT ORD':'REPETITION'}`;$('feedback').classList.add('hidden');$('feedback').textContent='';$('next').classList.add('hidden');$('markKnown').disabled=false;
-const options=[w.definition,...distractors(current)].map((value,i)=>({value,correct:i===0}));for(let j=options.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[options[j],options[k]]=[options[k],options[j]]}const holder=$('options');holder.replaceChildren();options.forEach((c,index)=>{const b=document.createElement('button');b.className='option';b.dataset.letter='ABCDE'[index];b.textContent=c.value;b.dataset.correct=c.correct?'yes':'no';b.onclick=()=>respond(c.correct,b);holder.append(b)});stats()}
+const alternatives=distractors(current);
+if(alternatives.length!==4){$('emptyMessage').textContent='Inga tillförlitliga svarsalternativ kunde byggas. Prova ett annat ord.';current=-1;choose();return;}
+const options=[w.definition,...alternatives].map((value,i)=>({value,correct:i===0}));for(let j=options.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[options[j],options[k]]=[options[k],options[j]]}const holder=$('options');holder.replaceChildren();options.forEach((c,index)=>{const b=document.createElement('button');b.className='option';b.dataset.letter='ABCDE'[index];b.textContent=c.value;b.dataset.correct=c.correct?'yes':'no';b.onclick=()=>respond(c.correct,b);holder.append(b)});stats()}
 function finish(msg){updateStreakUI();answered=true;cardFlipped=true;$('flashcard').classList.add('flipped');$('backHint').textContent='Definitionen visas ovan';document.querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.correct==='yes')b.classList.add('correct')});$('feedback').textContent=msg;$('feedback').classList.remove('hidden');$('next').classList.remove('hidden');$('markKnown').disabled=true;$('flashcard').disabled=true;stats()}
 async function persist(wordId, val){state[wordId]=val;syncMsg('Sparar…');saving=saving.catch(()=>{}).then(async()=>{const row={user_id:user.id,word_id:wordId,status:val.status,streak:val.streak||0,next_review_at:val.due?new Date(val.due).toISOString():null,last_seen_at:new Date(val.lastSeen||Date.now()).toISOString(),updated_at:new Date().toISOString()};const {error}=await db.from('user_word_progress').upsert(row,{onConflict:'user_id,word_id'});if(error)throw error;syncMsg('Synkroniserat')});try{await saving}catch(e){syncMsg('Kunde inte spara');notice('Synkroniseringsfel: '+e.message)}}
 function respond(correct,btn){if(answered||current<0)return;const old=entry(current),now=Date.now();if(correct){const streak=(old.streak||0)+1;if(streak>=6){void persist(words[current].id,{status:'known',streak:6,due:0,lastSeen:now});finish(`Rätt! ${words[current].term} är nu bemästrat efter sex rätt i rad och tas bort från normal repetition.`)}else{const days=[1,3,7,14,30][streak-1];void persist(words[current].id,{status:'learned',streak,due:now+days*DAY,lastSeen:now});finish(`Rätt! ${words[current].term} betyder: ${words[current].definition}. ${streak}/6 rätt i rad. Nästa repetition om ${days} dagar.`)}}else{void persist(words[current].id,{status:'review',streak:0,due:now+10*MINUTE,lastSeen:now});btn.classList.add('wrong');finish(`Inte riktigt. ${words[current].term} betyder: ${words[current].definition}. Repetition om cirka 10 minuter.`)}}
@@ -993,14 +1182,9 @@ function examTimerTick(){
 }
 function examShuffle(items){const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function examChoiceSet(i){
- const word=words[i],candidates=new Set([word.definition]);
- // Samma källfilter som vanliga quiz: exkludera uppenbara ledtrådar.
- for(let attempt=0;attempt<Math.min(300,words.length*2)&&candidates.size<5;attempt++){
-  const j=Math.floor(Math.random()*words.length),d=words[j].definition;
-  if(d&&d!==word.definition&&!givesAwayAnswer(word.term,d))candidates.add(d);
- }
- if(candidates.size!==5)return null;
- return examShuffle([...candidates]).map(d=>({label:d,correct:d===word.definition}));
+ const word=words[i],alts=qualityDistractors(i);
+ if(alts.length!==4)return null;
+ return examShuffle([word.definition,...alts]).map(d=>({label:d,correct:d===word.definition}));
 }
 function createExamQuestions(){
  const valid=examShuffle(words.map((_,i)=>i).filter(quizEligible));
