@@ -37,3 +37,28 @@ På kodprojektets sida välj **Code → Download ZIP**, extrahera och välj **ex
 - Content script körs på vanliga webbplatser för att kunna reagera på markering. Det tar inte emot och skickar inte hela artikeltexter eller lösenord.
 
 Källor: https://sv.wiktionary.org och https://creativecommons.org/licenses/by-sa/4.0/
+
+
+## GPT-pilot 0.2 – frivillig funktion
+
+Läsassistenten fortsätter att visa svenska Wiktionary som vanligt. Under definitionen finns en knapp **Förklara enklare med GPT**. Klicka bara när du vill ha en kort AI-förklaring. Om du vill kan den skickade texten innehålla en kort mening kring ordet (högst 260 tecken); ingen hel artikel skickas.
+
+### Aktivera som projektägare
+1. Skapa en separat **OpenAI API key** på https://platform.openai.com/api-keys med fakturering aktiverad och en låg användningsbudget i OpenAI-projektet.
+2. Öppna Supabase-projektets **Edge Functions → Secrets**: https://supabase.com/dashboard/project/hkijnyhmpcczihmnepww/functions/secrets .
+3. Lägg till secret med namnet **OPENAI_API_KEY** och nyckeln som värde. *Nyckeln får aldrig finnas i index.html, GitHub eller själva tillägget.* Dela inte nyckeln i chatten.
+4. Edge-funktionen `ordtoppen-gpt-pilot` är redan driftsatt men ger ett tydligt 503-svar innan secret finns.
+5. Hämta den uppdaterade koden från GitHub på nytt, ersätt din lokala extension-mapp, och klicka **Reload/Uppdatera** på kortet för Ordtoppen Läsassistent under chrome://extensions eller edge://extensions. Om du flyttar mappen kan du behöva välja **Läs in okomprimerat** igen.
+6. Klicka på tilläggets ikon och logga in med ditt befintliga Ordtoppen-konto. Lösenordet skickas till Supabase Auth, inte till OpenAI, och sparas inte i tillägget. När du markerar ett ord kan du klicka **Förklara enklare med GPT**.
+
+### Kostnadsskydd
+- 5 GPT-anrop per inloggat konto och dag.
+- Totalt högst 50 GPT-anrop/dag för piloten.
+- Ett anrop får högst 180 utmatningstoken; modellen är `gpt-6-luna`.
+- Det här begränsar antal möjliga anrop; sätt också en separat budget/utgiftsgräns hos OpenAI. Budgeten kan bero på projektets faktureringsfunktioner och är inte samma sak som anropsbegränsningen.
+- API-kostnader debiteras separat från ChatGPT-abonnemanget.
+
+### Kvalitet och integritet
+GPT-svaren är AI-genererade och kan innehålla fel, särskilt om ordet har flera betydelser. Wiktionarys definition och källänk visas separat. Funktionens lösenordsautentisering och access-token hanteras av Supabase Auth. Login-token sparas lokalt av Chrome/Edge-tillägget; ingen GPT-nyckel sparas där.
+
+Denna pilot är kodad och driftsatt men behöver verkliga användartester med en riktig API-nyckel innan vi betraktar den som färdig.
