@@ -410,9 +410,9 @@ footer{color:#9aa4ba;padding:10px 0}
  </section>
  <section class="ot-surface ot-expedition">
   <div class="ot-section-row"><h2>🏔️ Din expedition</h2><span class="ot-pill" id="homeLevel">Basläger</span></div>
-  <div class="ot-big"><span id="mastered">0</span> <small>/ 10 000 ord</small></div><p class="ot-expedition-sub">Du samlar höjdmeter, ett ord i taget.</p>
+  <div class="ot-big"><span id="mastered">0</span> <small>/ <span id="otEligibleTotal">–</span> HP-ord</small></div><p class="ot-expedition-sub">Du samlar höjdmeter, ett ord i taget.</p>
   <div class="ot-progress-shell" id="masteryProgress" role="progressbar" aria-label="Andel bemästrade ord" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ot-progress-fill" id="masteryFill"></div></div>
-  <div class="ot-waypoints"><div><strong>⛺ Basläger</strong><span>0 ord</span></div><div><strong>⭐ Etapp 1</strong><span>500 ord</span></div><div><strong>🏔️ Toppen</strong><span>10 000 ord</span></div></div>
+  <div class="ot-waypoints"><div><strong>⛺ Basläger</strong><span>0 ord</span></div><div><strong>⭐ Etapp 1</strong><span>500 ord</span></div><div><strong>🏔️ Toppen</strong><span id="otSummitTotal">– ord</span></div></div>
   <div class="ot-checkpoint"><span>🎒</span><div id="nextCampNote"><strong>Nästa delmål:</strong> 500 ord kvar.</div></div>
  </section>
 </div>
@@ -820,9 +820,10 @@ function status(i){const e=entry(i);return (e.status==='known'||(e.status==='lea
 // 'known' + streak>=6 marks mastery without changing the Supabase status constraint.
 function mastered(i){const e=entry(i);return status(i)==='known'&&Number(e.streak)>=6}
 function due(i){return !entry(i).due || entry(i).due<=Date.now()}
-function stats(){let masteredCount=0,learning=0,readyCount=0,unseen=0;
-words.forEach((_,i)=>{const st=status(i);if(st==='known')masteredCount++;else{if(st==='review'||st==='learned')learning++;if(st==='new')unseen++;if((st==='review'||st==='learned')&&due(i))readyCount++}});
-const total=words.length||10000, percent=total?100*masteredCount/total:0;
+function stats(){let masteredCount=0,learning=0,readyCount=0,unseen=0,eligibleCount=0;
+words.forEach((_,i)=>{if(!quizEligible(i))return;eligibleCount++;const st=status(i);if(st==='known')masteredCount++;else{if(st==='review'||st==='learned')learning++;if(st==='new')unseen++;if((st==='review'||st==='learned')&&due(i))readyCount++}});
+const total=eligibleCount, percent=total?100*masteredCount/total:0;
+$('otEligibleTotal').textContent=total.toLocaleString('sv-SE');$('otSummitTotal').textContent=total.toLocaleString('sv-SE')+' ord';
 $('mastered').textContent=masteredCount.toLocaleString('sv-SE');$('learning').textContent=learning.toLocaleString('sv-SE');
 $('masteryPercent').textContent=percent.toLocaleString('sv-SE',{maximumFractionDigits:1})+' %';
 $('masteryFill').style.width=percent+'%';
@@ -831,11 +832,11 @@ const masteredText=`${masteredCount.toLocaleString('sv-SE')} av ${total.toLocale
 $('masteryCaption').textContent=masteredText;
 $('mountainCaption').textContent=masteredText;
 $('mountainPercentText').textContent=percent.toLocaleString('sv-SE',{maximumFractionDigits:1})+' % mot toppen';
-const checkpoints=[2500,5000,7500,10000];
+const checkpoints=[500,2500,5000,total].filter((n,i,a)=>n>0&&n<=total&&a.indexOf(n)===i);
 const next=checkpoints.find(x=>masteredCount<x);
 $('mountainSubcaption').textContent=next
 ? `Du är på väg uppför berget – nästa delmål är ${next.toLocaleString('sv-SE')} bemästrade ord.`
-: 'Du har nått toppen – alla 10 000 ord är bemästrade!';
+: 'Du har nått toppen – alla ord i ditt HP-urval är bemästrade!';
 $('nextCampNote').innerHTML= next
 ? `<strong>Nästa delmål:</strong> ${(next-masteredCount).toLocaleString('sv-SE')} ord kvar till ${next.toLocaleString('sv-SE')}.`
 : '<strong>Toppen nådd!</strong> Du har bemästrat hela ordlistan.';
@@ -843,10 +844,10 @@ const p=Math.max(0,Math.min(1,total?masteredCount/total:0));
 const x=44 + p*26; const y=20 + p*66;
 $('mountainClimber').style.left=x+'%'; $('mountainClimber').style.bottom=y+'%';
 [...document.querySelectorAll('.milestone')].forEach(el=>{el.classList.toggle('reached', masteredCount>=Number(el.dataset.threshold||0));});
-$('dueStats').textContent=`${readyCount} ord redo för repetition. ${unseen} nya ord väntar. Totalt ${words.length} ord i databasen.`;
+$('dueStats').textContent=`${readyCount} ord redo för repetition. ${unseen} nya HP-ord väntar. ${total} ord i träningsurvalet, ${words.length} ord i hela databasen.`;
 $('homeDueCount').textContent=readyCount.toLocaleString('sv-SE');
 $('homeNewCount').textContent=String(dailyNew().length);
-$('homeLevel').textContent=masteredCount>=10000?'Toppen!':masteredCount>=2500?'Bergsklättrare':masteredCount>=500?'Etapp 1':'Basläger';
+$('homeLevel').textContent=masteredCount>=total&&total>0?'Toppen!':masteredCount>=2500?'Bergsklättrare':masteredCount>=500?'Etapp 1':'Basläger';
 $('topProgress').querySelector('span').textContent=masteredCount.toLocaleString('sv-SE')+' ord';
 $('badgeFirst').classList.toggle('unlocked',masteredCount>=10);
 $('badgeSecond').classList.toggle('unlocked',masteredCount>=50);
