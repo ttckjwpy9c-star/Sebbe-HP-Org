@@ -1440,9 +1440,10 @@ async function refreshPersonalWords(){
  if(!user)return;
  const uid=user.id;
  $('personalList').textContent='Hämtar dina sparade ord…';
- const {data,error}=await db.from('personal_words').select('id,term,definition,learning_status,streak,next_review_at,created_at').eq('user_id',uid).order('created_at',{ascending:false}).limit(2000);
+ let data;
+ try{data=await allPages('personal_words','id,term,definition,learning_status,streak,next_review_at,created_at',q=>q.eq('user_id',uid).order('created_at',{ascending:false}));}
+ catch(_){if(user?.id===uid)$('personalList').textContent='Kunde inte hämta Mina ord. Kontrollera anslutningen och försök igen.';return;}
  if(user?.id!==uid)return;
- if(error){$('personalList').textContent='Kunde inte hämta Mina ord. Kontrollera anslutningen och försök igen.';return;}
  personalWords=data||[];
  personalIndex=-1;personalRecent=-1;
  personalStats();renderPersonalList();showPersonalCard();
