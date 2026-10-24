@@ -40,6 +40,8 @@
   .spinner{display:inline-block;width:12px;height:12px;border:2px solid #dbe1f8;border-top-color:#526af4;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:-1px}
   @keyframes spin{to{transform:rotate(360deg)}}
   .error{color:#9c4b37}
+  .save-area{margin-top:14px}.save-button{width:100%;border-radius:12px;font-size:13px;padding:11px 13px;background:#526af4;color:white;font-weight:850}
+  .save-button:disabled{opacity:.75;cursor:default}.save-status{font-size:12px;color:#60719a;margin-top:7px;min-height:14px}
   `;
   const card=document.createElement('div');card.className='panel';card.setAttribute('role','dialog');card.setAttribute('aria-label','Ordtoppen AI-förklaring');
   const brand=document.createElement('div');brand.className='brand';brand.textContent='✦ Ordtoppen läsassistent';
@@ -77,7 +79,21 @@
    if(sequence!==selectionSequence||overlay!==host||!enabled)return;
    body.classList.remove('loading');
    body.textContent=reply?.explanation||reply?.error||'AI-förklaringen kunde inte hämtas.';
-   if(!reply?.explanation)body.classList.add('error');
+   if(!reply?.explanation){body.classList.add('error');return;}
+   const controls=document.createElement('div');controls.className='save-area';
+   const button=document.createElement('button');button.className='save-button';button.textContent='＋ Spara i Mina ord';
+   const status=document.createElement('div');status.className='save-status';status.setAttribute('role','status');
+   button.onclick=async()=>{
+    if(button.disabled||overlay!==host)return;
+    button.disabled=true;button.textContent='Sparar…';
+    try{
+     const result=await chrome.runtime.sendMessage({type:'ORDTOPPEN_SAVE_PERSONAL',word,definition:reply.explanation,sentence});
+     if(overlay!==host)return;
+     if(result?.saved){button.textContent='✓ Sparat i Mina ord';status.textContent=result.alreadySaved?'Ordet finns redan i din samling.':'Du hittar ordet på Ordtoppen under Mina ord.';}
+     else{button.disabled=false;button.textContent='＋ Spara i Mina ord';status.textContent=result?.error||'Kunde inte spara ordet.';}
+    }catch(_){button.disabled=false;button.textContent='＋ Spara i Mina ord';status.textContent='Kunde inte ansluta. Försök igen.';}
+   };
+   controls.append(button,status);body.after(controls);
   }catch(_){
    if(sequence===selectionSequence&&overlay===host){body.classList.remove('loading');body.classList.add('error');body.textContent='Det gick inte att nå GPT. Kontrollera inloggningen i tilläggets meny.';}
   }
