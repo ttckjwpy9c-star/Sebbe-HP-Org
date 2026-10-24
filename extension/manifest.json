@@ -1,13 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Ordtoppen Läsassistent",
-  "version": "0.2.0",
-  "description": "Läs ordförklaringar från Wiktionary och få valfria GPT-förklaringar.",
+  "version": "0.3.0",
+  "description": "Markera ett ord och få en kort AI-förklaring direkt på webbsidan.",
   "permissions": [
     "storage"
   ],
   "host_permissions": [
-    "https://sv.wiktionary.org/*",
     "https://hkijnyhmpcczihmnepww.supabase.co/*"
   ],
   "content_scripts": [
