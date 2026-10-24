@@ -27,3 +27,11 @@ Du behöver uppdatera det lokalt installerade tillägget manuellt tills det publ
 
 ## Källor och ansvar
 AI-genererade förklaringar från OpenAI via Supabase Edge Function `ordtoppen-gpt-pilot`. Svaret är avsett som pedagogiskt stöd och kan innehålla fel. För aktuell API-fakturering, se OpenAI Platform.
+
+## Mina ord – personlig ordsamling (v0.4)
+
+Efter en lyckad GPT-förklaring syns knappen **＋ Spara i Mina ord**. Du måste vara inloggad i tillägget med samma Supabase-konto som du använder på Ordtoppen. Sparade ord och deras AI-förklaringar lagras i `public.personal_words`, skyddat av RLS för den inloggade användaren. Det påverkar varken `public.words` eller `public.user_word_progress`.
+
+På Ordtoppen öppnar du fliken **Mina ord**. Där finns sökbar ordlista, borttagning, och separat repetition med vändbara ordkort. Rätt svar schemaläggs enligt 1/3/7/14/30 dagar och sex rätt markerar ordet som bemästrat. Fel svar återkommer efter cirka tio minuter. Läget **Alla mina ord** ger möjlighet att träna på samtliga sparade ord, inklusive bemästrade.
+
+Om ett ord redan är sparat ändras inte tidigare förklaring eller repetitionsstatus automatiskt. AI-betydelser kan vara felaktiga och bör tolkas som studiestöd.
