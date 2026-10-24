@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Ordtoppen Läsassistent",
-  "version": "0.3.0",
-  "description": "Markera ett ord och få en kort AI-förklaring direkt på webbsidan.",
+  "version": "0.4.0",
+  "description": "AI-förklaringar direkt när du markerar ord, och spara dem i Mina ord på Ordtoppen.",
   "permissions": [
     "storage"
   ],
