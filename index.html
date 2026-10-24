@@ -385,9 +385,40 @@ footer{color:#9aa4ba;padding:10px 0}
 @media(max-width:970px){.ot-training-grid{grid-template-columns:1fr}.ot-learning-aside{grid-template-columns:1fr 1fr}.ot-goal-surface{display:block}}
 @media(max-width:690px){.ot-view-header h1{font-size:28px}.ot-view-tabs{width:100%}.ot-view-tabs button{flex:1;padding:11px 6px;font-size:12px}.ot-work-surface{padding:17px}.ot-learning .options{grid-template-columns:1fr}.ot-learning .flashcard{height:215px}.ot-answers-header{margin-top:24px}.ot-learning-aside{grid-template-columns:1fr}.ot-tip-surface{display:none}#examView #examIntro{padding:17px}.ot-exam-banner{grid-template-columns:1fr;padding:23px}.ot-exam-banner h2{font-size:31px}.ot-exam-art{font-size:65px}.ot-exam-facts{gap:7px}.ot-exam-facts>div{padding:10px}.ot-exam-facts strong{font-size:19px}#examView #examActive{padding:19px}.ot-examination .exam-nav{align-items:flex-start;flex-direction:column}.ot-examination #examNext{width:100%}#examView #examResults{padding:25px}}
 
+
+/* Mina ord – privat ordsamling, separat från HP-ordbanken */
+.ot-personal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0 20px}
+.ot-personal-stats .ot-surface{padding:19px 23px;display:grid;gap:4px}
+.ot-personal-stats strong{font-size:30px;font-weight:1000;color:#465fe5}
+.ot-personal-stats span{font-size:12px;font-weight:900;color:#8290ad}
+.ot-personal-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.ot-personal-grid>.ot-surface{padding:24px;min-width:0}
+.ot-personal-search{width:100%;padding:14px 15px;border-radius:12px;border:1px solid #dbe2f7;background:#f9faff;font:inherit;color:#1e2a5a}
+.ot-personal-list{max-height:590px;overflow-y:auto;margin-top:13px;display:grid;gap:9px}
+.ot-personal-entry{padding:13px 15px;border:1px solid #e2e7f6;border-radius:15px;background:#fff;display:grid;gap:6px}
+.ot-personal-entry strong{font-size:16px}.ot-personal-entry p{margin:0;font-size:12px;line-height:1.5;color:#586b8d}
+.ot-personal-entry-actions{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.ot-personal-entry-actions span{font-size:11px;font-weight:900;color:#7282a3}
+.ot-personal-entry-actions button{font:inherit;font-size:12px;background:#f5f6ff;color:#5366b2;border:0;padding:6px 9px;border-radius:9px;cursor:pointer}
+.ot-personal-modes{display:flex;gap:7px;margin:0 0 17px;flex-wrap:wrap}
+.ot-personal-modes button{flex:1;border:1px solid #dee5fa;background:#fff;border-radius:11px;padding:11px;font:inherit;font-size:12px;font-weight:900;color:#617093;cursor:pointer}
+.ot-personal-modes button.selected{background:#e9edff;border-color:#a6b3fa;color:#415be0}
+.ot-personal-empty{text-align:center;padding:50px 16px;color:#8290ad;font-size:14px;font-weight:850;line-height:1.7}
+.ot-personal-flip{min-height:244px;width:100%;background:linear-gradient(150deg,#f9faff,#eeefff);border:1px solid #d5ddfb;border-radius:22px;padding:25px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;cursor:pointer;box-shadow:0 8px 0 #e5e9fc;font:inherit;color:#1e2a5a}
+#personalCardTerm{font-size:clamp(25px,4vw,38px);font-weight:1000;overflow-wrap:anywhere}
+#personalCardDefinition{font-size:17px;font-weight:800;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.ot-personal-flip.flipped{background:linear-gradient(150deg,#e8fff3,#fff);border-color:#bce9d0}
+.ot-personal-flip.flipped #personalCardTerm{font-size:14px;color:#5c7186}
+.ot-personal-flip small{font-size:12px;font-weight:900;color:#8594b2}
+.ot-personal-feedback{min-height:24px;margin:16px 0 8px;color:#566889;font-size:13px;font-weight:800}
+.ot-personal-card-buttons{display:flex;gap:10px;flex-wrap:wrap}
+.ot-personal-card-buttons>.btn{flex:1}
+.ot-personal-next{width:100%;border:0;border-radius:12px;background:#f0f2fe;color:#5065d7;padding:12px;font:inherit;font-weight:1000;margin-top:13px;cursor:pointer}
+.ot-personal-note{max-width:850px;margin:20px auto}
+@media(max-width:790px){.ot-personal-grid{grid-template-columns:1fr}.ot-personal-stats{gap:8px}.ot-personal-stats .ot-surface{padding:12px}.ot-personal-stats strong{font-size:22px}.ot-personal-stats span{font-size:10px}}
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script></head><body><main><header class="topbar">
 <div class="brand"><div class="brandmark" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M4 30 16 12l6 7 6-10 9 21Z" fill="#fff"/><path d="m16 12 5 6-3 3-4-3-4 8-6 4Z" fill="#e6eaff"/><path d="M23 20h8v3h-8z" fill="#ffd866"/></svg></div><div class="brandcopy"><strong>Ordtoppen<span class="brand-dot">.</span></strong><span>VARJE ORD TAR DIG HÖGRE</span></div></div>
-<div class="topbar-actions"><nav class="toplinks" aria-label="Snabbnavigation"><button type="button" class="toplink active" id="topHome">Hem</button><button type="button" class="toplink" id="topTraining">Träna ord</button><button type="button" class="toplink" id="topExam">Högskoleprovsläge</button></nav><div class="top-streak" id="topProgress" title="Bemästrade ord">🏔️ <span>0 ord</span></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><button class="menu-item" type="button" id="goExam">◷ &nbsp;Högskoleprovsläge</button><div class="menu-divider"></div><button class="menu-item" type="button" id="readerToggle">📖 &nbsp;Läsassistent – kontrollerar…</button><div class="menu-user" id="readerStatus" aria-live="polite">Ansluter till webbläsartillägget…</div><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></div>
+<div class="topbar-actions"><nav class="toplinks" aria-label="Snabbnavigation"><button type="button" class="toplink active" id="topHome">Hem</button><button type="button" class="toplink" id="topTraining">Träna ord</button><button type="button" class="toplink" id="topExam">Högskoleprovsläge</button><button type="button" class="toplink" id="topPersonal">Mina ord</button></nav><div class="top-streak" id="topProgress" title="Bemästrade ord">🏔️ <span>0 ord</span></div><div class="menu-wrap hidden" id="menuWrap"><button type="button" class="menu-toggle" id="menuToggle" aria-label="Öppna meny" aria-expanded="false" aria-controls="mainMenu"><span class="menu-bars" aria-hidden="true">☰</span> Meny</button><nav class="menu-dropdown hidden" id="mainMenu" aria-label="Huvudnavigation"><button class="menu-item active" type="button" id="goHome" aria-current="page">⌂ &nbsp;Hem</button><button class="menu-item" type="button" id="goTraining">▣ &nbsp;Träna ord</button><button class="menu-item" type="button" id="goExam">◷ &nbsp;Högskoleprovsläge</button><button class="menu-item" type="button" id="goPersonal">✦ &nbsp;Mina ord</button><div class="menu-divider"></div><button class="menu-item" type="button" id="readerToggle">📖 &nbsp;Läsassistent – kontrollerar…</button><div class="menu-user" id="readerStatus" aria-live="polite">Ansluter till webbläsartillägget…</div><div class="menu-divider"></div><div class="menu-user" id="menuAccount"></div><button class="menu-item" type="button" id="reset">⚠ &nbsp;Nollställ framsteg</button><button class="menu-item menu-logout" type="button" id="logout">↪ &nbsp;Logga ut</button></nav></div></div>
 </header>
 <section class="card" id="authSection"><div class="eyebrow">Ditt konto – synkroniseras med Supabase</div><div id="signedOut"><p class="hint">Skapa ett konto eller logga in. Dina ord och framsteg sparas därefter säkert i Supabase.</p><div class="toolbar"><input id="email" type="email" autocomplete="email" placeholder="E-postadress" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"><input id="password" type="password" autocomplete="current-password" placeholder="Lösenord (minst 6 tecken)" style="flex:1;min-width:200px;padding:12px;border:1px solid #cdd4e2;border-radius:10px"></div><div class="toolbar" style="margin-top:12px"><button class="btn primary" id="login">Logga in</button><button class="btn" id="signup">Skapa konto</button></div></div><div id="signedIn" class="hidden"><p class="hint">Inloggad som <strong id="account"></strong> · <span id="sync">Synkroniserat</span></p></div><p id="authMessage" role="status" aria-live="polite" class="hint"></p></section><div id="appContent" class="hidden">
 
@@ -421,7 +452,7 @@ footer{color:#9aa4ba;padding:10px 0}
  <button class="ot-action-card" type="button" id="homeQuickTrain"><span class="ot-action-icon">📚</span><h3>Träna ord</h3><p>Lär dig nya ord och repetera smart.</p><span class="ot-arrow">↗</span></button>
  <button class="ot-action-card" type="button" id="homeQuickExam"><span class="ot-action-icon">⏱️</span><h3>Högskoleprovsläge</h3><p>20 ord · 6 minuter · Utmana dig själv.</p><span class="ot-arrow">↗</span></button>
  <button class="ot-action-card" type="button" id="homeQuickReader"><span class="ot-action-icon">✨</span><h3>Läsassistent</h3><p>Förstå svåra ord medan du läser.</p><span class="ot-arrow">↗</span></button>
- <button class="ot-action-card" type="button" id="homeQuickKnown"><span class="ot-action-icon">🏆</span><h3>Din ordsamling</h3><p>Se orden du redan har erövrat.</p><span class="ot-arrow">↗</span></button>
+ <button class="ot-action-card" type="button" id="homeQuickKnown"><span class="ot-action-icon">🏆</span><h3>Mina ord</h3><p>Dina egna ord från läsassistenten.</p><span class="ot-arrow">↗</span></button>
 </div>
 <div class="ot-achievements"><div class="ot-achievement-head"><h3>🏅 Dina utmärkelser</h3><p>Varje milstolpe är värd att fira.</p></div><div class="ot-medal" id="badgeFirst"><span>🌱</span><div><b>Första steget</b><small>10 ord bemästrade</small></div></div><div class="ot-medal" id="badgeSecond"><span>🔥</span><div><b>På väg upp</b><small>50 ord bemästrade</small></div></div><div class="ot-medal" id="badgeThird"><span>⭐</span><div><b>Ordklättrare</b><small>250 ord bemästrade</small></div></div></div>
 <div class="ot-hidden-stats" aria-hidden="true"><span id="learning">0</span><span id="masteryPercent">0 %</span><span id="masteryCaption">0 av 10 000 ord bemästrade</span><span id="mountainCaption"></span><span id="mountainSubcaption"></span><span id="mountainClimber"></span><span id="dueStats"></span></div>
@@ -477,7 +508,29 @@ footer{color:#9aa4ba;padding:10px 0}
  <div id="examResultSummary" class="exam-result-summary"></div><div id="examResultDetails" class="exam-result-details"></div>
  <div class="exam-result-actions"><button id="examRetry" class="btn primary" type="button">Gör ett nytt prov ↻</button><button id="examBack" class="btn" type="button">Till Hem</button></div>
  <p class="hint">Ditt provresultat påverkar inte repetitionsintervallen eller statusen för dina ord.</p>
-</section></div></div><footer>Ordtoppen © 2026 · Varje ord tar dig högre.</footer></main>
+</section></div>
+<div id="personalView" class="view-hidden ot-personal">
+ <section class="ot-view-header"><div><span class="ot-view-overline">✦ DIN EGEN ORDSAMLING</span><h1>Mina ord ✨</h1><p>Ord du upptäcker och sparar via läsassistenten. Helt separat från HP-ordbanken.</p></div><button type="button" class="btn" id="personalRefresh">↻ Uppdatera samlingen</button></section>
+ <div class="ot-personal-stats"><div class="ot-surface"><strong id="personalTotal">0</strong><span>Sparade ord</span></div><div class="ot-surface"><strong id="personalDue">0</strong><span>Redo att träna</span></div><div class="ot-surface"><strong id="personalKnown">0</strong><span>Bemästrade</span></div></div>
+ <div class="ot-personal-grid">
+ <section class="ot-surface ot-personal-list-panel"><div class="ot-section-row"><h2>Din ordlista</h2><span class="ot-pill">Personlig</span></div><p class="ot-section-note">Ord och AI-förklaringar som du själv har valt att spara.</p>
+ <input type="search" id="personalSearch" aria-label="Sök bland dina ord" placeholder="Sök bland dina sparade ord…" class="ot-personal-search">
+ <div class="ot-personal-list" id="personalList" aria-live="polite">Läser in dina ord…</div></section>
+ <section class="ot-surface ot-personal-practice">
+ <div class="ot-section-row"><h2>Träningskort</h2><span class="ot-pill" id="personalCardCount">0 ord</span></div><p class="ot-section-note">Träna på alla dina sparade ord eller bara de som behöver repetition.</p>
+ <div class="ot-personal-modes"><button type="button" id="personalModeAll" class="selected">Alla mina ord</button><button type="button" id="personalModeDue">Dags att repetera</button></div>
+ <div id="personalPracticeEmpty" class="ot-personal-empty">Spara ett ord via läsassistenten så dyker det upp här.</div>
+ <div id="personalPracticeArea" class="view-hidden">
+   <button id="personalFlip" type="button" class="ot-personal-flip" aria-label="Vänd träningskortet"><span id="personalCardTerm"></span><span id="personalCardDefinition" class="view-hidden"></span><small id="personalFlipHint">Klicka för att se betydelsen ↻</small></button>
+   <div class="ot-personal-feedback" id="personalFeedback" role="status"></div>
+   <div class="ot-personal-card-buttons">
+    <button type="button" class="btn" id="personalAgain">Behöver öva mer</button>
+    <button type="button" class="btn primary" id="personalRemember">Jag kunde ordet ✓</button>
+   </div>
+   <button type="button" class="ot-personal-next" id="personalNext">Nästa ord →</button>
+ </div></section></div>
+ <p class="hint ot-personal-note">Dina ord och AI-förklaringar sparas privat på ditt konto. Dina svar här påverkar inte repetitionsresultaten i HP-träningen. AI-förklaringar kan innehålla fel.</p>
+</div></div><footer>Ordtoppen © 2026 · Varje ord tar dig högre.</footer></main>
 <script>
 const legacyWords=[
 ['ambivalent','Att ha motstridiga känslor','Att vara helt säker','Att vara ovanligt vänlig','Att tänka mycket snabbt','Att visa förakt'],
