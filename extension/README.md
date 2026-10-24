@@ -1,64 +1,29 @@
-# Ordtoppen Läsassistent (Chrome / Edge) – prototyp 0.1
+# Ordtoppen Läsassistent – Chrome/Edge (v0.3)
 
-Ett fristående **Manifest V3-tillägg**. På vanliga webbsidor kan användaren markera ett svenskt ord för att få en svensk Wiktionary-betydelse i en liten ruta, utan att lämna texten.
+Markera **ett svenskt ord** på en vanlig webbsida, så visas automatiskt en kort **AI-genererad förklaring** på svenska i en liten ruta. Inget extra knapptryck behövs. Wiktionary används inte längre.
 
-## Funktioner
-- Markera ett enskilt ord med musen eller tangentbordet.
-- Definitionsrutan stängs med × eller Escape.
-- Endast markerade uppslagsord skickas till **sv.wiktionary.org**.
-- På/av i tilläggets egen meny och på Ordtoppen-hemsidans meny (när tillägget är installerat).
-- Ingen inloggning, inga ord eller träningsresultat skrivs till Supabase i denna första version.
-- Om ordet inte finns, eller Wiktionarys formatering är svårtolkad, visas länk till källan.
+## Användning och begränsningar
+1. Installera tillägget som beskrivet nedan och logga in via tilläggets ikon med ditt befintliga Ordtoppen-konto.
+2. Markera ett enskilt ord i en artikel. Efter en kort fördröjning (350 ms) visas Ordtoppen-rutan. Förklaringen laddas automatiskt.
+3. Stäng med × eller Escape, eller avaktivera läsassistenten i tilläggets meny eller på Ordtoppen-hemsidan.
 
-## Installera i Chrome
-1. Öppna `chrome://extensions`
-2. Aktivera **Utvecklarläge**.
-3. Klicka **Läs in okomprimerat / Load unpacked**.
-4. Välj den nedladdade mappen `extension` (den som innehåller `manifest.json`).
-5. Öppna en vanlig nyhetsartikel, ladda om artikeln och markera ett enskilt svenskt ord.
+- 20 GPT-anrop per konto och dag, och ett separat totalt pilottak på 50 anrop per dag på servern.
+- Tidigare lyckade svar hålls i en tillfällig minnescache inom webbläsartilläggets bakgrundsprocess, max 120 poster. Minnescachen kan tömmas om webbläsaren stänger ned processen; den sparas inte permanent.
+- Enbart det markerade ordet samt högst 260 tecken av närliggande text skickas till Ordtoppen/Supabase och därifrån OpenAI när uppslagningen startas. Ingen hel artikel skickas. **Eftersom anropet görs automatiskt bör användaren bara markera text som den vill skicka till AI:n.**
+- AI-svar kan vara felaktiga. Ord och text används inte för att ändra Ordtoppens ordlista.
+- Fungerar inte på `chrome://` / `edge://`-sidor, skyddade PDF-vyer eller de flesta webbläsarens egna gränssnitt.
+- OpenAI API-nyckeln ligger i Supabase Secrets, inte i tillägget eller GitHub. Inloggning hanteras av Supabase Auth.
 
-## Installera i Edge
-1. Öppna `edge://extensions`.
-2. Aktivera **Utvecklarläge**.
-3. Klicka **Load unpacked / Läs in uppackat** och välj `extension`-mappen.
+## Installera i Chrome eller Edge
+1. Ladda ner repo-arkivet på https://github.com/ttckjwpy9c-star/Sebbe-HP-Org via **Code → Download ZIP** och extrahera.
+2. Öppna `chrome://extensions` i Chrome eller `edge://extensions` i Edge.
+3. Aktivera **Utvecklarläge**, välj **Läs in okomprimerat / Load unpacked** och välj `extension`-mappen som innehåller `manifest.json`.
+4. Klicka på tilläggets ikon och logga in. Ladda om webbsidor som redan var öppna.
 
-### Installera från GitHub
-På kodprojektets sida välj **Code → Download ZIP**, extrahera och välj **extension**-mappen i stegen ovan. Att lägga koden på GitHub installerar **inte** webbläsartillägget automatiskt.
+### Om du redan har installerat en äldre version
+Ladda ner och extrahera senaste repo-filerna. Ersätt innehållet i **den mapp som ditt installerade tillägg pekar på** med de nya filerna från `extension`, och klicka **Uppdatera/Reload** på tillägget under `chrome://extensions` eller `edge://extensions`. Alternativt: ta bort det gamla tillägget och läs in den nya `extension`-mappen. I det senare fallet behöver du logga in igen.
 
-## Slå på/av från Ordtoppen
-Öppna Ordtoppen i samma webbläsarprofil där tillägget installerats. När tillägget är aktivt kan hemsidan skicka användarens på/av-val till webbläsartillägget. När tillägget saknas förblir inställningen inaktiv och visar installationsinformation.
+Du behöver uppdatera det lokalt installerade tillägget manuellt tills det publiceras i en webbläsarbutik. **Att ändra GitHub uppdaterar inte automatiskt lokalt installerade tillägg.**
 
-## Begränsningar och integritet
-- Endast vanliga `http(s)`-sidor, inte interna browser-sidor eller skyddade PDF-vyer.
-- Enkel uppslagning av grundform: böjningar saknas ibland.
-- Ordförklaringar tolkas ur **svenska** Wiktionarys öppna uppslagsmaterial; vissa sidor kan sakna maskinläsbar förklaring. Uppslagen är inte kvalitetssäkrade av Ordtoppen.
-- Wiktionary-material kräver korrekt källa och licenshantering (CC BY-SA).
-- Detta är en lokal prototyp; den är inte granskad av Chrome Web Store eller publicerad där.
-- Content script körs på vanliga webbplatser för att kunna reagera på markering. Det tar inte emot och skickar inte hela artikeltexter eller lösenord.
-
-Källor: https://sv.wiktionary.org och https://creativecommons.org/licenses/by-sa/4.0/
-
-
-## GPT-pilot 0.2 – frivillig funktion
-
-Läsassistenten fortsätter att visa svenska Wiktionary som vanligt. Under definitionen finns en knapp **Förklara enklare med GPT**. Klicka bara när du vill ha en kort AI-förklaring. Om du vill kan den skickade texten innehålla en kort mening kring ordet (högst 260 tecken); ingen hel artikel skickas.
-
-### Aktivera som projektägare
-1. Skapa en separat **OpenAI API key** på https://platform.openai.com/api-keys med fakturering aktiverad och en låg användningsbudget i OpenAI-projektet.
-2. Öppna Supabase-projektets **Edge Functions → Secrets**: https://supabase.com/dashboard/project/hkijnyhmpcczihmnepww/functions/secrets .
-3. Lägg till secret med namnet **OPENAI_API_KEY** och nyckeln som värde. *Nyckeln får aldrig finnas i index.html, GitHub eller själva tillägget.* Dela inte nyckeln i chatten.
-4. Edge-funktionen `ordtoppen-gpt-pilot` är redan driftsatt men ger ett tydligt 503-svar innan secret finns.
-5. Hämta den uppdaterade koden från GitHub på nytt, ersätt din lokala extension-mapp, och klicka **Reload/Uppdatera** på kortet för Ordtoppen Läsassistent under chrome://extensions eller edge://extensions. Om du flyttar mappen kan du behöva välja **Läs in okomprimerat** igen.
-6. Klicka på tilläggets ikon och logga in med ditt befintliga Ordtoppen-konto. Lösenordet skickas till Supabase Auth, inte till OpenAI, och sparas inte i tillägget. När du markerar ett ord kan du klicka **Förklara enklare med GPT**.
-
-### Kostnadsskydd
-- 20 GPT-anrop per inloggat konto och dag.
-- Totalt högst 50 GPT-anrop/dag för piloten.
-- Ett anrop får högst 180 utmatningstoken; modellen är `gpt-6-luna`.
-- Det här begränsar antal möjliga anrop; sätt också en separat budget/utgiftsgräns hos OpenAI. Budgeten kan bero på projektets faktureringsfunktioner och är inte samma sak som anropsbegränsningen.
-- API-kostnader debiteras separat från ChatGPT-abonnemanget.
-
-### Kvalitet och integritet
-GPT-svaren är AI-genererade och kan innehålla fel, särskilt om ordet har flera betydelser. Wiktionarys definition och källänk visas separat. Funktionens lösenordsautentisering och access-token hanteras av Supabase Auth. Login-token sparas lokalt av Chrome/Edge-tillägget; ingen GPT-nyckel sparas där.
-
-Denna pilot är kodad och driftsatt men behöver verkliga användartester med en riktig API-nyckel innan vi betraktar den som färdig.
+## Källor och ansvar
+AI-genererade förklaringar från OpenAI via Supabase Edge Function `ordtoppen-gpt-pilot`. Svaret är avsett som pedagogiskt stöd och kan innehålla fel. För aktuell API-fakturering, se OpenAI Platform.
