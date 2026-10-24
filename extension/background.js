@@ -57,6 +57,33 @@ async function gptExplanation(word,sentence){
  }catch(_){return {error:'Kunde inte nå AI-tjänsten just nu. Försök igen lite senare.'};}
  finally{clearTimeout(timeout);}
 }
+
+async function savePersonalWord(word,definition,sentence){
+ const token=await getSessionToken();
+ if(!token)return {error:'Logga in i tillägget för att spara ord till din personliga samling.'};
+ const w=String(word||'').trim().normalize('NFC'),explanation=String(definition||'').trim();
+ if(!/^[a-zA-ZåäöÅÄÖéèÉÈüÜ-]{2,48}$/.test(w)||explanation.length<3||explanation.length>1000)
+  return {error:'Ordet eller förklaringen kunde inte sparas.'};
+ const payload={
+  term:w,normalized_term:w.toLocaleLowerCase('sv-SE'),
+  definition:explanation,context_sentence:String(sentence||'').trim().slice(0,260)||null
+ };
+ // Retrieve trusted user ID via Supabase Auth; RLS checks ownership.
+ const who=await fetch(PROJECT_URL+'/auth/v1/user',{headers:authHeaders(token)});
+ if(!who.ok)return {error:'Inloggningen behöver förnyas. Öppna tilläggets meny.'};
+ const account=await who.json();
+ if(!account?.id)return {error:'Kunde inte identifiera ditt konto.'};
+ payload.user_id=account.id;
+ const res=await fetch(PROJECT_URL+'/rest/v1/personal_words',{
+   method:'POST',
+   headers:{...authHeaders(token),'content-type':'application/json','Prefer':'return=minimal'},
+   body:JSON.stringify(payload)
+ });
+ if(res.ok)return {saved:true,alreadySaved:false};
+ const error=await res.json().catch(()=>({}));
+ if(res.status===409&&error?.code==='23505')return {saved:true,alreadySaved:true};
+ return {error:'Det gick inte att spara ordet. Försök igen.'};
+}
 chrome.runtime.onMessage.addListener((msg,_sender,sendResponse)=>{
  const run=async()=>{
   switch(msg?.type){
@@ -68,6 +95,7 @@ chrome.runtime.onMessage.addListener((msg,_sender,sendResponse)=>{
     return {signedIn:!!token,email:token?ss.ordtoppenAuth?.email:''};
    }
    case 'ORDTOPPEN_GPT': return gptExplanation(String(msg.word||''),String(msg.sentence||'').slice(0,260));
+   case 'ORDTOPPEN_SAVE_PERSONAL': return savePersonalWord(msg.word,msg.definition,msg.sentence);
    default: return {error:'Okänd förfrågan.'};
   }
  };
