@@ -19,14 +19,14 @@
    enabled=msg.enabled;if(!enabled)clearOverlay();sendBridgeState();
   }).catch(()=>window.postMessage({type:'ORDTOPPEN_EXTENSION_ERROR'},location.origin));
  }
- let lookupTimer=null,lastLookupKey='',activeLookupKey='';
+ let lookupTimer=null,activeLookupKey='';
  function clearOverlay(){if(overlay){overlay.remove();overlay=null;}activeLookupKey='';}
  function makeOverlay(rect,word){
   clearOverlay();
   const host=document.createElement('div');host.setAttribute('data-ordtoppen-overlay','');
   Object.assign(host.style,{position:'fixed',zIndex:'2147483647',left:'12px',top:'12px',width:'min(350px, calc(100vw - 24px))',pointerEvents:'auto'});
   const root=host.attachShadow({mode:'closed'});
-  const css=document.createElement('style');css.textContent=String.raw\`
+  const css=document.createElement('style');css.textContent=String.raw`
   :host{all:initial}*{box-sizing:border-box}
   .panel{color:#1e2a5a;background:#fff;border:1px solid #dce3fa;box-shadow:0 16px 46px #172a4b30;border-radius:19px;padding:17px;font:14px/1.55 Nunito,system-ui,Segoe UI,Arial,sans-serif}
   .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
@@ -40,7 +40,7 @@
   .spinner{display:inline-block;width:12px;height:12px;border:2px solid #dbe1f8;border-top-color:#526af4;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:-1px}
   @keyframes spin{to{transform:rotate(360deg)}}
   .error{color:#9c4b37}
-  \`;
+  `;
   const card=document.createElement('div');card.className='panel';card.setAttribute('role','dialog');card.setAttribute('aria-label','Ordtoppen AI-förklaring');
   const brand=document.createElement('div');brand.className='brand';brand.textContent='✦ Ordtoppen läsassistent';
   const head=document.createElement('div');head.className='top';
