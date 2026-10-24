@@ -1351,23 +1351,138 @@ $('examNext').onclick=examNext;
 $('examRetry').onclick=()=>{examPanels('intro');startExam()};
 $('examBack').onclick=()=>showView('home');
 
+
+/* Personliga ord – egen data och egen träning, helt separerad från HP-frågor. */
+let personalWords=[],personalIndex=-1,personalMode='all',personalAnswered=false,personalFlipped=false,personalRecent=-1;
+function personalReady(w){return w.learning_status==='new'||(w.learning_status==='review'&&(!w.next_review_at||Date.parse(w.next_review_at)<=Date.now()));}
+function personalPool(){return personalWords.map((w,i)=>i).filter(i=>personalMode==='all'||personalReady(personalWords[i]));}
+function personalStats(){
+ $('personalTotal').textContent=personalWords.length.toLocaleString('sv-SE');
+ $('personalDue').textContent=personalWords.filter(personalReady).length.toLocaleString('sv-SE');
+ $('personalKnown').textContent=personalWords.filter(w=>w.learning_status==='known').length.toLocaleString('sv-SE');
+ const pool=personalPool();
+ $('personalCardCount').textContent=pool.length+' ord';
+}
+function renderPersonalList(){
+ const term=$('personalSearch').value.trim().toLocaleLowerCase('sv-SE');
+ const el=$('personalList');el.replaceChildren();
+ const subset=personalWords.filter(w=>w.term.toLocaleLowerCase('sv-SE').includes(term)||w.definition.toLocaleLowerCase('sv-SE').includes(term));
+ if(!subset.length){el.textContent=term?'Inga ord matchar din sökning.':'Inga sparade ord ännu. Markera ord i en artikel och välj ”Spara i Mina ord”.';return;}
+ for(const word of subset){
+  const entry=document.createElement('div');entry.className='ot-personal-entry';
+  const heading=document.createElement('strong');heading.textContent=word.term;
+  const meaning=document.createElement('p');meaning.textContent=word.definition;
+  const controls=document.createElement('div');controls.className='ot-personal-entry-actions';
+  const state=document.createElement('span');state.textContent=word.learning_status==='known'?'✓ Bemästrat':word.learning_status==='review'?'↻ Repetition':'✦ Nytt ord';
+  const btn=document.createElement('button');btn.textContent='Träna →';btn.onclick=()=>{personalMode='all';syncPersonalMode();personalIndex=personalWords.findIndex(x=>x.id===word.id);showPersonalCard();document.getElementById('personalFlip').scrollIntoView({behavior:'smooth',block:'center'});};
+  const del=document.createElement('button');del.textContent='Ta bort';del.setAttribute('aria-label','Ta bort '+word.term);
+  del.onclick=()=>void deletePersonalWord(word);
+  controls.append(state,btn,del);entry.append(heading,meaning,controls);el.append(entry);
+ }
+}
+function syncPersonalMode(){
+ $('personalModeAll').classList.toggle('selected',personalMode==='all');
+ $('personalModeDue').classList.toggle('selected',personalMode==='due');
+ personalStats();
+}
+function showPersonalCard(){
+ const pool=personalPool();
+ if(personalIndex<0||!pool.includes(personalIndex))personalIndex=pool[0]??-1;
+ const card=$('personalPracticeArea'),empty=$('personalPracticeEmpty');
+ const valid=personalIndex>=0;
+ card.classList.toggle('view-hidden',!valid);empty.classList.toggle('view-hidden',valid);
+ if(!valid){empty.textContent=personalWords.length?(personalMode==='due'?'Inga ord behöver repeteras just nu. Prova ”Alla mina ord”.':'Inga ord att träna på.'):'Spara ett ord via läsassistenten så dyker det upp här.';return;}
+ const word=personalWords[personalIndex];
+ personalAnswered=false;personalFlipped=false;
+ $('personalFlip').classList.remove('flipped');
+ $('personalCardTerm').textContent=word.term;
+ $('personalCardDefinition').textContent=word.definition;
+ $('personalCardDefinition').classList.add('view-hidden');
+ $('personalFlipHint').textContent='Klicka för att se betydelsen ↻';
+ $('personalFeedback').textContent=word.learning_status==='known'?'Det här ordet har du redan bemästrat. Du kan träna det igen.':(word.streak?word.streak+'/6 rätt över repetitionspassen':'Nytt ord');
+ $('personalAgain').disabled=false;$('personalRemember').disabled=false;
+}
+function nextPersonalCard(){
+ const pool=personalPool();
+ if(!pool.length){personalIndex=-1;showPersonalCard();return;}
+ const remaining=pool.filter(i=>i!==personalIndex&&i!==personalRecent);
+ const candidate=remaining.length?remaining:pool.filter(i=>i!==personalIndex);
+ personalRecent=personalIndex;
+ personalIndex=(candidate.length?candidate:pool)[Math.floor(Math.random()*(candidate.length?candidate:pool).length)];
+ showPersonalCard();
+}
+async function savePersonalPractice(remembered){
+ if(personalIndex<0||personalAnswered||!user)return;
+ const word=personalWords[personalIndex],old={...word};
+ const now=Date.now();let streak=remembered?Math.min(6,Number(word.streak||0)+1):0;
+ const status=remembered?(streak>=6?'known':'review'):'review';
+ const days=[1,3,7,14,30];
+ const when=remembered?(streak>=6?null:new Date(now+days[streak-1]*86400000).toISOString()):new Date(now+10*60000).toISOString();
+ personalAnswered=true;
+ $('personalRemember').disabled=true;$('personalAgain').disabled=true;
+ $('personalFeedback').textContent='Sparar ditt svar…';
+ const {error}=await db.from('personal_words').update({learning_status:status,streak,next_review_at:when,last_practiced_at:new Date(now).toISOString(),updated_at:new Date(now).toISOString()}).eq('id',word.id).eq('user_id',user.id);
+ if(error){personalAnswered=false;$('personalRemember').disabled=false;$('personalAgain').disabled=false;$('personalFeedback').textContent='Kunde inte spara svaret. Försök igen.';return;}
+ Object.assign(word,{learning_status:status,streak,next_review_at:when});
+ personalFlipped=true;$('personalFlip').classList.add('flipped');$('personalCardDefinition').classList.remove('view-hidden');
+ $('personalFlipHint').textContent='Betydelsen visas';
+ $('personalFeedback').textContent=remembered?(status==='known'?'Fantastiskt! Ordet är bemästrat.':'Rätt! '+streak+'/6 – ordet kommer tillbaka enligt repetitionsplanen.'):'Ingen fara! Ordet kommer tillbaka för repetition.';
+ personalStats();renderPersonalList();
+}
+async function deletePersonalWord(word){
+ if(!user||!confirm('Vill du ta bort ”'+word.term+'” från Mina ord?'))return;
+ const {error}=await db.from('personal_words').delete().eq('id',word.id).eq('user_id',user.id);
+ if(error){alert('Kunde inte ta bort ordet. Försök igen.');return;}
+ personalWords=personalWords.filter(w=>w.id!==word.id);
+ personalIndex=-1;personalStats();renderPersonalList();showPersonalCard();
+}
+async function refreshPersonalWords(){
+ if(!user)return;
+ const uid=user.id;
+ $('personalList').textContent='Hämtar dina sparade ord…';
+ const {data,error}=await db.from('personal_words').select('id,term,definition,learning_status,streak,next_review_at,created_at').eq('user_id',uid).order('created_at',{ascending:false}).limit(2000);
+ if(user?.id!==uid)return;
+ if(error){$('personalList').textContent='Kunde inte hämta Mina ord. Kontrollera anslutningen och försök igen.';return;}
+ personalWords=data||[];
+ personalIndex=-1;personalRecent=-1;
+ personalStats();renderPersonalList();showPersonalCard();
+}
+$('personalSearch').addEventListener('input',renderPersonalList);
+$('personalRefresh').onclick=()=>void refreshPersonalWords();
+$('personalModeAll').onclick=()=>{personalMode='all';personalIndex=-1;syncPersonalMode();showPersonalCard();};
+$('personalModeDue').onclick=()=>{personalMode='due';personalIndex=-1;syncPersonalMode();showPersonalCard();};
+$('personalFlip').onclick=()=>{
+ if(personalIndex<0)return;
+ personalFlipped=!personalFlipped;
+ $('personalFlip').classList.toggle('flipped',personalFlipped);
+ $('personalCardDefinition').classList.toggle('view-hidden',!personalFlipped);
+ $('personalFlipHint').textContent=personalFlipped?'Klicka för att se ordet igen ↻':'Klicka för att se betydelsen ↻';
+};
+$('personalAgain').onclick=()=>void savePersonalPractice(false);
+$('personalRemember').onclick=()=>void savePersonalPractice(true);
+$('personalNext').onclick=nextPersonalCard;
+$('goPersonal').onclick=()=>showView('personal');
+$('topPersonal').onclick=()=>showView('personal');
+
 function showView(view, mode){
  if(exam.active&&view!=='exam'){
   if(!confirm('Vill du lämna provet? Provet avslutas och obesvarade frågor räknas som fel.'))return;
   finishExam(false);
  }
  closeMenu();
- const home=view==='home',training=view==='training',examMode=view==='exam';
+ const home=view==='home',training=view==='training',examMode=view==='exam',personal=view==='personal';
  $('homeView').classList.toggle('view-hidden',!home);
  $('trainingView').classList.toggle('view-hidden',!training);
  $('examView').classList.toggle('view-hidden',!examMode);
- $('goHome').classList.toggle('active',home);$('goTraining').classList.toggle('active',training);$('goExam').classList.toggle('active',examMode);
- $('topHome').classList.toggle('active',home);$('topTraining').classList.toggle('active',training);$('topExam').classList.toggle('active',examMode);
+ $('personalView').classList.toggle('view-hidden',!personal);
+ $('goHome').classList.toggle('active',home);$('goTraining').classList.toggle('active',training);$('goExam').classList.toggle('active',examMode);$('goPersonal').classList.toggle('active',personal);
+ $('topHome').classList.toggle('active',home);$('topTraining').classList.toggle('active',training);$('topExam').classList.toggle('active',examMode);$('topPersonal').classList.toggle('active',personal);
  $('goHome').setAttribute('aria-current',home?'page':'false');
  $('goTraining').setAttribute('aria-current',training?'page':'false');
- $('goExam').setAttribute('aria-current',examMode?'page':'false');
+ $('goExam').setAttribute('aria-current',examMode?'page':'false');$('goPersonal').setAttribute('aria-current',personal?'page':'false');
  if(training){if(mode){$('mode').value=mode;recent=[];recentReviewsInRow=0;}choose();}
  if(home)stats();
+ if(personal)void refreshPersonalWords();
  window.scrollTo({top:0,behavior:'instant'});
 }
 $('tabTrain').onclick=()=>showView('training');$('tabExam').onclick=()=>showView('exam');
@@ -1383,7 +1498,7 @@ $('homeMission').onclick=()=>showView('training','all');
 $('homeQuickTrain').onclick=()=>showView('training','all');
 $('homeQuickExam').onclick=()=>showView('exam');
 $('homeQuickReader').onclick=()=>{if(!document.getElementById('mainMenu').classList.contains('hidden'))closeMenu();else toggleMenu();requestReaderStatus();};
-$('homeQuickKnown').onclick=()=>{showView('training','all');if(!showKnown){showKnown=true;renderKnown();}document.getElementById('knownList').scrollIntoView({behavior:'smooth',block:'center'});};
+$('homeQuickKnown').onclick=()=>showView('personal');
 
 $('next').onclick=choose;$('mode').onchange=()=>{recent=[];recentReviewsInRow=0;choose()};
 async function removeProgress(i){const id=words[i].id;const {error}=await db.from('user_word_progress').delete().eq('user_id',user.id).eq('word_id',id);if(error){notice(error.message);return}delete state[id];renderKnown();stats();if(current<0)choose()}
@@ -1399,7 +1514,7 @@ const prioritized=[...w].sort((a,b)=>Number(progressed.has(b.id))-Number(progres
 const preferredIds=new Map();for(const item of prioritized){const key=item.term.trim().toLocaleLowerCase('sv-SE');if(!preferredIds.has(key))preferredIds.set(key,item.id)}
 words=w.filter(item=>preferredIds.get(item.term.trim().toLocaleLowerCase('sv-SE'))===item.id);
 reportedEasy=new Set(tooEasy.map(x=>x.word_id));state={};for(const v of progress)state[v.word_id]={status:v.status,streak:v.streak,due:v.next_review_at?Date.parse(v.next_review_at):0,lastSeen:v.last_seen_at?Date.parse(v.last_seen_at):0};ready=true;$('appContent').classList.remove('hidden');current=-1;recent=[];recentReviewsInRow=0;dailyNewCache={key:'',ids:[]};renderKnown();showView('home');syncMsg('Synkroniserat')}catch(e){notice('Kunde inte hämta databasen: '+e.message);syncMsg('Fel')}}
-async function setUser(u){stopExamClock();exam.active=false;exam.finished=false;examPanels('intro');user=u;ready=false;$('signedOut').classList.toggle('hidden',!!u);$('signedIn').classList.toggle('hidden',!u);$('appContent').classList.add('hidden');$('authSection').classList.toggle('hidden',!!u);$('menuWrap').classList.toggle('hidden',!u);closeMenu();if(!u){words=[];state={};$('account').textContent='';$('menuAccount').textContent='';return}$('account').textContent=u.email||'ditt konto';$('menuAccount').textContent='Inloggad som '+(u.email||'ditt konto');await loadApp()}
+async function setUser(u){stopExamClock();exam.active=false;exam.finished=false;examPanels('intro');user=u;ready=false;$('signedOut').classList.toggle('hidden',!!u);$('signedIn').classList.toggle('hidden',!u);$('appContent').classList.add('hidden');$('authSection').classList.toggle('hidden',!!u);$('menuWrap').classList.toggle('hidden',!u);closeMenu();if(!u){words=[];state={};personalWords=[];personalIndex=-1;$('account').textContent='';$('menuAccount').textContent='';return}$('account').textContent=u.email||'ditt konto';$('menuAccount').textContent='Inloggad som '+(u.email||'ditt konto');await loadApp()}
 $('login').onclick=async()=>{if(!db)return notice('Kunde inte ladda Supabase-biblioteket. Kontrollera internetanslutningen.');const {error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:'Inloggad!')};
 $('signup').onclick=async()=>{if(!db)return notice('Supabase-biblioteket kunde inte laddas.');const {data,error}=await db.auth.signUp({email:$('email').value.trim(),password:$('password').value});notice(error?error.message:data.session?'Kontot är skapat och du är inloggad.':'Kontot är skapat. Kontrollera din e-post för bekräftelselänk, om bekräftelse krävs.')};
 $('logout').onclick=async()=>{closeMenu();await db.auth.signOut();notice('Utloggad.')};
